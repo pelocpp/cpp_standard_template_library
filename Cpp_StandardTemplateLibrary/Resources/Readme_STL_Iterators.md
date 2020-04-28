@@ -28,7 +28,9 @@ Jede Implementierung muss folgende Fragen beantworten:
 Unter einem *Iterator* verstehen man einen verallgemeinerten Zeiger,
 der eine Position in einem Container identifiziert.
 
-<img src="iterator_general.png" width="300">
+<img src="stl_iterator_general.png" width="300">
+
+Abbildung 1: Versuch der Visualisierung eines Iterators.
 
 Er ermöglicht das Bewegen im Container (`operator++`) und den Zugriff auf Elemente (`operator*`).
 
@@ -49,7 +51,9 @@ Die meisten STL-Algorithmen verwenden einen Bereich als Argument.
   * Ein Bereich ist ein Paar von Iteratoren, das auf den Anfang und das Ende der Sequenz zeigen.
   * Der Anfangs-Iterator zeigt auf das erste Element, der Ende-Iterator auf die Position, die einen Schritt *hinter* dem letzten Element liegt.
 
-<img src="iterator_range.png" width="300">
+<img src="stl_iterator_range.png" width="300">
+
+Abbildung 2: Markierung von Anfang und Ende eines Bereichs.
 
   * Der Bereich wird oft als halboffener Bereich `[begin,end)` oder `[first,last)` oder `[first,beyond)` bezeichnet.
   * Ein Bereich `[begin,end)` ist *gültig*, wenn `end` durch wiederholte Anwendung des Aufrufs von `operator++` vom Anfang aus betrachtet erreichbar ist.
@@ -95,7 +99,9 @@ Die Iteratoren lassen sich in Kategorien einteilen. Die folgende Abbildung zeigt
 definierten Iteratorkategorien und ihre hierarchische Beziehung. Da die Iteratorkategorien der Standardbibliothek
 hierarchisch sind, enthält jede Kategorie alle Methoden/Operatoren der darüber liegenden Kategorien:
 
-<img src="Iterator_Categories.png" width="400">
+<img src="stl_Iterator_Categories.png" width="400">
+
+Abbildung 3: Einteilung der Iteratoren in Kategorien.
 
 Der folgenden Tabelle können Sie entnehmen, welcher STL-Container welchen Iterator-Typ unterstützt:
 

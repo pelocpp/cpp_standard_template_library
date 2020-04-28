@@ -181,5 +181,26 @@
     <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_03.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Resources\stl_iterator_general.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\stl_iterator_categories.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\stl_iterator_range.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\HouseSantaClaus_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\FlightMap.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\FlightMap2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Entfernungs_Tabelle_Deutschland.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

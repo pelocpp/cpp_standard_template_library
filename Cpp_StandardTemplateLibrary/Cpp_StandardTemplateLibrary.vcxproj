@@ -177,6 +177,9 @@
     <ClCompile Include="Program.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Resources\Entfernungs_Tabelle_Deutschland.png" />
+    <Image Include="Resources\FlightMap.png" />
+    <Image Include="Resources\FlightMap2.png" />
     <Image Include="Resources\graphs_01_nodes_and_edges.png" />
     <Image Include="Resources\graphs_02_adjacency_list.png" />
     <Image Include="Resources\graphs_03_DFS_Testgraph.png" />
@@ -189,13 +192,17 @@
     <Image Include="Resources\graphs_11_tuple_edge.png" />
     <Image Include="Resources\graphs_12_adjmatrix_01.png" />
     <Image Include="Resources\graphs_12_adjmatrix_02.png" />
+    <Image Include="Resources\HouseSantaClaus_02.png" />
     <Image Include="Resources\LMU_Muenchen_Dijkstra_02.png" />
     <Image Include="Resources\LMU_Muenchen_Dijkstra_03.png" />
     <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_01.png" />
     <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_02.png" />
     <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_03.png" />
+    <Image Include="Resources\stl_iterator_range.png" />
     <Image Include="Resources\stl_container_sequence_vs_associative.png" />
     <Image Include="Resources\stl_iterators.png" />
+    <Image Include="Resources\stl_iterator_categories.png" />
+    <Image Include="Resources\stl_iterator_general.png" />
     <Image Include="Resources\Ulysses_01.png" />
     <Image Include="Resources\Ulysses_02.png" />
     <Image Include="Resources\Ulysses_03.png" />
