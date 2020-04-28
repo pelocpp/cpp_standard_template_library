@@ -13,5 +13,158 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="TSP">
+      <UniqueIdentifier>{ba4d1d2e-c4b2-4a14-bc17-87a155391265}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Readme_Arbeitsblatt_BFS.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_DFS.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_Dijkstra.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_Einleitung.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_Entwurf.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_Exkurs_TSP.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_Kruskal.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_NearestNeighbour.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_Arbeitsblatt_Weiterarbeit.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_STL_Algorithms.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_STL_Containers.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_STL_Iterators.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Readme_STL_Overview.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Readme.md" />
+    <None Include="TSP\Danztig.tsp">
+      <Filter>TSP</Filter>
+    </None>
+    <None Include="TSP\SanFoundry.tsp">
+      <Filter>TSP</Filter>
+    </None>
+    <None Include="TSP\Ulysses.tsp">
+      <Filter>TSP</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Edge.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EdgeDetails.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphAdjList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphAdjMat.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphInterface.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeDetails.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver_BFS.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver_DFS.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver_Dijkstra.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver_Kruskal.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver_NearestNeighbour.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\stl_container_sequence_vs_associative.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\stl_iterators.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Ulysses_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Ulysses_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Ulysses_03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_01_nodes_and_edges.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_02_adjacency_list.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_03_DFS_Testgraph.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_04_edges_hierarchy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_05_generic_interface.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_06_template inheritance.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_08_relationship_solver_graph.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_09_setgraph_method.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_10_pair_node.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_11_tuple_edge.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_12_adjmatrix_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\graphs_12_adjmatrix_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
