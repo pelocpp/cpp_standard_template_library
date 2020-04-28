@@ -99,7 +99,7 @@ Die Iteratoren lassen sich in Kategorien einteilen. Die folgende Abbildung zeigt
 definierten Iteratorkategorien und ihre hierarchische Beziehung. Da die Iteratorkategorien der Standardbibliothek
 hierarchisch sind, enthält jede Kategorie alle Methoden/Operatoren der darüber liegenden Kategorien:
 
-<img src="stl_Iterator_Categories.png" width="400">
+<img src="stl_iterator_categories.png" width="400">
 
 Abbildung 3: Einteilung der Iteratoren in Kategorien.
 
