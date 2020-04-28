@@ -189,6 +189,11 @@
     <Image Include="Resources\graphs_11_tuple_edge.png" />
     <Image Include="Resources\graphs_12_adjmatrix_01.png" />
     <Image Include="Resources\graphs_12_adjmatrix_02.png" />
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_02.png" />
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_03.png" />
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_01.png" />
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_02.png" />
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_03.png" />
     <Image Include="Resources\stl_container_sequence_vs_associative.png" />
     <Image Include="Resources\stl_iterators.png" />
     <Image Include="Resources\Ulysses_01.png" />

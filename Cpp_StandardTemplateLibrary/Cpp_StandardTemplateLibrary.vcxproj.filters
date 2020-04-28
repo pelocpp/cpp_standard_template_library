@@ -166,5 +166,20 @@
     <Image Include="Resources\graphs_12_adjmatrix_02.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
