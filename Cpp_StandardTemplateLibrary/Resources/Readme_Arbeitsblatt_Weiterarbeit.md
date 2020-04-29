@@ -51,6 +51,13 @@ W getWeight(const E& edge) {
 
 ---
 
+#### Kleinigkeiten
+
+  * Es sollten die vier Varianten (Graph gerichtet, ungerichtet als auch gewichtet, ungewichtet) mit der Methode `toString` getestet sein.
+  * Nicht alle Beispiele aus den Beschreibungen sind implementiert (*Reise des Odysseus*, *Entfernungstabelle Deutschland*).
+
+---
+
 #### Erster Ansätze zur Ergänzung des Iterator-Konzepts
 
 Unterstützung in der Ergänzung des Iterator-Konzepts findet man unter
