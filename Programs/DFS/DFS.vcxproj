@@ -20,8 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{A78BF6D4-BDBF-4C20-AFA8-511B6429F4C4}</ProjectGuid>
-    <RootNamespace>CppStandardTemplateLibrary</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{2ea2aec4-e52d-4c60-8108-98f4a3da88ac}</ProjectGuid>
+    <RootNamespace>DFS</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,11 +73,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -85,21 +86,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -112,7 +101,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -120,6 +109,18 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -140,61 +141,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\Readme.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_BFS.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_DFS.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_Dijkstra.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_Einleitung.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_Entwurf.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_Exkurs_TSP.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_Kruskal.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_NearestNeighbour.md" />
-    <None Include="Resources\Readme_Arbeitsblatt_Weiterarbeit.md" />
-    <None Include="Resources\Readme_STL_Algorithms.md" />
-    <None Include="Resources\Readme_STL_Containers.md" />
-    <None Include="Resources\Readme_STL_Iterators.md" />
-    <None Include="Resources\Readme_STL_Overview.md" />
-    <None Include="TSP\Danztig.tsp" />
-    <None Include="TSP\SanFoundry.tsp" />
-    <None Include="TSP\Ulysses.tsp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Solver_Kruskal.h" />
-    <ClInclude Include="Solver_NearestNeighbour.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\Entfernungs_Tabelle_Deutschland.png" />
-    <Image Include="Resources\FlightMap.png" />
-    <Image Include="Resources\FlightMap2.png" />
-    <Image Include="Resources\graphs_01_nodes_and_edges.png" />
-    <Image Include="Resources\graphs_02_adjacency_list.png" />
-    <Image Include="Resources\graphs_03_DFS_Testgraph.png" />
-    <Image Include="Resources\graphs_04_edges_hierarchy.png" />
-    <Image Include="Resources\graphs_05_generic_interface.png" />
-    <Image Include="Resources\graphs_06_template inheritance.png" />
-    <Image Include="Resources\graphs_08_relationship_solver_graph.png" />
-    <Image Include="Resources\graphs_09_setgraph_method.png" />
-    <Image Include="Resources\graphs_10_pair_node.png" />
-    <Image Include="Resources\graphs_11_tuple_edge.png" />
-    <Image Include="Resources\graphs_12_adjmatrix_01.png" />
-    <Image Include="Resources\graphs_12_adjmatrix_02.png" />
-    <Image Include="Resources\HouseSantaClaus_02.png" />
-    <Image Include="Resources\LMU_Muenchen_Dijkstra_02.png" />
-    <Image Include="Resources\LMU_Muenchen_Dijkstra_03.png" />
-    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_01.png" />
-    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_02.png" />
-    <Image Include="Resources\LMU_Muenchen_Dijkstra_Cities_03.png" />
-    <Image Include="Resources\stl_iterator_range.png" />
-    <Image Include="Resources\stl_container_sequence_vs_associative.png" />
-    <Image Include="Resources\stl_iterators.png" />
-    <Image Include="Resources\stl_iterator_categories.png" />
-    <Image Include="Resources\stl_iterator_general.png" />
-    <Image Include="Resources\Ulysses_01.png" />
-    <Image Include="Resources\Ulysses_02.png" />
-    <Image Include="Resources\Ulysses_03.png" />
+    <ClInclude Include="Solver_DFS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

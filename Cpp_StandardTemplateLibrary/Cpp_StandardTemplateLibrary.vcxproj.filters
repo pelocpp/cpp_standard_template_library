@@ -69,39 +69,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Edge.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EdgeDetails.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Globals.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphAdjList.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphAdjMat.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphInterface.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NodeDetails.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Solver_BFS.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Solver_DFS.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Solver_Dijkstra.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Solver_Kruskal.h">
       <Filter>Source Files</Filter>
     </ClInclude>

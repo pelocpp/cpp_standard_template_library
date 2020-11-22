@@ -31,3 +31,18 @@
   * #### [Weiterarbeit / Offene Punkte](Cpp_StandardTemplateLibrary/Resources/Readme_Arbeitsblatt_Weiterarbeit.md)
 
 ---
+
+Weitere Weiterarbeit:
+
+https://studyflix.de/informatik/floyd-warshall-algorithmus-1295
+
+https://www-m9.ma.tum.de/graph-algorithms/spp-floyd-warshall/index_de.html
+
+https://www.youtube.com/watch?v=I1kA7c09lZE
+
+http://www.bleeptrack.de/tutorials/warshall
+
+und
+
+https://www.codeproject.com/Articles/48575/How-to-Define-a-Template-Class-in-a-h-File-and-Imp
+
