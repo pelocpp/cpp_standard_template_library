@@ -24,9 +24,6 @@ namespace NodeDetailsNumbered {
     };
 }
 
-
-
-
 namespace NodeDetailsTest {
 
     class TestNodeDetails {

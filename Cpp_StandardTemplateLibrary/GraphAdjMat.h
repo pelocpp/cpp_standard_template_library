@@ -91,7 +91,7 @@ public:
 
     std::vector<EDGE> getAllEdges() const override {
         std::vector<EDGE> edges;
-        for (EDGE edge : m_adj) {
+        for (const EDGE& edge : m_adj) {
             if (!isEmpty(edge)) {
                 edges.push_back(edge);
             }

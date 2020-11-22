@@ -144,7 +144,7 @@ public:
     std::vector<IndexType> getNeighbouringNodes(IndexType node) const override {
 
         std::vector<IndexType> neighbours;
-        for (EDGE edge : m_adjacencyList[node]) {
+        for (const EDGE& edge : m_adjacencyList[node]) {
 
             IndexType target = getTarget(edge);
             neighbours.push_back(target);
