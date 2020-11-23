@@ -1,5 +1,5 @@
 // =====================================================================================
-// NearestNeighbour
+// Program
 // =====================================================================================
 
 #include <iostream>
@@ -31,28 +31,20 @@
 #include "../Include/GraphAdjList.h"
 #include "../Include/GraphAdjMat.h"
 
-#include "Solver_NearestNeighbour.h"
-
-// Nearest Neighbour test functions
+// Dijkstra test functions
 //
-void test_01_NearestNeighbour_NFE();
-void test_01_NearestNeighbour_Fuenf_Staedte();
-void test_01_NearestNeighbour_TSP(std::string filename);
+void test_01_Dijkstra_LMU_Muenchen_Abstract();
+void test_02_Dijkstra_Bleeptrack_Youtube_Tutorial();
+void test_03_Dijkstra_TUM_Europa();
 
-// Example from Uni Heidelberg
-const std::string tspFileName01 = "Danztig.tsp";
-
-// Example from
-// https://www.sanfoundry.com/java-program-implement-traveling-salesman-problem-using-nearest-neighbour-algorithm/
-const std::string tspFileName02 = "SanFoundry.tsp";
-
-int main() {
-
-    test_01_NearestNeighbour_NFE();
-    test_01_NearestNeighbour_Fuenf_Staedte();
-    test_01_NearestNeighbour_TSP(tspFileName01);
+int main()
+{
+    test_01_Dijkstra_LMU_Muenchen_Abstract();
+    test_02_Dijkstra_Bleeptrack_Youtube_Tutorial();
+    test_03_Dijkstra_TUM_Europa();
     return 0;
 }
+
 
 // =====================================================================================
 // End-of-File

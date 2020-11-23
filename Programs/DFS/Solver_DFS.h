@@ -1,4 +1,8 @@
-namespace DFS_Solver {
+// =====================================================================================
+// Solver_DFS
+// =====================================================================================
+
+namespace Solver_DFS {
 
     template <typename NODE, typename EDGE>
     class DFSSolver {
@@ -151,7 +155,7 @@ namespace DFS_Solver {
     
 void test_DFS_01()
 {
-    using namespace DFS_Solver;
+    using namespace Solver_DFS;
     using namespace NodeDetailsTest;
     using namespace EdgeDetailsTest;
 
@@ -206,7 +210,7 @@ void test_DFS_01()
 
 void test_DFS_02()
 {
-    using namespace DFS_Solver;
+    using namespace Solver_DFS;
     using namespace NodeDetailsNumbered;
     using namespace EdgeDetailsEmpty;
 
@@ -286,3 +290,7 @@ void test_DFS_02()
     }
 }
 
+
+// =====================================================================================
+// End-of-File
+// =====================================================================================
