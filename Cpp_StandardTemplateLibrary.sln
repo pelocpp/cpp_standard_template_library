@@ -7,7 +7,63 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cpp_StandardTemplateLibrary
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BFS", "Programs\BFS\BFS.vcxproj", "{7824B991-2819-4CCC-BDB1-CB818DD1CC7F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D31A6E6-AFC8-43DC-B274-82502EB91D1F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{9D31A6E6-AFC8-43DC-B274-82502EB91D1F}"
+	ProjectSection(SolutionItems) = preProject
+		Programs\Resources\cpp_cheat_sheet.png = Programs\Resources\cpp_cheat_sheet.png
+		Programs\Resources\Entfernungs_Tabelle_Deutschland.png = Programs\Resources\Entfernungs_Tabelle_Deutschland.png
+		Programs\Resources\FlightMap.png = Programs\Resources\FlightMap.png
+		Programs\Resources\FlightMap2.png = Programs\Resources\FlightMap2.png
+		Programs\Resources\graphs_01_nodes_and_edges.png = Programs\Resources\graphs_01_nodes_and_edges.png
+		Programs\Resources\graphs_02_adjacency_list.png = Programs\Resources\graphs_02_adjacency_list.png
+		Programs\Resources\graphs_03_DFS_Testgraph.png = Programs\Resources\graphs_03_DFS_Testgraph.png
+		Programs\Resources\graphs_04_edges_hierarchy.png = Programs\Resources\graphs_04_edges_hierarchy.png
+		Programs\Resources\graphs_05_generic_interface.png = Programs\Resources\graphs_05_generic_interface.png
+		Programs\Resources\graphs_06_template inheritance.png = Programs\Resources\graphs_06_template inheritance.png
+		Programs\Resources\graphs_08_relationship_solver_graph.png = Programs\Resources\graphs_08_relationship_solver_graph.png
+		Programs\Resources\graphs_09_setgraph_method.png = Programs\Resources\graphs_09_setgraph_method.png
+		Programs\Resources\graphs_10_pair_node.png = Programs\Resources\graphs_10_pair_node.png
+		Programs\Resources\graphs_11_tuple_edge.png = Programs\Resources\graphs_11_tuple_edge.png
+		Programs\Resources\graphs_12_adjmatrix_01.png = Programs\Resources\graphs_12_adjmatrix_01.png
+		Programs\Resources\graphs_12_adjmatrix_02.png = Programs\Resources\graphs_12_adjmatrix_02.png
+		Programs\Resources\HouseSantaClaus_02.png = Programs\Resources\HouseSantaClaus_02.png
+		Programs\Resources\LMU_Muenchen_Dijkstra_02.png = Programs\Resources\LMU_Muenchen_Dijkstra_02.png
+		Programs\Resources\LMU_Muenchen_Dijkstra_03.png = Programs\Resources\LMU_Muenchen_Dijkstra_03.png
+		Programs\Resources\LMU_Muenchen_Dijkstra_Cities_01.png = Programs\Resources\LMU_Muenchen_Dijkstra_Cities_01.png
+		Programs\Resources\LMU_Muenchen_Dijkstra_Cities_02.png = Programs\Resources\LMU_Muenchen_Dijkstra_Cities_02.png
+		Programs\Resources\LMU_Muenchen_Dijkstra_Cities_03.png = Programs\Resources\LMU_Muenchen_Dijkstra_Cities_03.png
+		Programs\Resources\Readme.md = Programs\Resources\Readme.md
+		Programs\Resources\Readme_Arbeitsblatt_BFS.md = Programs\Resources\Readme_Arbeitsblatt_BFS.md
+		Programs\Resources\Readme_Arbeitsblatt_DFS.md = Programs\Resources\Readme_Arbeitsblatt_DFS.md
+		Programs\Resources\Readme_Arbeitsblatt_Dijkstra.md = Programs\Resources\Readme_Arbeitsblatt_Dijkstra.md
+		Programs\Resources\Readme_Arbeitsblatt_Einleitung.md = Programs\Resources\Readme_Arbeitsblatt_Einleitung.md
+		Programs\Resources\Readme_Arbeitsblatt_Entwurf.md = Programs\Resources\Readme_Arbeitsblatt_Entwurf.md
+		Programs\Resources\Readme_Arbeitsblatt_Exkurs_TSP.md = Programs\Resources\Readme_Arbeitsblatt_Exkurs_TSP.md
+		Programs\Resources\Readme_Arbeitsblatt_Kruskal.md = Programs\Resources\Readme_Arbeitsblatt_Kruskal.md
+		Programs\Resources\Readme_Arbeitsblatt_NearestNeighbour.md = Programs\Resources\Readme_Arbeitsblatt_NearestNeighbour.md
+		Programs\Resources\Readme_Arbeitsblatt_Weiterarbeit.md = Programs\Resources\Readme_Arbeitsblatt_Weiterarbeit.md
+		Programs\Resources\Readme_STL_Algorithms.md = Programs\Resources\Readme_STL_Algorithms.md
+		Programs\Resources\Readme_STL_Containers.md = Programs\Resources\Readme_STL_Containers.md
+		Programs\Resources\Readme_STL_Iterators.md = Programs\Resources\Readme_STL_Iterators.md
+		Programs\Resources\Readme_STL_Overview.md = Programs\Resources\Readme_STL_Overview.md
+		Programs\Resources\stl_container_sequence_vs_associative.png = Programs\Resources\stl_container_sequence_vs_associative.png
+		Programs\Resources\stl_iterator_categories.png = Programs\Resources\stl_iterator_categories.png
+		Programs\Resources\stl_iterator_general.png = Programs\Resources\stl_iterator_general.png
+		Programs\Resources\stl_iterator_range.png = Programs\Resources\stl_iterator_range.png
+		Programs\Resources\stl_iterators.png = Programs\Resources\stl_iterators.png
+		Programs\Resources\Ulysses_01.png = Programs\Resources\Ulysses_01.png
+		Programs\Resources\Ulysses_02.png = Programs\Resources\Ulysses_02.png
+		Programs\Resources\Ulysses_03.png = Programs\Resources\Ulysses_03.png
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DFS", "Programs\DFS\DFS.vcxproj", "{2EA2AEC4-E52D-4C60-8108-98F4A3DA88AC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dijkstra", "Programs\Dijkstra\Dijkstra.vcxproj", "{127580BB-179A-45F6-85DE-FE511B382AD3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kruskal", "Programs\Kruskal\Kruskal.vcxproj", "{DFB4A258-2EA7-469A-AE78-D12E9D163EC5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NearestNeighbour", "Programs\NearestNeighbour\NearestNeighbour.vcxproj", "{C9EFCC8F-B401-45CE-9D93-CBA3A22CDF3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{9D87FBD9-4FAE-4135-A653-492229ADCCE4}"
 	ProjectSection(SolutionItems) = preProject
 		Programs\Include\Edge.h = Programs\Include\Edge.h
 		Programs\Include\EdgeDetails.h = Programs\Include\EdgeDetails.h
@@ -18,14 +74,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Programs\Include\Node.h = Programs\Include\Node.h
 		Programs\Include\NodeDetails.h = Programs\Include\NodeDetails.h
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DFS", "Programs\DFS\DFS.vcxproj", "{2EA2AEC4-E52D-4C60-8108-98F4A3DA88AC}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dijkstra", "Programs\Dijkstra\Dijkstra.vcxproj", "{127580BB-179A-45F6-85DE-FE511B382AD3}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kruskal", "Programs\Kruskal\Kruskal.vcxproj", "{DFB4A258-2EA7-469A-AE78-D12E9D163EC5}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NearestNeighbour", "Programs\NearestNeighbour\NearestNeighbour.vcxproj", "{C9EFCC8F-B401-45CE-9D93-CBA3A22CDF3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
