@@ -275,6 +275,6 @@ graphentheoretischer Algorithmen zuwenden.
 
 ---
 
-[Zurück](../../Readme.md)
+[Zurück](Readme.md)
 
 ---
