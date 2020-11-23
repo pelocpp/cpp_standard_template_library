@@ -16,18 +16,20 @@ namespace EdgeDetailsEmpty {
 namespace EdgeDetailsTest {
 
     class TestEdgeDetails {
+
     private:
         std::string m_text;
 
     public:
         // c'tors
-        TestEdgeDetails() : m_text(std::string("")) {}
-        TestEdgeDetails(std::string text) : m_text(text) {}
+        TestEdgeDetails() : m_text(std::string{ "" }) {}
+        TestEdgeDetails(std::string text) : m_text{ text } {}
 
         // getter
         std::string getText() const { return m_text; };
     };
 
+    // PeLo :rausziehen ... und als friend deklarieren ...
     std::ostream& operator << (std::ostream& os, const TestEdgeDetails& details) {
         os << details.getText();
         return os;

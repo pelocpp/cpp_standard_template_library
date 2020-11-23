@@ -31,13 +31,17 @@ namespace NodeDetailsNumbered {
 namespace NodeDetailsTest {
 
     class TestNodeDetails {
+
+        friend std::ostream& operator << (std::ostream&, const TestNodeDetails&);
+    
     private:
         int m_number;
         std::string m_text;
+
     public:
         // c'tors
-        TestNodeDetails() : m_number(0), m_text(std::string("")) {}
-        TestNodeDetails(int number, std::string text) : m_number(number), m_text(text) {}
+        TestNodeDetails() : m_number{ 0 }, m_text(std::string{ "" }) {}
+        TestNodeDetails(int number, std::string text) : m_number{ number }, m_text{ text } {}
 
         // getter
         int getNumber() const { return m_number; };
@@ -45,7 +49,7 @@ namespace NodeDetailsTest {
     };
 
     std::ostream& operator << (std::ostream& os, const TestNodeDetails& details) {
-        os << "[" << details.getNumber() << "] " << details.getText();
+        os << "[" << details.m_number << "] " << details.m_text;
         return os;
     }
 }

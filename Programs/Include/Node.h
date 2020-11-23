@@ -16,6 +16,12 @@ T getDetails(const N& node) {
     return std::get<1>(node);
 }
 
+// PeLo
+template<typename N>
+auto getDetails2(const N& node) {
+    return std::get<1>(node);
+}
+
 template<typename N>
 std::string nodeToString(const N& node) {
     return to_string(getId(node));
