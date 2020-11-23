@@ -60,6 +60,6 @@ Knoten eines Graphen müssen immer eindeutig sein, sie könnten als Schlüssel für 
 
 ---
 
-[Zurück](Readme.md)
+[Zurück](../../Readme.md)
 
 ---
