@@ -27,21 +27,13 @@
 #include "../Include/Edge.h"
 #include "../Include/EdgeDetails.h"
 
-#include "../Include/GraphInterface.h"
-#include "../Include/GraphAdjList.h"
-#include "../Include/GraphAdjMat.h"
-
-// Dijkstra test functions
+// General testing functions for nodes, edges and graphs
 //
-void test_01_Dijkstra_LMU_Muenchen_Abstract();
-void test_02_Dijkstra_Bleeptrack_Youtube_Tutorial();
-void test_03_Dijkstra_TUM_Europa();
+
 
 int main()
 {
-    test_01_Dijkstra_LMU_Muenchen_Abstract();
-    test_02_Dijkstra_Bleeptrack_Youtube_Tutorial();
-    test_03_Dijkstra_TUM_Europa();
+    std::cout << "General testing functions for nodes, edges and graphs" << std::endl;
     return 0;
 }
 
