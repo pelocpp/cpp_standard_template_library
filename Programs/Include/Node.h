@@ -11,14 +11,15 @@ int getId(const N& node) {
     return std::get<0>(node);
 }
 
+// PeLo: entfernen ... der zweite Template Parameter kann so wegfallen
 template<typename N, typename T>
 T getDetails(const N& node) {
     return std::get<1>(node);
 }
 
-// PeLo
+// PeLo: Langfristig das 'Ex' entfernen ....
 template<typename N>
-auto getDetails2(const N& node) {
+auto getDetailsEx(const N& node) {
     return std::get<1>(node);
 }
 

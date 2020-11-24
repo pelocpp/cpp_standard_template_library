@@ -68,6 +68,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{9D87
 		Programs\Include\Globals.h = Programs\Include\Globals.h
 		Programs\Include\GraphAdjList.h = Programs\Include\GraphAdjList.h
 		Programs\Include\GraphAdjMat.h = Programs\Include\GraphAdjMat.h
+		Programs\Include\GraphAdjMat2.h = Programs\Include\GraphAdjMat2.h
 		Programs\Include\GraphInterface.h = Programs\Include\GraphInterface.h
 		Programs\Include\Node.h = Programs\Include\Node.h
 		Programs\Include\NodeDetails.h = Programs\Include\NodeDetails.h

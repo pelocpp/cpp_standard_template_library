@@ -106,12 +106,12 @@ void testPeLo01_Kruskal_Programiz()
     using namespace NodeDetailsTest;
     using namespace EdgeDetailsTest;
 
-    Node<TestNodeDetails> n1{ 0, {0, std::string("a")} };
-    Node<TestNodeDetails> n2{ 1, {1, std::string("b")} };
-    Node<TestNodeDetails> n3{ 2, {2, std::string("c")} };
-    Node<TestNodeDetails> n4{ 3, {3, std::string("d")} };
-    Node<TestNodeDetails> n5{ 4, {4, std::string("e")} };
-    Node<TestNodeDetails> n6{ 5, {5, std::string("f")} };
+    Node<TestNodeDetails> n1{ 0, { std::string("Node a")} };
+    Node<TestNodeDetails> n2{ 1, { std::string("Node b")} };
+    Node<TestNodeDetails> n3{ 2, { std::string("Node c")} };
+    Node<TestNodeDetails> n4{ 3, { std::string("Node d")} };
+    Node<TestNodeDetails> n5{ 4, { std::string("Node e")} };
+    Node<TestNodeDetails> n6{ 5, { std::string("Node f")} };
 
     WeightedEdge<int, TestEdgeDetails> we1{ 0, 1, 4, "" };
     WeightedEdge<int, TestEdgeDetails> we2{ 0, 2, 4, "" };
@@ -132,7 +132,7 @@ void testPeLo01_Kruskal_Programiz()
 
     // create graph
     // GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(false);
-    GraphAdjMatrix<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(false);
+    GraphAdjMatrix<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(Direction::undirected);
     graph.addNodes(nodes);
     graph.addEdges(edges);
     std::cout << graph.toString() << std::endl;

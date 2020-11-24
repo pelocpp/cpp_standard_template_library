@@ -159,14 +159,14 @@ void test_DFS_01()
     using namespace NodeDetailsTest;
     using namespace EdgeDetailsTest;
 
-    Node<TestNodeDetails> n1{ 0, {0, "0"} };
-    Node<TestNodeDetails> n2{ 1, {1, "1"} };
-    Node<TestNodeDetails> n3{ 2, {2, "2"} };
-    Node<TestNodeDetails> n4{ 3, {3, "3"} };
-    Node<TestNodeDetails> n5{ 4, {4, "4"} };
-    Node<TestNodeDetails> n6{ 5, {5, "5"} };
-    Node<TestNodeDetails> n7{ 6, {6, "6"} };
-    Node<TestNodeDetails> n8{ 7, {7, "7"} };
+    Node<TestNodeDetails> n1{ 0, { "Node 0"} };
+    Node<TestNodeDetails> n2{ 1, { "Node 1"} };
+    Node<TestNodeDetails> n3{ 2, { "Node 2"} };
+    Node<TestNodeDetails> n4{ 3, { "Node 3"} };
+    Node<TestNodeDetails> n5{ 4, { "Node 4"} };
+    Node<TestNodeDetails> n6{ 5, { "Node 5"} };
+    Node<TestNodeDetails> n7{ 6, { "Node 6"} };
+    Node<TestNodeDetails> n8{ 7, { "Node 7"} };
 
     std::vector<Node<TestNodeDetails>> nodes = {
         n1, n2, n3, n4, n5, n6, n7, n8
@@ -185,7 +185,7 @@ void test_DFS_01()
 
     // graph with 8 nodes (vertices)
     // GraphAdjList<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> testGraph(false);
-    GraphAdjMatrix<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> testGraph(false);
+    GraphAdjMatrix<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> testGraph(Direction::undirected);
 
     testGraph.addNodes(nodes);
     testGraph.addEdges(edges);
@@ -260,7 +260,7 @@ void test_DFS_02()
 
     // graph with 8 nodes (vertices)
     // GraphAdjList<Node<NumberedNodeDetails>, UnweightedEdge<EmptyEdgeDetails>> testGraph(false);
-    GraphAdjMatrix<Node<NumberedNodeDetails>, UnweightedEdge<EmptyEdgeDetails>> testGraph(false);
+    GraphAdjMatrix<Node<NumberedNodeDetails>, UnweightedEdge<EmptyEdgeDetails>> testGraph(Direction::undirected);
 
     
     testGraph.addNodes(nodes);

@@ -5,7 +5,8 @@
 template <typename NODE, typename EDGE>
 class GraphAdjMatrix : public IGraph<NODE, EDGE> {
 private:
-    bool m_isDirected;
+    // bool m_isDirected;
+    Direction m_direction;
     int  m_numNodes;
     int  m_numEdges;
     std::vector<NODE> m_nodes;   // nodes vector
@@ -13,8 +14,9 @@ private:
 
 public:
     // c'tors
+    // PeLo: More uniform syntax
     GraphAdjMatrix() = delete;
-    GraphAdjMatrix(bool isDirected) : m_isDirected{ isDirected } {
+    GraphAdjMatrix(Direction direction) : /* m_isDirected{ isDirected } */  m_direction{ direction } {
         m_numNodes = -1;
         m_numEdges = 0;
     }
@@ -29,7 +31,7 @@ public:
     }
 
     bool isDirected() const override {
-        return m_isDirected;
+        return m_direction == Direction::directed;
     }
 
     bool isWeighted() const override {
@@ -157,31 +159,50 @@ public:
     std::string toString() const override {
         std::ostringstream oss;
 
+        // evaluate 'weight' attribute
+        std::string is_weighted;
+        if constexpr (std::tuple_size<EDGE>::value == 3) {
+            is_weighted = "unweighted";
+        }
+        if constexpr (std::tuple_size<EDGE>::value == 4) {
+            is_weighted = "weighted";
+        }
+
+        oss << "Graph: " << ((m_direction == Direction::directed) ? "directed" : "undirected") << ", " << is_weighted << "\n";
+
         if (!isDirected()) {
 
             std::string separator = " <=> ";
 
             for (int row = 0; row < m_numNodes; ++row)
             {
-                oss << "[" << row << "] ";
+                oss << "Node [" << row << "]: ";
 
                 bool isFirst = true;
 
                 for (int col = 0; col < m_numNodes; ++col)
                 {
-                    if (row > col) {
-                        int index = toIndex(row, col);
-                        EDGE edge = m_adj[index];
-                        if (! isEmpty(edge)) {
-                            assert(getSource(edge) == row);
-                            assert(getTarget(edge) == col);
+                    int index = toIndex(row, col);
+                    EDGE edge = m_adj[index];
 
-                            if (!isFirst) {
-                                oss << " | ";
+                    if (! isEmpty(edge)) {
+                        assert(getSource(edge) == row);
+                        assert(getTarget(edge) == col);
+
+                        oss << row << separator << col;
+
+                        if (isWeighted()) {
+                            if constexpr (std::tuple_size<EDGE>::value == 4) {
+                                auto weight = getWeightEx(edge);
+                                oss << " {" << weight << "} ";
                             }
-                            oss << row << separator << col;
-                            isFirst = false;
                         }
+                        
+                        if (!isFirst) {
+                            oss << " | ";
+                        }
+
+                        isFirst = false;
                     }
                 }
                 oss << '\n';
@@ -192,7 +213,7 @@ public:
 
             for (int row = 0; row < m_numNodes; ++row)
             {
-                oss << "[" << row << "] ";
+                oss << "Node [" << row << "]: ";
 
                 bool isFirst = true;
 
@@ -200,15 +221,18 @@ public:
                 {
                     int index = toIndex(row, col);
                     const EDGE edge = m_adj[index];
+
                     if (!isEmpty(edge)) {
+
                         assert(getSource(edge) == row);
                         assert(getTarget(edge) == col);
+
                         oss << row << separator << col;
 
                         if (isWeighted()) {
                             if constexpr (std::tuple_size<EDGE>::value == 4) {
-                                int weight = getWeight<EDGE, int>(edge);
-                                oss << " [" << weight << "]";
+                                auto weight = getWeightEx(edge);
+                                oss << " {" << weight << "} ";
                             }
                         }
 
@@ -227,22 +251,57 @@ public:
     }
 
     public:
+        //// additional member template functions
+        //template<typename NODE_DETAILS, typename EDGE_DETAILS>
+        //std::string toStringNodes() const {
+        //    std::ostringstream oss;
+        //    std::for_each(std::begin(m_nodes), std::end(m_nodes), [&](const NODE& node) {
+        //        int id = getId(node);
+        //        NODE_DETAILS details = getDetails<NODE, NODE_DETAILS>(node);
+        //        oss << "[" << id << "] " << details << '\n';
+        //        });
+
+        //    return oss.str();
+        //}
+
         // additional member template functions
-        template<typename NODE_DETAILS, typename EDGE_DETAILS>
         std::string toStringNodes() const {
             std::ostringstream oss;
+            oss << "Nodes:" << '\n';
             std::for_each(std::begin(m_nodes), std::end(m_nodes), [&](const NODE& node) {
                 int id = getId(node);
-                NODE_DETAILS details = getDetails<NODE, NODE_DETAILS>(node);
-                oss << "[" << id << "] " << details << '\n';
+                auto details = getDetailsEx(node);
+                oss << "[" << id << "]  " << details << '\n';
                 });
 
             return oss.str();
         }
 
-        template<typename NODE_DETAILS, typename EDGE_DETAILS>
+        //template<typename NODE_DETAILS, typename EDGE_DETAILS>
+        //std::string toStringEdges() const {
+        //    std::ostringstream oss;
+        //    for (EDGE edge : m_adj) {
+        //        if (!isEmpty(edge)) {
+        //            EDGE_DETAILS details{};
+        //            if constexpr (std::tuple_size<EDGE>::value == 3) {
+        //                // it's a unweighted edge
+        //                details = getDetailsUnweightedEdge<EDGE, EDGE_DETAILS>(edge);
+        //            }
+        //            if constexpr (std::tuple_size<EDGE>::value == 4) {
+        //                // it's a weighted edge
+        //                details = getDetailsWeightedEdge<EDGE, EDGE_DETAILS>(edge);
+        //            }
+
+        //            oss << edgeToString(edge) << " " << details << '\n';
+        //        }
+        //    }
+        //    return oss.str();
+        //}
+
+        template<typename EDGE_DETAILS>
         std::string toStringEdges() const {
             std::ostringstream oss;
+            oss << "Edges:" << '\n';
             for (EDGE edge : m_adj) {
                 if (!isEmpty(edge)) {
                     EDGE_DETAILS details{};
@@ -255,7 +314,7 @@ public:
                         details = getDetailsWeightedEdge<EDGE, EDGE_DETAILS>(edge);
                     }
 
-                    oss << edgeToString(edge) << " " << details << '\n';
+                    oss << '[' << edgeToString(edge) << ']' << "  " << details << '\n';
                 }
             }
             return oss.str();
@@ -274,7 +333,7 @@ private:
         IndexType source = getSource<EDGE>(edge);
         IndexType target = getTarget<EDGE>(edge);
 
-        if (! m_isDirected) {
+        if (! isDirected()) {
             // add two entries
             int index = toIndex(source, target);
             m_adj[index] = edge;

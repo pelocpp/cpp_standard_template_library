@@ -180,18 +180,18 @@ void test_BFS_SchaumsOutline() {
     // Beispiel aus "Schaums Outline": Graph mit 9 nodes Knoten
 
     // GraphAdjList<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> schaumsGraph(false);
-    GraphAdjMatrix<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> schaumsGraph(false);
+    GraphAdjMatrix<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> schaumsGraph(Direction::undirected);
 
     schaumsGraph.addNodes({
-        { 0, {1, "1"} },
-        { 1, {2, "2"} },
-        { 2, {3, "3"} },
-        { 3, {4, "4"} },
-        { 4, {5, "5"} },
-        { 5, {6, "6"} },
-        { 6, {7, "7"} },
-        { 7, {8, "8"} },
-        { 8, {9, "9"} }
+        { 0, { "Node 1"} },
+        { 1, { "Node 2"} },
+        { 2, { "Node 3"} },
+        { 3, { "Node 4"} },
+        { 4, { "Node 5"} },
+        { 5, { "Node 6"} },
+        { 6, { "Node 7"} },
+        { 7, { "Node 8"} },
+        { 8, { "Node 9"} }
         });
 
     // vector of edges

@@ -34,8 +34,15 @@ void swapSourceTarget(E& edge) {
     std::swap(std::get<0>(edge), std::get<1>(edge));
 }
 
+// PeLo: entfernen ... der zweite Template Parameter kann so wegfallen
 template<typename E, typename W>
 W getWeight(const E& edge) {
+    return std::get<2>(edge);
+}
+
+// PeLo: Langfristig das 'Ex' entfernen ....
+template<typename E>
+auto getWeightEx(const E& edge) {
     return std::get<2>(edge);
 }
 

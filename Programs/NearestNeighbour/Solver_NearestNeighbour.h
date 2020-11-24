@@ -124,9 +124,9 @@ void test_01_NearestNeighbour_NFE()
     using namespace NodeDetailsTest;
     using namespace EdgeDetailsTest;
 
-    Node<TestNodeDetails> n1{ 0, {0, std::string("Nbg")} };
-    Node<TestNodeDetails> n2{ 1, {1, std::string("Fth")} };
-    Node<TestNodeDetails> n3{ 2, {2, std::string("Erl")} };
+    Node<TestNodeDetails> n1{ 0, { std::string("Nbg")} };
+    Node<TestNodeDetails> n2{ 1, { std::string("Fth")} };
+    Node<TestNodeDetails> n3{ 2, { std::string("Erl")} };
 
     WeightedEdge<int, TestEdgeDetails> we1{ 0, 1, 10, "" };
     WeightedEdge<int, TestEdgeDetails> we2{ 0, 2, 20, "" };
@@ -163,11 +163,11 @@ void test_01_NearestNeighbour_Fuenf_Staedte()
     using namespace NodeDetailsTest;
     using namespace EdgeDetailsTest;
 
-    Node<TestNodeDetails> n1{ 0, {0, std::string("Nuernberg")} };
-    Node<TestNodeDetails> n2{ 1, {1, std::string("Fuerth")} };
-    Node<TestNodeDetails> n3{ 2, {2, std::string("Erlangen")} };
-    Node<TestNodeDetails> n4{ 3, {3, std::string("Schwaig")} };
-    Node<TestNodeDetails> n5{ 4, {4, std::string("Schwabach")} };
+    Node<TestNodeDetails> n1{ 0, { std::string("Nuernberg")} };
+    Node<TestNodeDetails> n2{ 1, { std::string("Fuerth")} };
+    Node<TestNodeDetails> n3{ 2, { std::string("Erlangen")} };
+    Node<TestNodeDetails> n4{ 3, { std::string("Schwaig")} };
+    Node<TestNodeDetails> n5{ 4, { std::string("Schwabach")} };
 
     WeightedEdge<int, TestEdgeDetails> we1{ 0, 1, 10, " bla " };
     WeightedEdge<int, TestEdgeDetails> we2{ 0, 2, 23, " bla " };

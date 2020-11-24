@@ -129,12 +129,12 @@ void test_01_Dijkstra_LMU_Muenchen_Abstract()
 
     // Beispiel "LMU_Muenchen"
 
-    Node<TestNodeDetails> n1{ 0, {0, std::string("a")} };
-    Node<TestNodeDetails> n2{ 1, {1, std::string("b")} };
-    Node<TestNodeDetails> n3{ 2, {2, std::string("c")} };
-    Node<TestNodeDetails> n4{ 3, {3, std::string("d")} };
-    Node<TestNodeDetails> n5{ 4, {4, std::string("e")} };
-    Node<TestNodeDetails> n6{ 5, {5, std::string("f")} };
+    Node<TestNodeDetails> n1{ 0, {std::string("node a")} };
+    Node<TestNodeDetails> n2{ 1, {std::string("node b")} };
+    Node<TestNodeDetails> n3{ 2, {std::string("node c")} };
+    Node<TestNodeDetails> n4{ 3, {std::string("node d")} };
+    Node<TestNodeDetails> n5{ 4, {std::string("node e")} };
+    Node<TestNodeDetails> n6{ 5, {std::string("node f")} };
 
     WeightedEdge<int, TestEdgeDetails> we1{ 0, 1, 10, "a => b [10]"};
     WeightedEdge<int, TestEdgeDetails> we2{ 0, 2, 20, "a => c [20]"};
@@ -156,7 +156,7 @@ void test_01_Dijkstra_LMU_Muenchen_Abstract()
 
     // create graph
     // GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(true);
-    GraphAdjMatrix<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(true);
+    GraphAdjMatrix<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(Direction::undirected);
 
     graph.addNodes(nodes);
     graph.addEdges(edges);
@@ -187,15 +187,15 @@ void test_02_Dijkstra_Bleeptrack_Youtube_Tutorial()
     // create graph
     GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(true);
 
-    Node<TestNodeDetails> n1{ 0, {0, std::string("S")} };
-    Node<TestNodeDetails> n2{ 1, {1, std::string("A")} };
-    Node<TestNodeDetails> n3{ 2, {2, std::string("B")} };
-    Node<TestNodeDetails> n4{ 3, {3, std::string("C")} };
-    Node<TestNodeDetails> n5{ 4, {4, std::string("D")} };
-    Node<TestNodeDetails> n6{ 5, {5, std::string("E")} };
-    Node<TestNodeDetails> n7{ 6, {6, std::string("F")} };
-    Node<TestNodeDetails> n8{ 7, {7, std::string("G")} };
-    Node<TestNodeDetails> n9{ 8, {8, std::string("Z")} };
+    Node<TestNodeDetails> n1{ 0, {std::string("Node S")} };
+    Node<TestNodeDetails> n2{ 1, {std::string("Node A")} };
+    Node<TestNodeDetails> n3{ 2, {std::string("Node B")} };
+    Node<TestNodeDetails> n4{ 3, {std::string("Node C")} };
+    Node<TestNodeDetails> n5{ 4, {std::string("Node D")} };
+    Node<TestNodeDetails> n6{ 5, {std::string("Node E")} };
+    Node<TestNodeDetails> n7{ 6, {std::string("Node F")} };
+    Node<TestNodeDetails> n8{ 7, {std::string("Node G")} };
+    Node<TestNodeDetails> n9{ 8, {std::string("Node Z")} };
 
     graph.addNodes({
         n1, n2, n3, n4, n5, n6, n7, n8, n9
@@ -312,7 +312,7 @@ void test_03_Dijkstra_TUM_Europa ()
 
     // create graph
     // GraphAdjList<Node<CityDetails>, WeightedEdge<int, RouteDetails>> graph(true);
-    GraphAdjMatrix<Node<CityDetails>, WeightedEdge<int, RouteDetails>> graph(true);
+    GraphAdjMatrix<Node<CityDetails>, WeightedEdge<int, RouteDetails>> graph(Direction::directed);
 
     graph.addNodes({
         n01, n02, n03, n04, n05, n06, n07, n08, n09, n10
