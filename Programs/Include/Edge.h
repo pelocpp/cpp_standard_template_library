@@ -42,8 +42,8 @@ W getWeight(const E& edge) {
 
 // PeLo: Langfristig das 'Ex' entfernen ....
 template<typename E>
-auto getWeightEx(const E& edge) {
-    return std::get<2>(edge);
+auto getWeightEx(E&& edge) {
+    return std::get<2>(std::forward<E>(edge));
 }
 
 template<typename E, typename T>
@@ -55,6 +55,20 @@ template<typename E, typename T>
 T getDetailsWeightedEdge(const E& edge) {
     return std::get<3>(edge);
 }
+
+
+// PeLo: Langfristig das 'Ex' entfernen ....
+template<typename E>
+auto getDetailsUnweightedEdgeEx(E&& edge) {
+    return std::get<2>(std::forward<E>(edge));
+}
+
+// PeLo: Langfristig das 'Ex' entfernen ....
+template<typename E>
+auto  getDetailsWeightedEdgeEx(E&& edge) {
+    return std::get<3>(std::forward<E>(edge));
+}
+
 
 template<typename E>
 std::string edgeToString(const E& edge) {

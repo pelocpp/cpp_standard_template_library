@@ -272,49 +272,29 @@ public:
                 int id = getId(node);
                 auto details = getDetailsEx(node);
                 oss << "[" << id << "]  " << details << '\n';
-                });
-
+                }
+            );
             return oss.str();
         }
-
-        //template<typename NODE_DETAILS, typename EDGE_DETAILS>
-        //std::string toStringEdges() const {
-        //    std::ostringstream oss;
-        //    for (EDGE edge : m_adj) {
-        //        if (!isEmpty(edge)) {
-        //            EDGE_DETAILS details{};
-        //            if constexpr (std::tuple_size<EDGE>::value == 3) {
-        //                // it's a unweighted edge
-        //                details = getDetailsUnweightedEdge<EDGE, EDGE_DETAILS>(edge);
-        //            }
-        //            if constexpr (std::tuple_size<EDGE>::value == 4) {
-        //                // it's a weighted edge
-        //                details = getDetailsWeightedEdge<EDGE, EDGE_DETAILS>(edge);
-        //            }
-
-        //            oss << edgeToString(edge) << " " << details << '\n';
-        //        }
-        //    }
-        //    return oss.str();
-        //}
 
         template<typename EDGE_DETAILS>
         std::string toStringEdges() const {
             std::ostringstream oss;
             oss << "Edges:" << '\n';
-            for (EDGE edge : m_adj) {
+            for (const EDGE& edge : m_adj) {
                 if (!isEmpty(edge)) {
-                    EDGE_DETAILS details{};
+                    oss << '[' << edgeToString(edge) << ']';
                     if constexpr (std::tuple_size<EDGE>::value == 3) {
                         // it's a unweighted edge
-                        details = getDetailsUnweightedEdge<EDGE, EDGE_DETAILS>(edge);
+                        auto details = getDetailsUnweightedEdgeEx(edge);
+                        oss << "  " << details << '\n';
                     }
-                    if constexpr (std::tuple_size<EDGE>::value == 4) {
+                    else if constexpr (std::tuple_size<EDGE>::value == 4) {
                         // it's a weighted edge
-                        details = getDetailsWeightedEdge<EDGE, EDGE_DETAILS>(edge);
+                        auto details = getDetailsWeightedEdgeEx(edge);
+                        auto weight = getWeightEx(edge);
+                        oss << " [" << weight << "] " << details << '\n';
                     }
-
-                    oss << '[' << edgeToString(edge) << ']' << "  " << details << '\n';
                 }
             }
             return oss.str();

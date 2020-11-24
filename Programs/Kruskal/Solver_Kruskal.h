@@ -43,7 +43,7 @@ namespace Solver_Kruskal {
             }
         );
 
-        for (EDGE edge : edges) {
+        for (const EDGE& edge : edges) {
 
             IndexType source = getSource(edge);
             IndexType target = getTarget(edge);
