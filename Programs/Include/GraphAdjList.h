@@ -5,14 +5,15 @@
 template <typename NODE, typename EDGE>
 class GraphAdjList : public IGraph<NODE, EDGE> {
 private:
-    bool m_isDirected;
+    // bool m_isDirected;
+    Direction m_direction;
     std::vector<NODE> m_nodes;
     std::vector<std::vector<EDGE>> m_adjacencyList;
 
 public:
     // c'tors
     GraphAdjList() = delete;
-    GraphAdjList(bool isDirected) : m_isDirected(isDirected) {}
+    GraphAdjList(Direction direction) : /* m_isDirected{ isDirected } */  m_direction{ direction } {}
 
     // getter
     int countNodes() const override {
@@ -29,7 +30,7 @@ public:
     }
 
     bool isDirected() const override {
-        return m_isDirected;
+        return m_direction == Direction::directed;
     }
 
     bool isWeighted() const override {
@@ -59,6 +60,10 @@ public:
                 addNode(node);
             }
         }
+    }
+
+    NODE getNode(IndexType node) const override {
+        return m_nodes[node];
     }
 
     std::vector<NODE> getAllNodes() const override {

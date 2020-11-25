@@ -77,14 +77,13 @@ void test_01()
     FloydWarshallSolver<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> fw;
     fw.setGraph(&graph);
     fw.solve();
-    //fw.print();
+    fw.printPath(1, 2);
+    fw.printPath(3, 0);
 }
-
 
 int main()
 {
-    std::cout << "Floyd-Warshall Algorithm: Test Graph" << std::endl << std::endl;
-
+    std::cout << "Floyd-Warshall Algorithm: Test Graph" << std::endl;
     test_01();
     return 0;
 }

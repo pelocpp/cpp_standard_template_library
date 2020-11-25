@@ -79,6 +79,10 @@ public:
         }
     }
 
+    NODE getNode(IndexType node) const override {
+        return m_nodes[node];
+    }
+
     std::vector<NODE> getAllNodes() const override {
         return m_nodes;
     }

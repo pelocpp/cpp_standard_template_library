@@ -2,8 +2,14 @@
 // Node.h
 // =====================================================================================
 
+
+// PeLo
 template<typename T>
 using Node = std::pair<IndexType, T>;
+
+// PeLo
+//template<typename T>
+//using Node = std::tuple<IndexType, T>;
 
 // helper functions for nodes
 template<typename N>
@@ -23,10 +29,10 @@ auto getDetailsEx(const N& node) {
     return std::get<1>(node);
 }
 
-template<typename N>
-std::string nodeToString(const N& node) {
-    return to_string(getId(node));
-}
+//template<typename N>
+//std::string nodeToString(const N& node) {
+//    return std::to_string(getId(node));
+//}
 
 // =====================================================================================
 // End-of-File

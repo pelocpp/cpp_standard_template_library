@@ -146,7 +146,7 @@ void test_01_NearestNeighbour_NFE()
     };
 
     // create graph
-    GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(true);
+    GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(Direction::directed);
     graph.addNodes(nodes);
     graph.addEdges(edges);
 
@@ -204,7 +204,7 @@ void test_01_NearestNeighbour_Fuenf_Staedte()
     };
 
     // create graph
-    GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(true);
+    GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(Direction::directed);
     graph.addNodes(nodes);
     graph.addEdges(edges);
 
@@ -230,7 +230,7 @@ void test_01_NearestNeighbour_TSP(std::string filename)
     using namespace EdgeDetailsTest;
 
     // create graph
-    GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(true);
+    GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(Direction::directed);
     bool ok = graph.readTSPFile<TestNodeDetails, TestEdgeDetails>(filename);
     if (!ok)
         return;
