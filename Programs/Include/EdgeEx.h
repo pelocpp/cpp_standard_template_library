@@ -53,6 +53,7 @@ using MyEdge1 = decltype (make_edge(std::declval<IndexType>(), std::declval<Inde
 
 // PeLo
 
+// https://stackoverflow.com/questions/26732709/how-to-use-sfinae-to-create-2-different-implementations-of-the-same-method
 //
 //template<class T>
 //typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type

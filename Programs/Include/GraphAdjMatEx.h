@@ -19,7 +19,7 @@ public:
 
     // PeLo ????  da muss die Anzahl der Knoten übergeben werden .. oder nicht ???
 
-    GraphAdjMatrixEx(bool directed = NotDirected, bool weighted = NotWeighted) : m_numNodes{ -1 }, m_numEdges{ -1 } {
+    GraphAdjMatrixEx(bool directed = NotDirected, bool weighted = NotWeighted) : m_numNodes{ -1 }, m_numEdges{ 0 } {
         m_isDirected = directed;
         m_isWeighted = weighted;
         //m_numNodes = -1;  // PeLo ???

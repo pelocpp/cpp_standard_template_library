@@ -9,7 +9,7 @@ private:
     int  m_numEdges;
     bool m_isDirected;
     bool m_isWeighted;
-    std::vector<std::vector<EDGE>> m_adjacencyList;
+    std::vector<std::vector<EDGE>> m_adjacencyList;   // PeLo: replace EDGE by  std::pair
 
 public:
     // c'tors
