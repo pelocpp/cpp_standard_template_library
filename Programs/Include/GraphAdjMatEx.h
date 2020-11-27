@@ -154,10 +154,12 @@ public:
                         oss << row << separator << col;
 
                         if (isWeighted()) {
-                        //    if constexpr (std::tuple_size<EDGE>::value == 4) {   // PeLo das kann weg !!!!!!!!!!!!!!!!!!!!
+                            if constexpr (std::tuple_size<EDGE>::value >= 3) {   // PeLo das kann weg !!!!!!!!!! NEIN - das ist hier ein Problem
+                                                                                // ich muss irgendwie Weighted Edge und Unweighted Edge
+                                                                                // zur COMPILE TIME unterscheiden können !!!!
                                 auto weight = getWeightEx(edge);
-                        //        oss << " {" << weight << "} ";
-                         //   }
+                                oss << " {" << weight << "} ";
+                            }
                         }
 
                         oss << "  ||  ";

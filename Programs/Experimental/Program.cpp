@@ -88,7 +88,6 @@ void test_02_experimental()
     GraphAdjMatrixEx<TestEdgeType> graph(Directed, Weighted);
 
     graph.setNodesCount(NumNodes);
-
     graph.addEdges(edges);
 
     std::string graphDisplay = graph.toString();

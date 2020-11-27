@@ -16,6 +16,9 @@ auto getDetail(NODE&& node, int&& i) {
     return std::get<i>(std::forward<NODE>(node));
 }
 
+template<typename ...TARGS>
+using BaseNode = std::tuple<TARGS ...>;
+
 //template<typename WEIGHT, typename ... ARGS>
 //auto make_weighted_edge(IndexType to, IndexType target, WEIGHT weight, ARGS ... args) {
 //    return std::tuple<IndexType, IndexType, ARGS ...> { to, target, weight, args ... };

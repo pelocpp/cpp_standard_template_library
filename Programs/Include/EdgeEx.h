@@ -51,6 +51,30 @@ void setTargetNode(EDGE&& edge, int value) {
 template<typename ... TARGS>
 using MyEdge1 = decltype (make_edge(std::declval<IndexType>(), std::declval<IndexType>(), std::declval<TARGS>() ...));
 
+// PeLo
+
+//
+//template<class T>
+//typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+//make_edge_ex(T x, T y, int ulp)
+//{
+//    return std::tuple<IndexType, IndexType, TARGS ...> { from, to, args ... };
+//}
+//
+//template<class T>
+//typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+//make_weighted_edge_ex(T x, T y, int ulp)
+//{
+//    return std::tuple<IndexType, IndexType, TARGS ...> { from, to, args ... };
+//}
+
+
+// =====================================================================================
+// REST
+// =====================================================================================
+
+
+
 // ==================================================================
 // rest - needed ??? PeLo
 
