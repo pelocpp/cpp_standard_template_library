@@ -1,14 +1,14 @@
 // =====================================================================================
-// Solver_FloydWarshall
+// Solver_FloydWarshall Ex
 // =====================================================================================
 
-namespace SolverFloydWarshall {
+namespace SolverFloydWarshallEx {
 
-    template <typename NODE, typename EDGE>
-    class FloydWarshallSolver {
+    template <typename EDGE>
+    class FloydWarshallSolverEx {
 
     private:
-        const IGraph <NODE, EDGE>* m_graph;
+        const IGraphEx<EDGE>* m_graph;
         std::vector<std::vector<int>> m_floyd;
 
         std::vector<std::vector<int>> mat_distances;
@@ -16,10 +16,10 @@ namespace SolverFloydWarshall {
 
     public:
         // c'tor
-        FloydWarshallSolver() : m_graph{ nullptr } {}
+        FloydWarshallSolverEx() : m_graph{ nullptr } {}
 
         // public interface
-        void setGraph(const IGraph<NODE, EDGE>*);
+        void setGraph(const IGraphEx<EDGE>*);
         void solve();
         void printPath(IndexType from, IndexType to);
 
@@ -27,13 +27,13 @@ namespace SolverFloydWarshall {
         void printPathEx(IndexType from, IndexType to);
     };
 
-    template <typename NODE, typename EDGE>
-    void FloydWarshallSolver<NODE, EDGE>::setGraph(const IGraph<NODE, EDGE>* graph) {
+    template <typename EDGE>
+    void FloydWarshallSolverEx<EDGE>::setGraph(const IGraphEx<EDGE>* graph) {
         m_graph = graph;
     }
 
-    template <typename NODE, typename EDGE>
-    void FloydWarshallSolver<NODE, EDGE>::solve() {
+    template <typename EDGE>
+    void FloydWarshallSolverEx<EDGE>::solve() {
 
         constexpr int infinite = std::numeric_limits<int>::max();
 
@@ -77,10 +77,10 @@ namespace SolverFloydWarshall {
 
     }
 
-    template <typename NODE, typename EDGE>
-    void FloydWarshallSolver<NODE, EDGE>::printPath(IndexType from, IndexType to) {
+    template <typename EDGE>
+    void FloydWarshallSolverEx<EDGE>::printPath(IndexType from, IndexType to) {
 
-         NODE start = m_graph->getNode(from);
+       //  NODE start = m_graph->getNode(from);
 
          std::cout << "von Stadt: " << from << std::endl;
 
@@ -91,8 +91,8 @@ namespace SolverFloydWarshall {
          std::cout << "macht Kilometer: " << mat_distances[from][to] << std::endl;
     }
 
-    template <typename NODE, typename EDGE>
-    void FloydWarshallSolver<NODE, EDGE>::printPathEx(IndexType from, IndexType to) {
+    template <typename EDGE>
+    void FloydWarshallSolverEx<EDGE>::printPathEx(IndexType from, IndexType to) {
     
         int k;
 

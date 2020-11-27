@@ -2,7 +2,6 @@
 // Node.h
 // =====================================================================================
 
-
 // PeLo
 template<typename T>
 using Node = std::pair<IndexType, T>;

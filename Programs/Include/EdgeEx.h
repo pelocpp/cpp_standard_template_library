@@ -1,6 +1,61 @@
 // =====================================================================================
-// Edge.h
+// EdgeEx.h
 // =====================================================================================
+
+// ==================================================================
+// experimental
+
+template<typename ... TARGS>
+auto make_edge(IndexType from, IndexType to, TARGS ... args) {
+    return std::tuple<IndexType, IndexType, TARGS ...> { from, to, args ... };
+}
+
+template<typename WEIGHT, typename ... TARGS>
+auto make_weighted_edge(IndexType from, IndexType to, WEIGHT weight, TARGS ... args) {
+    return std::tuple<IndexType, IndexType, TARGS ...> { from, to, weight, args ... };
+}
+
+//template<typename ... TARGS>
+//auto make_empty_edge(TARGS ... args) {
+//    return std::tuple<IndexType, IndexType, args ...> { -1, -1, args ... };
+//}
+//
+//template<typename TWEIGHT, typename ... TARGS>
+//auto make_empty_weighted_edge(TWEIGHT weight, TARGS ... args) {
+//    return std::tuple<IndexType, IndexType, TARGS ...> { -1, -1, TWEIGHT{}, args ... };
+//}
+
+template<typename ...TARGS>
+using BaseEdge = std::tuple<IndexType, IndexType, TARGS ...>;
+
+template<typename TWEIGHT, typename ...TARGS>
+using BaseEdgeWeighted = std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...>;
+
+// PeLo: Same name as NODE template .... is it a problem ????
+template<typename EDGE>
+auto getEdgeDetail(EDGE&& edge, int&& i) {
+    return std::get<i>(std::forward<EDGE>(edge));
+}
+
+template<typename EDGE>
+void setSourceNode(EDGE&& edge, int value) {
+    std::get<0>(edge) = value;
+}
+
+template<typename EDGE>
+void setTargetNode(EDGE&& edge, int value) {
+    std::get<1>(edge) = value;
+}
+
+
+template<typename ... TARGS>
+using MyEdge1 = decltype (make_edge(std::declval<IndexType>(), std::declval<IndexType>(), std::declval<TARGS>() ...));
+
+// ==================================================================
+// rest - needed ??? PeLo
+
+
+
 
 template<typename T>
 using UnweightedEdge = std::tuple<IndexType, IndexType, T>;
@@ -10,8 +65,8 @@ using WeightedEdge = std::tuple<IndexType, IndexType, W, T>;
 
 // PeLo: umbenennen: make_WeightedEdge
 template<typename W, typename T>
-WeightedEdge<W, T> createWeightedEdge(IndexType source, IndexType target, W weight) {
-    return std::tuple<IndexType, IndexType, W, T> {source, target, weight, T{}};
+WeightedEdge<W, T> createWeightedEdge(IndexType to, IndexType target, W weight) {
+    return std::tuple<IndexType, IndexType, W, T> {to, target, weight, T{}};
 }
 
 // helper functions for edges
@@ -79,6 +134,7 @@ std::string edgeToString(const E& edge) {
     oss << source << "->" << target;
     return oss.str();
 }
+
 
 // =====================================================================================
 // End-of-File
