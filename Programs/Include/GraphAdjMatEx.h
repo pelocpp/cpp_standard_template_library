@@ -130,7 +130,8 @@ public:
     virtual std::string toString() const override {
         std::ostringstream oss;
 
-        oss << "Graph: " << (m_isDirected ? "directed" : "undirected") << ", " << m_isWeighted << "\n";
+        oss << "Graph: " << (m_isDirected ? "directed" : "undirected") << " / ";
+        oss << (m_isWeighted ? "weighted" : "not weighted") << "\n";
 
         if (!isDirected()) {
 

@@ -159,7 +159,7 @@ auto my_make_edge(int id, std::string text) -> MyNodeType {
     return make_node<int, std::string>(id, text);
 };
 
-void test_DFS_03()
+void test_DFS_01()
 {
     using namespace Solver_DFS_Ex;
 
@@ -190,14 +190,14 @@ void test_DFS_03()
     };
 
     // graph with 8 nodes (vertices)
-    // GraphAdjList<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> testGraph(false);
-    GraphAdjMatrixEx<BaseEdge<>> graph(NotDirected, NotWeighted);
-
-    std::string graphDisplay = graph.toString();
-    std::cout << graphDisplay << std::endl;
+    GraphAdjListEx<BaseEdge<>> graph(NotDirected, NotWeighted);
+    //GraphAdjMatrixEx<BaseEdge<>> graph(NotDirected, NotWeighted);
 
     graph.setNodesCount(NumNodes);
     graph.addEdges(edges);
+
+    std::string graphDisplay = graph.toString();
+    std::cout << graphDisplay << std::endl;
 
     DFSSolverEx<BaseEdge<>> dfs;
     dfs.setGraph(&graph);
@@ -216,91 +216,53 @@ void test_DFS_03()
     }
 }
 
-//
-//void test_DFS_02()
-//{
-//    using namespace Solver_DFS;
-//    using namespace NodeDetailsNumbered;
-//    using namespace EdgeDetailsEmpty;
-//
-//    //class NumberedNodeDetails {
-//    //private:
-//    //    int m_number;
-//    //public:
-//    //    // c'tors
-//    //    NumberedNodeDetails() : m_number(0) {}
-//    //    NumberedNodeDetails(int number) : m_number(number) {}
-//
-//    //    // getter
-//    //    int getNumber() const { return m_number; };
-//    //};
-//
-//    //// just for testing 
-//    //class EmptyEdgeDetails {
-//
-//    //public:
-//    //    // c'tors
-//    //    EmptyEdgeDetails() = default;
-//    //};
-//
-//    Node<NumberedNodeDetails> n1{ 0, 0 };
-//    Node<NumberedNodeDetails> n2{ 1, 1 };
-//    Node<NumberedNodeDetails> n3{ 2, 2 };
-//    Node<NumberedNodeDetails> n4{ 3, 3 };
-//    Node<NumberedNodeDetails> n5{ 4, 4 };
-//    Node<NumberedNodeDetails> n6{ 5, 5 };
-//    Node<NumberedNodeDetails> n7{ 6, 6 };
-//    Node<NumberedNodeDetails> n8{ 7, 7 };
-//
-//    std::vector<Node<NumberedNodeDetails>> nodes = {
-//        n1, n2, n3, n4, n5, n6, n7, n8
-//    };
-//
-//    // vector of graph edges as per above diagram
-//    std::vector<UnweightedEdge<EmptyEdgeDetails>> edges = {
-//        {0, 3 , {} },
-//        {1, 0, {} }, {1, 2, {} }, {1, 4, {} },
-//        {2, 7, {} },
-//        {3, 4, {} }, {3, 5, {} },
-//        {4, 3, {} }, {4, 6, {} },
-//        {5, 6, {} },
-//        {6, 7, {} }
-//    };
-//
-//    // graph with 8 nodes (vertices)
-//    // GraphAdjList<Node<NumberedNodeDetails>, UnweightedEdge<EmptyEdgeDetails>> testGraph(false);
-//    GraphAdjMatrix<Node<NumberedNodeDetails>, UnweightedEdge<EmptyEdgeDetails>> testGraph(Direction::undirected);
-//
-//
-//    testGraph.addNodes(nodes);
-//    testGraph.addEdges(edges);
-//
-//    std::cout << "Node:       " << testGraph.countNodes() << std::endl;
-//    std::cout << "Edges:      " << testGraph.countEdges() << std::endl;
-//    std::cout << "IsDirected: " << testGraph.isDirected() << std::endl;
-//    std::cout << "IsWeighted: " << testGraph.isWeighted() << std::endl;
-//
-//    DFSSolver<Node<NumberedNodeDetails>, UnweightedEdge<EmptyEdgeDetails>> dfs;
-//
-//    dfs.setGraph(&testGraph);
-//
-//    constexpr int Source = 1;
-//    constexpr int Target = 6;
-//
-//    dfs.findPathAll(Source, Target);
-//
-//    if (int count; count = dfs.countFoundPaths())
-//    {
-//        std::cout << "Found " << count << " solutions:" << std::endl;
-//        dfs.printPaths();
-//    }
-//    else {
-//        std::cout << "No path exists between vertices " << Source << " and " << Target;
-//    }
-//}
-//
 
+void test_DFS_02()
+{
+    using namespace Solver_DFS_Ex;
 
+    constexpr int NumNodes = 8;
+
+    // vector of graph edges as per above diagram
+    std::vector<BaseEdge<>> edges = {
+        {0, 3 },
+        {1, 0 }, {1, 2 }, {1, 4 },
+        {2, 7 },
+        {3, 4 }, {3, 5 },
+        {4, 3 }, {4, 6 },
+        {5, 6 },
+        {6, 7 }
+    };
+
+    // graph with 8 nodes (vertices)
+    GraphAdjListEx<BaseEdge<>> graph(Directed, NotWeighted);
+    //GraphAdjMatrixEx<BaseEdge<>> graph(Directed, NotWeighted);
+
+    graph.setNodesCount(NumNodes);
+    graph.addEdges(edges);
+
+    std::cout << "Node:       " << graph.countNodes() << std::endl;
+    std::cout << "Edges:      " << graph.countEdges() << std::endl;
+    std::cout << "IsDirected: " << graph.isDirected() << std::endl;
+    std::cout << "IsWeighted: " << graph.isWeighted() << std::endl;
+
+    DFSSolverEx<BaseEdge<>> dfs;
+    dfs.setGraph(&graph);
+
+    constexpr int Source = 1;
+    constexpr int Target = 6;
+
+    dfs.findPathAll(Source, Target);
+
+    if (int count; count = dfs.countFoundPaths())
+    {
+        std::cout << "Found " << count << " solutions:" << std::endl;
+        dfs.printPaths();
+    }
+    else {
+        std::cout << "No path exists between vertices " << Source << " and " << Target;
+    }
+}
 
 // =====================================================================================
 // End-of-File

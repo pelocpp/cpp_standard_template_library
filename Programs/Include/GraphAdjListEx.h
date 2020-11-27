@@ -1,26 +1,36 @@
 // =====================================================================================
-// GraphAdjList.h
+// GraphAdjListEx.h
 // =====================================================================================
 
-template <typename NODE, typename EDGE>
-class GraphAdjList : public IGraph<NODE, EDGE> {
+template <typename EDGE>
+class GraphAdjListEx : public IGraphEx<EDGE> {
 private:
-    // bool m_isDirected;
-    Direction m_direction;
-    std::vector<NODE> m_nodes;
+    int  m_numNodes;
+    int  m_numEdges;
+    bool m_isDirected;
+    bool m_isWeighted;
     std::vector<std::vector<EDGE>> m_adjacencyList;
 
 public:
     // c'tors
-    GraphAdjList() = delete;
-    GraphAdjList(Direction direction) : /* m_isDirected{ isDirected } */  m_direction{ direction } {}
+    GraphAdjListEx() = delete;
 
-    // getter
-    int countNodes() const override {
-        return m_nodes.size();
+    GraphAdjListEx(bool directed = NotDirected, bool weighted = NotWeighted) : m_numNodes{ -1 }, m_numEdges{ -1 } {
+        m_isDirected = directed;
+        m_isWeighted = weighted;
+        //m_numNodes = -1;  // PeLo ???
+        //m_numEdges = -1; 
     }
 
-    int countEdges() const override {
+    // getter
+    virtual int countNodes() const override {
+        return m_numNodes;
+    }
+
+    virtual int countEdges() const override {
+
+        // PeLo: Was ist mit der Variablen ????
+
         int count = 0;
         std::for_each(std::begin(m_adjacencyList), std::end(m_adjacencyList), [&count](std::vector<EDGE> row) {
             count += row.size();
@@ -29,60 +39,61 @@ public:
         return count;
     }
 
-    bool isDirected() const override {
-        return m_direction == Direction::directed;
+    virtual bool isDirected() const override {
+        return m_isDirected;
     }
 
-    bool isWeighted() const override {
-        return std::tuple_size<EDGE>::value == 4;
+    virtual bool isWeighted() const override {
+        return m_isWeighted;
     }
+
+    // setter
+    virtual void setNodesCount(int numNodes) override {
+        m_numNodes = numNodes;
+
+        // initialize adjacency matrix
+        m_adjacencyList.resize(m_numNodes);
+    }
+
+
+    //void addNodes(const std::vector<NODE>& nodes) override {
+    //    if (m_nodes.size() != 0 or m_adjacencyList.size() != 0) {
+    //        throw std::bad_function_call();
+    //    }
+    //    else {
+    //        m_adjacencyList.resize(nodes.size());
+    //        for (const NODE& node : nodes) {
+    //            addNode(node);
+    //        }
+    //    }
+    //}
+
+    //void addNodes(const std::initializer_list<NODE> list) override {
+    //    if (m_nodes.size() != 0 or m_adjacencyList.size() != 0) {
+    //        throw std::bad_function_call();
+    //    }
+    //    else {
+    //        m_adjacencyList.resize(list.size());
+    //        for (const NODE& node : list) {
+    //            addNode(node);
+    //        }
+    //    }
+    //}
 
     // public interface
-    void addNodes(const std::vector<NODE>& nodes) override {
-        if (m_nodes.size() != 0 or m_adjacencyList.size() != 0) {
-            throw std::bad_function_call();
-        }
-        else {
-            m_adjacencyList.resize(nodes.size());
-            for (const NODE& node : nodes) {
-                addNode(node);
-            }
-        }
-    }
-
-    void addNodes(const std::initializer_list<NODE> list) override {
-        if (m_nodes.size() != 0 or m_adjacencyList.size() != 0) {
-            throw std::bad_function_call();
-        }
-        else {
-            m_adjacencyList.resize(list.size());
-            for (const NODE& node : list) {
-                addNode(node);
-            }
-        }
-    }
-
-    NODE getNode(IndexType node) const override {
-        return m_nodes[node];
-    }
-
-    std::vector<NODE> getAllNodes() const override {
-        return m_nodes;
-    }
-
-    void addEdges(const std::vector<EDGE>& edges) override {
+    virtual void addEdges(const std::vector<EDGE>& edges) override {
         for (const EDGE& edge : edges) {
             addEdge(edge);
         }
     }
 
-    void addEdges(const std::initializer_list<EDGE> list) override {
+    virtual void addEdges(const std::initializer_list<EDGE> list) override {
         for (const EDGE& edge : list) {
             addEdge(edge);
         }
     }
 
-    std::vector<EDGE> getAllEdges() const override {
+    virtual std::vector<EDGE> getAllEdges() const override {
         std::vector<EDGE> edges;
         for (std::vector<EDGE> row : m_adjacencyList) {
            std::copy(row.begin(), row.end(), std::back_inserter(edges));
@@ -90,7 +101,7 @@ public:
         return edges;
     }
 
-    EDGE searchEdge(IndexType source, IndexType target) const override {
+    virtual EDGE searchEdge(IndexType source, IndexType target) const override {
 
         auto iter = std::find_if(
             std::begin(m_adjacencyList[source]),
@@ -110,8 +121,11 @@ public:
         }
     }
 
-    std::string toString() const override {
+    virtual std::string toString() const override {
         std::ostringstream oss;
+
+        oss << "Graph: " << (m_isDirected ? "directed" : "undirected") << " / ";
+        oss << (m_isWeighted ? "weighted" : "not weighted") << "\n";
 
         bool isFirstEdge = true;
         int row = 0;
@@ -150,7 +164,7 @@ public:
         return oss.str();
     }
 
-    std::vector<IndexType> getNeighbouringNodes(IndexType node) const override {
+    virtual std::vector<IndexType> getNeighbouringNodes(IndexType node) const override {
 
         std::vector<IndexType> neighbours;
         for (const EDGE& edge : m_adjacencyList[node]) {
@@ -162,7 +176,7 @@ public:
         return neighbours;
     }
 
-    std::vector<EDGE> getNeighbouringEdges(IndexType node) const override {
+    virtual std::vector<EDGE> getNeighbouringEdges(IndexType node) const override {
         // need a copy (using copy c'tor)
         std::vector<EDGE> edges = m_adjacencyList[node];
         return edges;
@@ -170,17 +184,17 @@ public:
 
 public:
     // additional member template functions
-    template<typename NODE_DETAILS, typename EDGE_DETAILS>
-    std::string toStringNodes() const {
-        std::ostringstream oss;
-        std::for_each(std::begin(m_nodes), std::end(m_nodes), [&](const NODE& node) {
-            int id = getId(node);
-            NODE_DETAILS details = getDetails<NODE, NODE_DETAILS>(node);
-            oss << "[" << id << "] " << details << '\n';
-            });
+    //template<typename NODE_DETAILS, typename EDGE_DETAILS>
+    //std::string toStringNodes() const {
+    //    std::ostringstream oss;
+    //    std::for_each(std::begin(m_nodes), std::end(m_nodes), [&](const NODE& node) {
+    //        int id = getId(node);
+    //        NODE_DETAILS details = getDetails<NODE, NODE_DETAILS>(node);
+    //        oss << "[" << id << "] " << details << '\n';
+    //        });
 
-        return oss.str();
-    }
+    //    return oss.str();
+    //}
 
     template<typename NODE_DETAILS, typename EDGE_DETAILS>
     std::string toStringEdges() const {
@@ -224,6 +238,14 @@ public:
         parseTSPData<NODE_DETAILS, EDGE_DETAILS>(infile, dimension);
         return true;
     }
+
+    private:
+        EDGE make_empty_edge() {
+            EDGE empty{};
+            setSourceNode(empty, -1);
+            setTargetNode(empty, -1);
+            return empty;
+        }
 
 private:
     // private helper methods
@@ -322,76 +344,81 @@ private:
     template<typename NODE_DETAILS, typename EDGE_DETAILS>
     void parseTSPData(std::ifstream& infile, int dimension) {
 
-        // create rsp. resize node vector and adjacency vector to appropriate size
-        m_nodes.resize(dimension);
+        //// create rsp. resize node vector and adjacency vector to appropriate size
+        //m_nodes.resize(dimension);
 
-        // fill vector with node objects
-        std::generate(std::begin(m_nodes), std::end(m_nodes), [index = 0]() mutable {
-            NODE node{ static_cast<IndexType>(index), {} };
-            index++;
-            return node;
-        });
+        //// fill vector with node objects
+        //std::generate(std::begin(m_nodes), std::end(m_nodes), [index = 0]() mutable {
+        //    NODE node{ static_cast<IndexType>(index), {} };
+        //    index++;
+        //    return node;
+        //});
 
-        m_adjacencyList.resize(dimension);
+        //m_adjacencyList.resize(dimension);
 
-        try {
+        //try {
 
-            int row = 1;
-            int col = 0;
+        //    int row = 1;
+        //    int col = 0;
 
-            while (true) {
-                std::string line;
-                std::getline(infile, line);
+        //    while (true) {
+        //        std::string line;
+        //        std::getline(infile, line);
 
-                if (line == "DISPLAY_DATA_SECTION") {
-                    // end of display data section reached
-                    break;
-                }
-                //  std::cout << line << std::endl;
+        //        if (line == "DISPLAY_DATA_SECTION") {
+        //            // end of display data section reached
+        //            break;
+        //        }
+        //        //  std::cout << line << std::endl;
 
-                std::istringstream iss = std::istringstream{ line };
-                while (true) {
-                    std::string value;
+        //        std::istringstream iss = std::istringstream{ line };
+        //        while (true) {
+        //            std::string value;
 
-                    iss >> value;
-                    if (value.empty()) {
-                        break;
-                    }
+        //            iss >> value;
+        //            if (value.empty()) {
+        //                break;
+        //            }
 
-                    // convert string to integer (weight)
-                    int weight = std::stoi(value);
+        //            // convert string to integer (weight)
+        //            int weight = std::stoi(value);
 
-                    // add edge to graph
-                    col++;
+        //            // add edge to graph
+        //            col++;
 
-                    if (row != col) {
-                        // std::cout << "Value " << weight << " [" << row << "," << col << "]" << std::endl;
-                        EDGE edge1 = createWeightedEdge<int, EDGE_DETAILS>(row - 1, col - 1, weight);
-                        EDGE edge2 = createWeightedEdge<int, EDGE_DETAILS>(col - 1, row - 1, weight);
-                        addEdge(edge1);
-                        addEdge(edge2);
-                    }
+        //            if (row != col) {
+        //                // std::cout << "Value " << weight << " [" << row << "," << col << "]" << std::endl;
+        //                EDGE edge1 = createWeightedEdge<int, EDGE_DETAILS>(row - 1, col - 1, weight);
+        //                EDGE edge2 = createWeightedEdge<int, EDGE_DETAILS>(col - 1, row - 1, weight);
+        //                addEdge(edge1);
+        //                addEdge(edge2);
+        //            }
 
-                    // switch to next diagonal row, if necessary
-                    if (col == row) {
-                        row++;
-                        col = 0;
-                    }
-                }
-            }
+        //            // switch to next diagonal row, if necessary
+        //            if (col == row) {
+        //                row++;
+        //                col = 0;
+        //            }
+        //        }
+        //    }
 
-            infile.close();
-        }
-        catch (std::ifstream::failure e) {
-            std::cerr << "Error reading file!";
-            infile.close();
-            return;
-        }
+        //    infile.close();
+        //}
+        //catch (std::ifstream::failure e) {
+        //    std::cerr << "Error reading file!";
+        //    infile.close();
+        //    return;
+        //}
     }
 
-    void addNode(const NODE& node) {
-        m_nodes.push_back(node);
-    }
+    //void addNode(const NODE& node) {
+    //    m_nodes.push_back(node);
+    //}
+
+
+
+
+    // PeLo: Was ist hier mit gewichteter Edge ???????????????????
 
     void addEdge(const EDGE& edge) {
         IndexType nodeNum = getSource<EDGE>(edge);

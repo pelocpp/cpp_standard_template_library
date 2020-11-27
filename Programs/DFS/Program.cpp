@@ -36,7 +36,7 @@
 #include "../Include/EdgeEx.h"
 
 #include "../Include/GraphInterfaceEx.h"
-//#include "../Include/GraphAdjListEx.h"
+#include "../Include/GraphAdjListEx.h"
 #include "../Include/GraphAdjMatEx.h"
 
 #include "Solver_DFS.h"
@@ -45,10 +45,9 @@
 //
 void test_DFS_01();
 void test_DFS_02();
-void test_DFS_03();
 
 int main() {
-    test_DFS_03();
+    test_DFS_02();
     return 0;
 }
 
