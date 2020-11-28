@@ -2,14 +2,14 @@
 // GraphAdjMatrixEx.h
 // =====================================================================================
 
-template <typename EDGE>
+template <typename EDGE, bool WEIGHTED>
 class GraphAdjMatrixEx final : public IGraphEx<EDGE> {
 
 private:
     int  m_numNodes;
     int  m_numEdges;
     bool m_isDirected;
-    bool m_isWeighted;
+  //  bool m_isWeighted;
     std::vector<EDGE> m_adj; // adjacency matrix
 
 public:
@@ -19,9 +19,9 @@ public:
 
     // PeLo ????  da muss die Anzahl der Knoten übergeben werden .. oder nicht ???
 
-    GraphAdjMatrixEx(bool directed = NotDirected, bool weighted = NotWeighted) : m_numNodes{ -1 }, m_numEdges{ 0 } {
+    GraphAdjMatrixEx(bool directed = NotDirected) : m_numNodes{ -1 }, m_numEdges{ 0 } {    // das mit num edges === 0 ist auch scheiße ... 
         m_isDirected = directed;
-        m_isWeighted = weighted;
+     //   m_isWeighted = WEIGHTED;
         //m_numNodes = -1;  // PeLo ???
         //m_numEdges = -1; 
     }
@@ -40,7 +40,7 @@ public:
     }
 
     virtual bool isWeighted() const override {
-        return m_isWeighted;
+        return WEIGHTED;
     }
 
     // setter
@@ -131,7 +131,7 @@ public:
         std::ostringstream oss;
 
         oss << "Graph: " << (m_isDirected ? "directed" : "undirected") << " / ";
-        oss << (m_isWeighted ? "weighted" : "not weighted") << "\n";
+        oss << (WEIGHTED ? "weighted" : "not weighted") << "\n";
 
         if (!isDirected()) {
 

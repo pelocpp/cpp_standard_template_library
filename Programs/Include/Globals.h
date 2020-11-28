@@ -2,7 +2,7 @@
 // Globals.h
 // =====================================================================================
 
-using IndexType = int;
+using IndexType = size_t;   // PeLo     size_t ausprobieren !!!!!!!!!!!!!!!!
 
 enum class Direction { directed, undirected };
 //

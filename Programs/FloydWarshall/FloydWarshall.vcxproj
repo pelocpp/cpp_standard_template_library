@@ -142,9 +142,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="ProgramEx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Solver_FloydWarshall.h" />
+    <ClInclude Include="Solver_FloydWarshallEx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

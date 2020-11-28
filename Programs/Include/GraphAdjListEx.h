@@ -2,13 +2,13 @@
 // GraphAdjListEx.h
 // =====================================================================================
 
-template <typename EDGE>
-class GraphAdjListEx : public IGraphEx<EDGE> {
+template <typename EDGE, bool WEIGHTED>
+class GraphAdjListEx final : public IGraphEx<EDGE> {
 private:
     int  m_numNodes;
     int  m_numEdges;
     bool m_isDirected;
-    bool m_isWeighted;
+   // bool m_isWeighted;
     std::vector<std::vector<EDGE>> m_adjacencyList;   // PeLo: replace EDGE by  std::pair
 
 public:
@@ -17,7 +17,7 @@ public:
 
     GraphAdjListEx(bool directed = NotDirected, bool weighted = NotWeighted) : m_numNodes{ -1 }, m_numEdges{ -1 } {
         m_isDirected = directed;
-        m_isWeighted = weighted;
+    //    m_isWeighted = weighted;
         //m_numNodes = -1;  // PeLo ???
         //m_numEdges = -1; 
     }
@@ -44,7 +44,7 @@ public:
     }
 
     virtual bool isWeighted() const override {
-        return m_isWeighted;
+        return WEIGHTED;
     }
 
     // setter
@@ -125,7 +125,7 @@ public:
         std::ostringstream oss;
 
         oss << "Graph: " << (m_isDirected ? "directed" : "undirected") << " / ";
-        oss << (m_isWeighted ? "weighted" : "not weighted") << "\n";
+        oss << (WEIGHTED ? "weighted" : "not weighted") << "\n";
 
         bool isFirstEdge = true;
         int row = 0;
