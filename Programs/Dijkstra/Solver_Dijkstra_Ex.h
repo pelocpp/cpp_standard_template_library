@@ -140,7 +140,7 @@ void printDistances(IndexType start, IndexType numNodes, std::vector<IndexType>&
     //int i = 0;
     //for (NODE node : nodes) {
 
-    for (int i = 0; i < numNodes; ++i) {
+    for (IndexType i = 0; i < numNodes; ++i) {
        // NODE_DETAILS targetLocation = getDetails<NODE_DETAILS>(node);
         std::cout
             << "Distance from " << start
@@ -185,7 +185,7 @@ void test_01_Dijkstra_LMU_Muenchen_Abstract_Ex()
 
     // create graph
     // GraphAdjListEx<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(true);
-    GraphAdjMatrixEx<MyEdgeType> graph(Directed, Weighted);
+    GraphAdjMatrixEx<MyEdgeType, Weighted> graph(Directed);
 
     graph.setNodesCount(6);
     graph.addEdges(edges);
@@ -213,7 +213,7 @@ void test_02_Dijkstra_Bleeptrack_Youtube_Tutorial_Ex()
     constexpr int NumNodes = 9;
 
     // create graph
-    GraphAdjListEx<MyEdgeType> graph(Directed, Weighted);
+    GraphAdjListEx<MyEdgeType, Weighted> graph(Directed);
 
     graph.setNodesCount(NumNodes);
 
@@ -339,8 +339,8 @@ void test_03_Dijkstra_TUM_Europa_Ex ()
     MyEdgeType we28{ e, j, 766 , "Rom => Wien" };
 
     // create graph
-    // GraphAdjList<Node<CityDetails>, MyEdgeType> graph(true);
-    GraphAdjMatrixEx<MyEdgeType> graph(Directed, Weighted);
+    GraphAdjListEx<MyEdgeType, Weighted> graph(Directed);
+    // GraphAdjMatrixEx<MyEdgeType, Weighted> graph(Directed);
 
     graph.setNodesCount(NumNodes);
 

@@ -22,7 +22,6 @@
 #include <sstream>
 
 #include "../Include/Globals.h"
-
 #include "../Include/NodeEx.h"
 #include "../Include/EdgeEx.h"
 
@@ -30,7 +29,7 @@
 #include "../Include/GraphAdjListEx.h"
 #include "../Include/GraphAdjMatEx.h"
 
-#include "Solver_Dijkstra.h"
+// #include "Solver_Dijkstra.h"
 #include "Solver_Dijkstra_Ex.h"
 
 // Dijkstra test functions
