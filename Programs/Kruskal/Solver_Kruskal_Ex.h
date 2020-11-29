@@ -10,7 +10,7 @@ namespace Solver_Kruskal_Ex {
 
     template <typename EDGE>
     class KruskalSolverEx {
-        const IGraphEx <EDGE>* m_graph;
+        const IGraphEx<EDGE>* m_graph;
         std::vector<IndexType> m_root;  // root nodes ('Union Find' algorithm)
         std::vector<EDGE> m_mst;        // minimum spanning tree (described with edges)
 

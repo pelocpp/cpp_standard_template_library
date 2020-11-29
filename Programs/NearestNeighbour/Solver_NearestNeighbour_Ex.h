@@ -8,7 +8,7 @@ namespace Solver_NearestNeighbour_Ex {
     template <typename EDGE>
     class NearestNeighbourSolverEx {
     private:
-        const IGraphEx <EDGE>* m_graph;
+        const IGraphEx<EDGE>* m_graph;
         std::stack<IndexType> m_stack;
         int m_totalDistance;
 
@@ -49,7 +49,7 @@ namespace Solver_NearestNeighbour_Ex {
             std::optional<int> min(std::nullopt);
             IndexType found = -1;
 
-            for (EDGE edge : neighbours) {
+            for (const EDGE& edge : neighbours) {
 
                 int weight = getWeight<EDGE, int>(edge);
                 IndexType target = getTarget(edge);

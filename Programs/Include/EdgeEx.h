@@ -6,29 +6,6 @@
 // experimental
 
 
-//
-//template<typename T, typename = void> struct EgdeCreator;
-//
-//template<typename T>
-//struct EgdeCreator < T, typename std::enable_if<std::is_pod<T>::type>
-//{
-//    static auto make_edge_revised()
-//    {
-//        return std::tuple<IndexType, IndexType, TARGS ...> { from, to, args ... };
-//    }
-//};
-//
-//template<typename T>
-//struct EgdeCreator < T, typename std::enable_if<!std::is_pod<T>::type>
-//{
-//    static auto make_edge_revised()
-//    {
-//        return std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...> { from, to, weight, args ... };
-//    };
-//};
-
-
-
 
 template<typename ... TARGS>
 auto make_edge(IndexType from, IndexType to, TARGS ... args) {
@@ -94,6 +71,30 @@ using MyEdge1 = decltype (make_edge(std::declval<IndexType>(), std::declval<Inde
 //{
 //    return std::tuple<IndexType, IndexType, TARGS ...> { from, to, args ... };
 //}
+
+
+//
+//template<typename T, typename = void> struct EgdeCreator;
+//
+//template<typename T>
+//struct EgdeCreator < T, typename std::enable_if<std::is_pod<T>::type>
+//{
+//    static auto make_edge_revised()
+//    {
+//        return std::tuple<IndexType, IndexType, TARGS ...> { from, to, args ... };
+//    }
+//};
+//
+//template<typename T>
+//struct EgdeCreator < T, typename std::enable_if<!std::is_pod<T>::type>
+//{
+//    static auto make_edge_revised()
+//    {
+//        return std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...> { from, to, weight, args ... };
+//    };
+//};
+
+
 
 
 // =====================================================================================

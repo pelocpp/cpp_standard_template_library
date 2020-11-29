@@ -59,21 +59,21 @@ void test_BFS_NordAmerika()
     // vector of graph edges as per above diagram
     std::vector<BaseEdge<>> edges = {
 
-        {0, 1 },
-        {0, 2 },
-        {0, 3 },
-        {1, 3 },
-        {2, 4 },
-        {2, 1 },
-        {2, 5 },
-        {3, 4 },
-        {3, 6 },
-        {3, 7 },
-        {6, 4 }
+        { 0, 1 },
+        { 0, 2 },
+        { 0, 3 },
+        { 1, 3 },
+        { 2, 4 },
+        { 2, 1 },
+        { 2, 5 },
+        { 3, 4 },
+        { 3, 6 },
+        { 3, 7 },
+        { 6, 4 }
     };
 
     // GraphAdjListEx<BaseEdge<>, NotWeighted> flightGraph(false);
-    GraphAdjMatrixEx<BaseEdge<>, NotWeighted> flightGraph(false);
+    GraphAdjMatrixEx<BaseEdge<>, NotWeighted, NotDirected> flightGraph{ NumNodes };
 
     flightGraph.setNodesCount(NumNodes);
     flightGraph.addEdges(edges);
@@ -132,7 +132,7 @@ void test_BFS_SchaumsOutline() {
     };
 
 
-    GraphAdjMatrixEx<BaseEdge<>, NotWeighted> schaumsGraph(false);
+    GraphAdjMatrixEx<BaseEdge<>, NotWeighted, NotDirected> schaumsGraph{ NumNodes };
     // GraphAdjListEx<BaseEdge<>, NotWeighted> schaumsGraph(false);
 
     schaumsGraph.setNodesCount(NumNodes);

@@ -9,7 +9,7 @@ namespace SolverFloydWarshallEx {
     class FloydWarshallSolverEx {
 
     private:
-        const IGraphEx <EDGE>* m_graph;
+        const IGraphEx<EDGE>* m_graph;
         std::vector<std::vector<int>> m_floyd;
 
         std::vector<std::vector<int>> mat_distances;

@@ -7,7 +7,7 @@ namespace Solver_DFS_Ex {
     template <typename EDGE>
     class DFSSolverEx {
     private:
-        const IGraphEx <EDGE>* m_graph;
+        const IGraphEx<EDGE>* m_graph;
         std::vector<bool> m_visited;
         std::deque<std::vector<IndexType>> m_paths;
 

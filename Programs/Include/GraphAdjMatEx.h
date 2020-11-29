@@ -2,14 +2,12 @@
 // GraphAdjMatrixEx.h
 // =====================================================================================
 
-template <typename EDGE, bool WEIGHTED>
+template <typename EDGE, bool WEIGHTED, bool DIRECTED>
 class GraphAdjMatrixEx final : public IGraphEx<EDGE> {
 
 private:
     int  m_numNodes;
     int  m_numEdges;
-    bool m_isDirected;
-  //  bool m_isWeighted;
     std::vector<EDGE> m_adj; // adjacency matrix
 
 public:
@@ -18,9 +16,10 @@ public:
     GraphAdjMatrixEx() = delete;
 
     // PeLo ????  da muss die Anzahl der Knoten übergeben werden .. oder nicht ???
+    // Ja, in einem extra c'tor
 
-    GraphAdjMatrixEx(bool directed = NotDirected) : m_numNodes{ -1 }, m_numEdges{ 0 } {    // das mit num edges === 0 ist auch scheiße ... 
-        m_isDirected = directed;
+    GraphAdjMatrixEx(int numNodes) : m_numNodes{ numNodes }, m_numEdges{ 0 } {    // das mit num edges === 0 ist auch scheiße ... 
+   //     m_isDirected = directed;
      //   m_isWeighted = WEIGHTED;
         //m_numNodes = -1;  // PeLo ???
         //m_numEdges = -1; 
@@ -36,7 +35,7 @@ public:
     }
 
     virtual bool isDirected() const override {
-        return m_isDirected;
+        return DIRECTED;
     }
 
     virtual bool isWeighted() const override {
@@ -69,7 +68,7 @@ public:
     virtual std::vector<EDGE> getAllEdges() const override {
         std::vector<EDGE> edges;
         for (const EDGE& edge : m_adj) {
-            if (!isEmpty(edge)) {        // PeLo:  Hmmm,wie können da empty Edges reinkommen  ???
+            if (!isEmpty(edge)) {        // PeLo:  Hmmm, wie können da empty Edges reinkommen  ???
                 edges.push_back(edge);
             }
         }
@@ -130,7 +129,7 @@ public:
     virtual std::string toString() const override {
         std::ostringstream oss;
 
-        oss << "Graph: " << (m_isDirected ? "directed" : "undirected") << " / ";
+        oss << "Graph: " << (DIRECTED ? "directed" : "undirected") << " / ";
         oss << (WEIGHTED ? "weighted" : "not weighted") << "\n";
 
         if (!isDirected()) {
