@@ -142,9 +142,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="ProgramEx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Solver_NearestNeighbour.h" />
+    <ClInclude Include="Solver_NearestNeighbour_Ex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TSP\Danztig.tsp" />
