@@ -103,10 +103,8 @@ void test_01_Dijkstra_LMU_Muenchen_Abstract_Ex()
     };
 
     // create graph
-    GraphAdjListEx<MyEdgeType, Weighted> graph(Directed);
-    // GraphAdjMatrixEx<MyEdgeType, Weighted> graph(Directed);
-
-    graph.setNodesCount(6);
+    GraphAdjListEx<MyEdgeType, Weighted, Directed> graph(6);
+    // GraphAdjMatrixEx<MyEdgeType, Weighted, Directed> graph(6);
     graph.addEdges(edges);
     std::cout << graph.toString() << std::endl;
 
@@ -132,10 +130,8 @@ void test_02_Dijkstra_Bleeptrack_Youtube_Tutorial_Ex()
     constexpr int NumNodes = 9;
 
     // create graph
-    // GraphAdjListEx<MyEdgeType, Weighted> graph(Directed);
-    GraphAdjMatrixEx<MyEdgeType, Weighted> graph(Directed);
-
-    graph.setNodesCount(NumNodes);
+    // GraphAdjListEx<MyEdgeType, Weighted, Directed> graph(NumNodes);
+    GraphAdjMatrixEx<MyEdgeType, Weighted, Directed> graph(NumNodes);
 
     MyNodeType n1{ 0, std::string("Node S") };
     MyNodeType n2{ 1, std::string("Node A") };
@@ -259,8 +255,8 @@ void test_03_Dijkstra_TUM_Europa_Ex()
     MyEdgeType we28{ e, j, 766 , "Rom => Wien" };
 
     // create graph
-    // GraphAdjListEx<MyEdgeType, Weighted> graph(Directed);
-    GraphAdjMatrixEx<MyEdgeType, Weighted> graph(Directed);
+    // GraphAdjListEx<MyEdgeType, Weighted, Directed> graph(NumNodes);
+    GraphAdjMatrixEx<MyEdgeType, Weighted, Directed> graph(NumNodes);
 
     graph.setNodesCount(NumNodes);
 

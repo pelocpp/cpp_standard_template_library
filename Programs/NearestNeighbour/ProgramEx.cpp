@@ -74,8 +74,7 @@ void test_01_NearestNeighbour_NFE()
 
     // create graph
     // TODO PeLo: Ist dieser Graph gerichtet oder nicht ?????????????????????
-    GraphAdjListEx<BaseEdgeWeighted<int>, Weighted> graph(true);
-    graph.setNodesCount(3);
+    GraphAdjListEx<BaseEdgeWeighted<int>, Weighted, Directed> graph(3);
     graph.addEdges(edges);
 
     // create solver
@@ -132,8 +131,7 @@ void test_01_NearestNeighbour_Fuenf_Staedte()
     };
 
     // create graph
-    GraphAdjListEx<Edge, Weighted> graph(true);
-    graph.setNodesCount(5);
+    GraphAdjListEx<Edge, Weighted, Directed> graph(5);
     graph.addEdges(edges);
 
     // print graph with details
@@ -187,7 +185,7 @@ int main() {
 
     test_01_NearestNeighbour_NFE();
     test_01_NearestNeighbour_Fuenf_Staedte();
-    test_01_NearestNeighbour_TSP(tspFileName01);
+//    test_01_NearestNeighbour_TSP(tspFileName01);
     return 0;
 }
 

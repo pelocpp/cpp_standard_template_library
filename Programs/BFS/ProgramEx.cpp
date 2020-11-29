@@ -8,11 +8,8 @@
 #include <map>
 #include <deque>
 #include <iomanip>
-#include <algorithm>
 #include <tuple>
 #include <optional>
-#include <functional>
-#include <utility>
 #include <cassert>
 
 #include <filesystem>
@@ -72,8 +69,8 @@ void test_BFS_NordAmerika()
         { 6, 4 }
     };
 
-    // GraphAdjListEx<BaseEdge<>, NotWeighted> flightGraph(false);
-    GraphAdjMatrixEx<BaseEdge<>, NotWeighted, NotDirected> flightGraph{ NumNodes };
+    GraphAdjListEx<BaseEdge<>, NotWeighted, NotDirected> flightGraph{ NumNodes };
+    // GraphAdjMatrixEx<BaseEdge<>, NotWeighted, NotDirected> flightGraph{ NumNodes };
 
     flightGraph.setNodesCount(NumNodes);
     flightGraph.addEdges(edges);
@@ -131,9 +128,8 @@ void test_BFS_SchaumsOutline() {
         { 8, std::string{ "Node 9"} }
     };
 
-
-    GraphAdjMatrixEx<BaseEdge<>, NotWeighted, NotDirected> schaumsGraph{ NumNodes };
-    // GraphAdjListEx<BaseEdge<>, NotWeighted> schaumsGraph(false);
+    // GraphAdjMatrixEx<BaseEdge<>, NotWeighted, NotDirected> schaumsGraph{ NumNodes };
+    GraphAdjListEx<BaseEdge<>, NotWeighted, NotDirected> schaumsGraph(NumNodes);
 
     schaumsGraph.setNodesCount(NumNodes);
 

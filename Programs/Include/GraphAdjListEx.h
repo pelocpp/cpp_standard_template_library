@@ -2,22 +2,18 @@
 // GraphAdjListEx.h
 // =====================================================================================
 
-template <typename EDGE, bool WEIGHTED>
+template <typename EDGE, bool WEIGHTED, bool DIRECTED>
 class GraphAdjListEx final : public IGraphEx<EDGE> {
 private:
     int  m_numNodes;
     int  m_numEdges;
-    bool m_isDirected;
-   // bool m_isWeighted;
     std::vector<std::vector<EDGE>> m_adjacencyList;   // PeLo: replace EDGE by  std::pair
 
 public:
     // c'tors
     GraphAdjListEx() = delete;
 
-    GraphAdjListEx(bool directed = NotDirected, bool weighted = NotWeighted) : m_numNodes{ -1 }, m_numEdges{ -1 } {
-        m_isDirected = directed;
-    //    m_isWeighted = weighted;
+    GraphAdjListEx(int numNodes) : m_numNodes{ numNodes }, m_numEdges{ -1 } {
         //m_numNodes = -1;  // PeLo ???
         //m_numEdges = -1; 
     }
@@ -40,7 +36,7 @@ public:
     }
 
     virtual bool isDirected() const override {
-        return m_isDirected;
+        return DIRECTED;
     }
 
     virtual bool isWeighted() const override {
@@ -124,7 +120,7 @@ public:
     virtual std::string toString() const override {
         std::ostringstream oss;
 
-        oss << "Graph: " << (m_isDirected ? "directed" : "undirected") << " / ";
+        oss << "Graph: " << (DIRECTED ? "directed" : "undirected") << " / ";
         oss << (WEIGHTED ? "weighted" : "not weighted") << "\n";
 
         bool isFirstEdge = true;
@@ -141,9 +137,10 @@ public:
                     IndexType target = getTarget(edge);
                     oss << source << separator << target;
 
-                    if (isWeighted()) {
-                        if constexpr (std::tuple_size<EDGE>::value == 4) {
-                            int weight = getWeight<EDGE, int>(edge);
+                    if (WEIGHTED) {
+                        if constexpr (std::tuple_size<EDGE>::value == 4) {   // PeLo den 4-er verstehe ich nicht ???
+                            // int weight = getWeight<EDGE, int>(edge);
+                            auto weight = getWeightEx(edge);
                             oss << " [" << weight << "]";
                         }
                     }
@@ -196,26 +193,26 @@ public:
     //    return oss.str();
     //}
 
-    template<typename NODE_DETAILS, typename EDGE_DETAILS>
-    std::string toStringEdges() const {
-        std::ostringstream oss;
-        std::for_each(std::begin(m_adjacencyList), std::end(m_adjacencyList), [&](const std::vector<EDGE>& list) {
-            std::for_each(std::begin(list), std::end(list), [&](const EDGE& edge) {
-                EDGE_DETAILS details{};
-                if constexpr (std::tuple_size<EDGE>::value == 3) {
-                    // it's a unweighted edge
-                    details = getDetailsUnweightedEdge<EDGE, EDGE_DETAILS>(edge);
-                }
-                if constexpr (std::tuple_size<EDGE>::value == 4) {
-                    // it's a weighted edge
-                    details = getDetailsWeightedEdge<EDGE, EDGE_DETAILS>(edge);
-                }
+    //template<typename NODE_DETAILS, typename EDGE_DETAILS>
+    //std::string toStringEdges() const {
+    //    std::ostringstream oss;
+    //    std::for_each(std::begin(m_adjacencyList), std::end(m_adjacencyList), [&](const std::vector<EDGE>& list) {
+    //        std::for_each(std::begin(list), std::end(list), [&](const EDGE& edge) {
+    //            EDGE_DETAILS details{};
+    //            if constexpr (std::tuple_size<EDGE>::value == 3) {
+    //                // it's a unweighted edge
+    //                details = getDetailsUnweightedEdge<EDGE, EDGE_DETAILS>(edge);
+    //            }
+    //            if constexpr (std::tuple_size<EDGE>::value == 4) {
+    //                // it's a weighted edge
+    //                details = getDetailsWeightedEdge<EDGE, EDGE_DETAILS>(edge);
+    //            }
 
-                oss << edgeToString(edge) << " " << details << '\n';
-            });
-        });
-        return oss.str();
-    }
+    //            oss << edgeToString(edge) << " " << details << '\n';
+    //        });
+    //    });
+    //    return oss.str();
+    //}
 
     template<typename NODE_DETAILS, typename EDGE_DETAILS>
     bool readTSPFile(std::string filename) {

@@ -85,9 +85,7 @@ void test_02_experimental()
         { 3, 2, 2, std::string { "Von 4 nach 3" } }
     };
 
-    GraphAdjMatrixEx<TestEdgeType> graph(Directed, Weighted);
-
-    graph.setNodesCount(NumNodes);
+    GraphAdjMatrixEx<TestEdgeType, Directed, Weighted> graph(NumNodes);
     graph.addEdges(edges);
 
     std::string graphDisplay = graph.toString();

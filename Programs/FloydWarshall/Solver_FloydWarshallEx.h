@@ -49,7 +49,7 @@ namespace SolverFloydWarshallEx {
         for (const EDGE& edge : edges) {
             IndexType row = getSource(edge);
             IndexType col = getTarget(edge);
-            auto distance = getWeightEx(edge);
+            auto distance = getWeightEx(edge);   // PeLo ist das jetzt eine Variable distance oder weight ???
             mat_distances[row][col] = distance;
         }
 
