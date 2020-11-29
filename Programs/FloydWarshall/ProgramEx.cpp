@@ -57,7 +57,8 @@ void test_01()
         {3, 2, 2, { "Von 4 nach 3" } }
     };
 
-    GraphAdjMatrixEx<EdgeType, Weighted> graph(Directed);
+    // GraphAdjMatrixEx<EdgeType, Weighted> graph(Directed);
+    GraphAdjListEx<EdgeType, Weighted> graph(Directed);
 
     graph.setNodesCount(NumNodes);
     graph.addEdges(edges);

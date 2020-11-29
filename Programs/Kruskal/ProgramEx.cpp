@@ -6,16 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <stack>
-#include <deque>
-#include <iomanip>
-#include <queue>
-#include <algorithm>
 #include <tuple>
-#include <optional>
-#include <functional>
-#include <utility>
-#include <cassert>
 
 #include <filesystem>
 #include <fstream>
@@ -31,9 +22,13 @@
 
 #include "Solver_Kruskal_Ex.h"
 
+// Kruskal test functions
+//
+void testPeLo01_Kruskal_Programiz();
+void testPeLo01_Kruskal_TUM();
+
 using NodeType = BaseNode<int, std::string>;
 using EdgeType = BaseEdgeWeighted<int, std::string>;
-
 
 // https://www.programiz.com
 void testPeLo01_Kruskal_Programiz()
@@ -67,8 +62,9 @@ void testPeLo01_Kruskal_Programiz()
     };
 
     // create graph
-    // GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(false);
-    GraphAdjMatrixEx<EdgeType, Weighted> graph(NotDirected);
+    GraphAdjListEx<EdgeType, Weighted> graph(NotDirected);
+    // GraphAdjMatrixEx<EdgeType, Weighted> graph(NotDirected);
+
     graph.setNodesCount(NumNodes);
     graph.addEdges(edges);
     std::cout << graph.toString() << std::endl;
@@ -87,8 +83,8 @@ void testPeLo01_Kruskal_TUM()
     constexpr int NumNodes = 8;
 
     // create graph
-    // GraphAdjList<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> graph(false);
-    GraphAdjMatrixEx<EdgeType, Weighted> graph(NotDirected);
+    GraphAdjListEx<EdgeType, Weighted> graph(NotDirected);
+    // GraphAdjMatrixEx<EdgeType, Weighted> graph(NotDirected);
 
     graph.setNodesCount(NumNodes);
 
@@ -138,13 +134,6 @@ void testPeLo01_Kruskal_TUM()
     kruskal.solve();
     kruskal.printMST();
 }
-
-
-
-// Kruskal test functions
-//
-void testPeLo01_Kruskal_Programiz();
-void testPeLo01_Kruskal_TUM();
 
 int main() {
 
