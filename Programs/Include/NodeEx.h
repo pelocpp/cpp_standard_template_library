@@ -11,13 +11,35 @@ auto make_node(TARGS ... args) {
     return std::tuple<TARGS ...> { args ... };
 }
 
-template<typename NODE>
-auto getDetail(NODE&& node, int&& i) {
-    return std::get<i>(std::forward<NODE>(node));
-}
-
 template<typename ...TARGS>
 using BaseNode = std::tuple<TARGS ...>;
+
+// NO CHANCE !!!
+//template<typename NODE>
+//auto getDetail(NODE&& node, int&& i) {
+//    return std::get<i>(std::forward<NODE>(node));
+//}
+
+//template<typename NODE, std::size_t N = 0>
+//auto getDetail(NODE&& node) {
+//    return std::get<N>(std::forward<NODE>(node));
+//}
+
+template<typename NODE, std::size_t N = 0>
+auto getDetail(NODE& node) {
+    return std::get<N>(node);
+}
+
+
+
+
+
+// https://stackoverflow.com/questions/32606464/why-can-we-not-access-elements-of-a-tuple-by-index
+
+//template <std::size_t N>
+//std::integral_constant<std::size_t, N> ic;
+
+
 
 //template<typename WEIGHT, typename ... ARGS>
 //auto make_weighted_edge(IndexType to, IndexType target, WEIGHT weight, ARGS ... args) {

@@ -27,10 +27,6 @@
 using NodeType = BaseNode<int, std::string>;
 using EdgeType = BaseEdgeWeighted<int, std::string>;
 
-//auto my_make_edge(int id, std::string text) -> MyNodeType {
-//    return make_node<int, std::string>(id, text);
-//};
-
 // General testing functions
 //
 void test_01()

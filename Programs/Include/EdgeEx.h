@@ -57,6 +57,7 @@ template<typename TWEIGHT, typename ...TARGS>
 using BaseEdgeWeighted = std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...>;
 
 // PeLo: Same name as NODE template .... is it a problem ????
+// DER WIRD NICHT ÜBERSETZUNGSFähig sein !!!
 template<typename EDGE>
 auto getEdgeDetail(EDGE&& edge, int&& i) {
     return std::get<i>(std::forward<EDGE>(edge));
