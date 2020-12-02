@@ -2,6 +2,9 @@
 // EdgeEx.h
 // =====================================================================================
 
+// PeLo
+// https://en.cppreference.com/w/cpp/utility/tuple/tuple_cat
+
 // ==================================================================
 // experimental
 
@@ -31,13 +34,6 @@ using BaseEdge = std::tuple<IndexType, IndexType, TARGS ...>;
 template<typename TWEIGHT, typename ...TARGS>
 using BaseEdgeWeighted = std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...>;
 
-// PeLo: Same name as NODE template .... is it a problem ????
-// DER WIRD NICHT ÜBERSETZUNGSFähig sein !!!
-template<typename EDGE>
-auto getEdgeDetail(EDGE&& edge, int&& i) {
-    return std::get<i>(std::forward<EDGE>(edge));
-}
-
 template<typename EDGE>
 void setSourceNode(EDGE&& edge, int value) {
     std::get<0>(edge) = value;
@@ -48,41 +44,118 @@ void setTargetNode(EDGE&& edge, int value) {
     std::get<1>(edge) = value;
 }
 
+// ==================================================================
 
-// PeLo TESTEN UND AUFRUFEN ... wo wird das aufgerufen !!!
-template<typename EDGE, typename ITERATOR, bool WEIGHTED>
+template <bool WEIGHTED, unsigned int N>
+struct EdgeHelper
+{
+    template <typename ... TARGS>
+    static std::string traverse(const std::tuple<TARGS ...>& tuple) {
+
+        if constexpr (WEIGHTED && N == 3) {
+            return std::string("");
+        }
+        else if constexpr ((!WEIGHTED) && N == 2) {
+            return std::string("");
+        }
+
+        std::string tmp = EdgeHelper<WEIGHTED, N - 1>::traverse(tuple);
+
+        using type = typename std::tuple_element<N - 1, std::tuple<TARGS...>>::type;
+        auto value = std::get<N - 1>(tuple);
+
+        std::string seperator = "";
+        if constexpr (N < sizeof...(TARGS)) {
+            seperator = ", ";
+        }
+
+        std::string result = "";
+        if constexpr (std::is_same<std::string, type>::value) {
+            result = tmp + value + seperator;
+        }
+        else {
+            result = tmp + std::to_string(value) + seperator;
+        }
+
+        return result;
+    }
+};
+
+template <bool WEIGHTED>
+struct EdgeHelper<WEIGHTED, 0>
+{
+    template <typename ... TARGS>
+    static std::string traverse(const std::tuple<TARGS ...>& tuple) { return std::string(""); }
+};
+
+template <typename ... TARGS>
+std::string toStringUnweightedEdge(const std::tuple<TARGS ...>& tuple)
+{
+    std::ostringstream oss;
+
+    oss << "["
+        << std::get<IndexSource>(tuple)
+        << "] -> ["
+        << std::get<IndexTarget>(tuple)
+        << "] ";
+
+    std::string result = EdgeHelper<false, sizeof ... (TARGS)>::traverse(tuple);
+    oss << result;
+    return oss.str();
+}
+
+template <typename ... TARGS>
+std::string toStringWeightedEdge(const std::tuple<TARGS ...>& tuple)
+{
+    std::ostringstream oss;
+
+    oss << "[" 
+        << std::get<IndexSource>(tuple)
+        << "] -> ["
+        << std::get<IndexTarget>(tuple)
+        << "] ";
+
+    using TWeight = typename std::tuple_element<IndexWeight, std::tuple<TARGS...>>::type;
+    TWeight weight = std::get<IndexWeight>(tuple);
+
+    oss << "("
+        << weight
+        << ") ";
+
+    std::string result = EdgeHelper<true, sizeof ... (TARGS)>::traverse(tuple);
+    oss << result;
+    return oss.str();
+}
+
+template<typename EDGE, bool WEIGHTED>
+std::string toStringEdge(EDGE edge) {
+    std::string s;
+    if constexpr (!WEIGHTED) {
+        s = toStringUnweightedEdge(edge);
+    }
+    else if constexpr (WEIGHTED) {
+        s = toStringWeightedEdge(edge);
+    }
+    return s;
+}
+
+template<typename EDGE, bool WEIGHTED, typename ITERATOR>
 std::string toStringEdges(ITERATOR begin, ITERATOR end) {
     std::ostringstream oss;
-    std::string details;
+    std::string s;
     std::for_each(begin, end, [&](const EDGE& edge) {
         if constexpr (! WEIGHTED) {
-            // it's a unweighted edge
-            details = getDetailsUnweightedEdge<EDGE>(edge);
+            s = toStringUnweightedEdge(edge);
         }
-        if constexpr (WEIGHTED) {
-            // it's a weighted edge
-            details = getDetailsWeightedEdge<EDGE>(edge);
+        else if constexpr (WEIGHTED) {
+            s = toStringWeightedEdge(edge);
         }
-        oss << edgeToString(edge) << " " << details << '\n';
+        oss << s << std::endl;
     });
     return oss.str();
 }
 
-// WEITER !!!!!!!!!!!!!!!!
-
-// https://en.cppreference.com/w/cpp/utility/tuple/tuple_cat
-
-//template<typename WEIGHTED_EDGE>
-//auto getDetailsWeightedEdge(IndexType from, IndexType to, TWEIGHT weight, E&& edge) {
-//
-//
-//
-//    return std::get<2>(std::forward<E>(edge));
-//}
-//
-
-
-
+// ==================================================================
 
 
 
@@ -117,27 +190,6 @@ using MyEdge1 = decltype (make_edge(std::declval<IndexType>(), std::declval<Inde
 //}
 
 
-//
-//template<typename T, typename = void> struct EgdeCreator;
-//
-//template<typename T>
-//struct EgdeCreator < T, typename std::enable_if<std::is_pod<T>::type>
-//{
-//    static auto make_edge_revised()
-//    {
-//        return std::tuple<IndexType, IndexType, TARGS ...> { from, to, args ... };
-//    }
-//};
-//
-//template<typename T>
-//struct EgdeCreator < T, typename std::enable_if<!std::is_pod<T>::type>
-//{
-//    static auto make_edge_revised()
-//    {
-//        return std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...> { from, to, weight, args ... };
-//    };
-//};
-
 
 
 
@@ -164,73 +216,34 @@ using MyEdge1 = decltype (make_edge(std::declval<IndexType>(), std::declval<Inde
 //WeightedEdge<W, T> createWeightedEdge(IndexType to, IndexType target, W weight) {
 //    return std::tuple<IndexType, IndexType, W, T> {to, target, weight, T{}};
 //}
-//
-//// helper functions for edges
-//template<typename E>
-//bool isEmpty(const E& edge) {
-//    return (std::get<0>(edge) == -1 && std::get<1>(edge) == -1) ? true : false;
-//}
 
-template<typename E>
-int getSource(const E& edge) {
+
+
+// helper functions for edges
+template<typename EDGE>
+bool isEmpty(const EDGE& edge) {
+    return (std::get<0>(edge) == -1 && std::get<1>(edge) == -1) ? true : false;
+}
+
+template<typename EDGE>
+int getSource(const EDGE& edge) {
     return std::get<0>(edge);
 }
 
-template<typename E>
-int getTarget(const E& edge) {
+template<typename EDGE>
+int getTarget(const EDGE& edge) {
     return std::get<1>(edge);
 }
 
-//template<typename E>
-//void swapSourceTarget(E& edge) {
-//    std::swap(std::get<0>(edge), std::get<1>(edge));
-//}
-//
-//// PeLo: entfernen ... der zweite Template Parameter kann so wegfallen
-//template<typename E, typename W>
-//W getWeight(const E& edge) {
-//    return std::get<2>(edge);
-//}
-//
-//// PeLo: Langfristig das 'Ex' entfernen ....
-//template<typename E>
-//auto getWeightEx(E&& edge) {
-//    return std::get<2>(std::forward<E>(edge));
-//}
-//
-//template<typename E, typename T>
-//T getDetailsUnweightedEdge(const E& edge) {
-//    return std::get<2>(edge);
-//}
-//
-//template<typename E, typename T>
-//T getDetailsWeightedEdge(const E& edge) {
-//    return std::get<3>(edge);
-//}
-//
-//
-//// PeLo: Langfristig das 'Ex' entfernen ....
-//template<typename E>
-//auto getDetailsUnweightedEdgeEx(E&& edge) {
-//    return std::get<2>(std::forward<E>(edge));
-//}
-//
-//// PeLo: Langfristig das 'Ex' entfernen ....
-//template<typename E>
-//auto  getDetailsWeightedEdgeEx(E&& edge) {
-//    return std::get<3>(std::forward<E>(edge));
-//}
-//
-//template<typename E>
-//std::string edgeToString(const E& edge) {
-//    IndexType source = getSource(edge);
-//    IndexType target = getTarget(edge);
-//
-//    std::ostringstream oss;
-//    oss << source << "->" << target;
-//    return oss.str();
-//}
+template<typename EDGE>
+void swapSourceTarget(EDGE& edge) {
+    std::swap(std::get<0>(edge), std::get<1>(edge));
+}
 
+template<typename EDGE>
+auto getWeight(const EDGE& edge) {
+    return std::get<2>(edge);
+}
 
 // =====================================================================================
 // End-of-File

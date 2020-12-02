@@ -24,8 +24,8 @@ namespace Solver_Dijkstra_Ex {
         std::vector<IndexType> getDistances();
 
         // note: template function on a template class :-)
-        template<typename NODE_DETAILS>
-        void printDistances();
+        // template<typename NODE_DETAILS>
+        // void printDistances();
     };
 
     template <typename EDGE>
@@ -46,8 +46,8 @@ namespace Solver_Dijkstra_Ex {
 
         // need a lambda to compare Track elements
         auto compareTracks = [](const Track<int>& lhs, const Track<int>& rhs)  {
-            auto [idLeft, weightLeft] = lhs;
-            auto [idRight, weightRight] = rhs;
+            const auto& [idLeft, weightLeft] = lhs;
+            const auto& [idRight, weightRight] = rhs;
             return weightLeft > weightRight;
         };
 
@@ -67,16 +67,18 @@ namespace Solver_Dijkstra_Ex {
         while (!pq.empty()) {
 
             // get minimum distance vertex from priority queue - we call it 'vertex'
-            Track<int> track = pq.top();
+            using TWEIGHT = int;
+            Track<TWEIGHT> track = pq.top();
             int vertex = track.first;
             pq.pop();
 
             // get all adjacent vertices of the dequeued vertex
             std::vector<EDGE> neighbours = m_graph->getNeighbouringEdges(vertex);
-            for (EDGE edge : neighbours) {
+            for (const EDGE& edge : neighbours) {
 
                 IndexType target = getTarget<EDGE>(edge);
-                IndexType weight = getWeight<EDGE, int>(edge);
+            //    IndexType weight = getWeight<EDGE, int>(edge);
+                auto weight = getWeight<EDGE>(edge);
 
                 // if the distance to 'target' is shorter by going through 'vertex' ...
                 if (m_distances[target] == -1 || m_distances[target] > m_distances[vertex] + weight) {

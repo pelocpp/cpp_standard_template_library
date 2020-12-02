@@ -4,6 +4,11 @@
 
 using IndexType = size_t;   // PeLo     size_t ausprobieren !!!!!!!!!!!!!!!!
 
+// PeLo: Alle std::get  durchforsten ....
+constexpr int IndexSource = 0;
+constexpr int IndexTarget = 1;
+constexpr int IndexWeight = 2;
+
 enum class Direction { directed, undirected };
 //
 //template <>

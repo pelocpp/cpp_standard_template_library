@@ -133,7 +133,7 @@ namespace Solver_DFS_Ex {
 
     template <typename EDGE>
     void DFSSolverEx<EDGE>::printPath(std::vector<IndexType>& path) {
-        std::for_each(std::begin(path), std::end(path) - 1, [](int vertex) {
+        std::for_each(std::begin(path), std::end(path) - 1, [](IndexType vertex) {
             std::cout << vertex << " -> ";
             }
         );
@@ -144,7 +144,7 @@ namespace Solver_DFS_Ex {
 
     template <typename EDGE>
     void DFSSolverEx<EDGE>::printPaths() {
-        for (auto path : m_paths) {
+        for (auto& path : m_paths) {
             printPath(path);
         }
     }

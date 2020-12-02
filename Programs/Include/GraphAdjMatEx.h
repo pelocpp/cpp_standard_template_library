@@ -18,11 +18,9 @@ public:
     // PeLo ????  da muss die Anzahl der Knoten übergeben werden .. oder nicht ???
     // Ja, in einem extra c'tor
 
-    GraphAdjMatrixEx(int numNodes) : m_numNodes{ numNodes }, m_numEdges{ 0 } {    // das mit num edges === 0 ist auch scheiße ... 
-   //     m_isDirected = directed;
-     //   m_isWeighted = WEIGHTED;
-        //m_numNodes = -1;  // PeLo ???
-        //m_numEdges = -1; 
+    GraphAdjMatrixEx(int numNodes) : m_numEdges{ 0 } {   // PeLo : das mit num edges === 0 ist auch scheiße ... 
+
+        setNodesCount(numNodes);
     }
 
     // getter
@@ -157,7 +155,7 @@ public:
                             if constexpr (std::tuple_size<EDGE>::value >= 3) {   // PeLo das kann weg !!!!!!!!!! NEIN - das ist hier ein Problem
                                                                                 // ich muss irgendwie Weighted Edge und Unweighted Edge
                                                                                 // zur COMPILE TIME unterscheiden können !!!!
-                                auto weight = getWeightEx(edge);
+                                auto weight = getWeight(edge);
                                 oss << " {" << weight << "} ";
                             }
                         }
@@ -197,7 +195,7 @@ public:
 
                         if (isWeighted()) {
                             if constexpr (std::tuple_size<EDGE>::value == 4) {
-                                auto weight = getWeightEx(edge);
+                                auto weight = getWeight(edge);
                                 oss << " {" << weight << "} ";
                             }
                         }

@@ -1,5 +1,5 @@
 // =====================================================================================
-// Program
+// Program DFS
 // =====================================================================================
 
 #include <iostream>
@@ -32,6 +32,7 @@
 #include "Solver_DFS_Ex.h"
 
 
+// PeLo: Hmmm, ist das eine zentrale Stelle ???
 using MyNodeType = BaseNode<int, std::string>;
 
 auto my_make_edge(int id, std::string text) -> MyNodeType {
@@ -139,13 +140,13 @@ void test_DFS_02()
     }
 }
 
-
 // DFS test functions
 //
 void test_DFS_01();
 void test_DFS_02();
 
 int main() {
+    test_DFS_01();
     test_DFS_02();
     return 0;
 }

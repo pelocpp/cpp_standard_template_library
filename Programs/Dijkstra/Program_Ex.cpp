@@ -29,7 +29,6 @@
 #include "../Include/GraphAdjListEx.h"
 #include "../Include/GraphAdjMatEx.h"
 
-// #include "Solver_Dijkstra.h"
 #include "Solver_Dijkstra_Ex.h"
 
 // Dijkstra test functions
@@ -46,11 +45,13 @@ auto my_make_edge(int id, std::string text) -> MyNodeType {
     return make_node<int, std::string>(id, text);
 };
 
-using MyEdgeType = BaseEdgeWeighted<int, std::string>;
+using MyWeightType = int;
+
+using MyEdgeType = BaseEdgeWeighted<MyWeightType, std::string>;
 
 void printDistances(IndexType start, IndexType numNodes, std::vector<IndexType>& distances) {
 
-    std::cout << "\nPrinting the shortest paths for node " << start << ".\n";
+    std::cout << "\nPrinting the shortest paths for node " << start << std::endl << std::endl;
 
     //std::vector<NODE> nodes = m_graph->getAllNodes();
     //NODE startNode = nodes[m_start];
@@ -101,6 +102,12 @@ void test_01_Dijkstra_LMU_Muenchen_Abstract_Ex()
     std::vector<MyEdgeType> edges = {
         edge1, edge2, edge3, edge4, edge5, edge6, edge7, edge8, edge9
     };
+
+    // TEST THIS !!!!!!!!!!!!!!!!!! 
+    std::string s = toStringEdges<MyEdgeType, true>(std::begin(edges), std::end(edges));
+    std::cout << s << std::endl;
+
+    return;
 
     // create graph
     GraphAdjListEx<MyEdgeType, Weighted, Directed> graph(6);
@@ -298,8 +305,8 @@ void test_03_Dijkstra_TUM_Europa_Ex()
 int main()
 {
     test_01_Dijkstra_LMU_Muenchen_Abstract_Ex();
-    test_02_Dijkstra_Bleeptrack_Youtube_Tutorial_Ex();
-    test_03_Dijkstra_TUM_Europa_Ex();
+    //test_02_Dijkstra_Bleeptrack_Youtube_Tutorial_Ex();
+    //test_03_Dijkstra_TUM_Europa_Ex();
     return 0;
 }
 

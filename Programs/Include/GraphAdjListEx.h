@@ -13,9 +13,9 @@ public:
     // c'tors
     GraphAdjListEx() = delete;
 
-    GraphAdjListEx(int numNodes) : m_numNodes{ numNodes }, m_numEdges{ -1 } {
-        //m_numNodes = -1;  // PeLo ???
-        //m_numEdges = -1; 
+    GraphAdjListEx(int numNodes) : m_numEdges{ -1 } {   // PeLo : Was ist mit der m_numEdges Initialisierung ???
+
+        setNodesCount(numNodes);
     }
 
     // getter
@@ -140,7 +140,7 @@ public:
                     if (WEIGHTED) {
                         if constexpr (std::tuple_size<EDGE>::value == 4) {   // PeLo den 4-er verstehe ich nicht ???
                             // int weight = getWeight<EDGE, int>(edge);
-                            auto weight = getWeightEx(edge);
+                            auto weight = getWeight(edge);
                             oss << " [" << weight << "]";
                         }
                     }
