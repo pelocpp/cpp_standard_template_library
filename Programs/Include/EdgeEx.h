@@ -18,21 +18,17 @@ auto make_weighted_edge(IndexType from, IndexType to, TWEIGHT weight, TARGS ... 
     return std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...> { from, to, weight, args ... };
 }
 
-//template<typename ... TARGS>
-//auto make_empty_edge(TARGS ... args) {
-//    return std::tuple<IndexType, IndexType, args ...> { -1, -1, args ... };
-//}
-//
-//template<typename TWEIGHT, typename ... TARGS>
-//auto make_empty_weighted_edge(TWEIGHT weight, TARGS ... args) {
-//    return std::tuple<IndexType, IndexType, TARGS ...> { -1, -1, TWEIGHT{}, args ... };
-//}
-
 template<typename ...TARGS>
 using BaseEdge = std::tuple<IndexType, IndexType, TARGS ...>;
 
+template<typename ... TARGS>
+using BaseEdgeEx = decltype (make_edge(std::declval<IndexType>(), std::declval<IndexType>(), std::declval<TARGS>() ...));
+
 template<typename TWEIGHT, typename ...TARGS>
 using BaseEdgeWeighted = std::tuple<IndexType, IndexType, TWEIGHT, TARGS ...>;
+
+template<typename TWEIGHT, typename ... TARGS>
+using BaseEdgeWeightedEx = decltype (make_edge(std::declval<IndexType>(), std::declval<IndexType>(), std::declval<TWEIGHT>(), std::declval<TARGS>() ...));
 
 template<typename EDGE>
 void setSourceNode(EDGE&& edge, int value) {
@@ -43,6 +39,21 @@ template<typename EDGE>
 void setTargetNode(EDGE&& edge, int value) {
     std::get<1>(edge) = value;
 }
+
+
+
+// PeLo: Die brauche ich doch, oder ???????????????????????????
+//template<typename ... TARGS>
+//auto make_empty_edge(TARGS ... args) {
+//    return std::tuple<IndexType, IndexType, args ...> { -1, -1, args ... };
+//}
+//
+//template<typename TWEIGHT, typename ... TARGS>
+//auto make_empty_weighted_edge(TWEIGHT weight, TARGS ... args) {
+//    return std::tuple<IndexType, IndexType, TARGS ...> { -1, -1, TWEIGHT{}, args ... };
+//}
+
+
 
 // ==================================================================
 
@@ -166,11 +177,13 @@ std::string toStringEdges(ITERATOR begin, ITERATOR end) {
 
 
 
+//auto my_make_edge(int id, std::string text) -> MyNodeType {
+//    return make_node<int, std::string>(id, text);
+//};
 
 
 
-template<typename ... TARGS>
-using MyEdge1 = decltype (make_edge(std::declval<IndexType>(), std::declval<IndexType>(), std::declval<TARGS>() ...));
+
 
 // PeLo
 // https://stackoverflow.com/questions/26732709/how-to-use-sfinae-to-create-2-different-implementations-of-the-same-method

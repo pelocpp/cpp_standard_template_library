@@ -13,11 +13,8 @@
 #include "../Include/NodeEx.h"
 #include "../Include/EdgeEx.h"
 
-using Node = BaseNode<int, std::string>;
-
-//auto my_make_edge(int id, std::string text) -> MyNodeType {
-//    return make_node<int, std::string>(id, text);
-//};
+using Node = BaseNode<std::string, int>;
+using MinimalNode = BaseNode<>;
 
 using WeightType = int;
 using Edge = BaseEdgeWeighted<WeightType, std::string, std::string>;
@@ -26,6 +23,101 @@ using UnweightedEdge = BaseEdge<std::string, int>;
 using MinimalWeightedEdge = BaseEdgeWeighted<WeightType>;
 using MinimalUnweightedEdge = BaseEdge<>;
 
+void test_00_nodes_errors()
+{
+    // BaseNode<> node(std::string("111"));  // first parameter must be typeof 'int' rsp. 'IndexType'
+    // BaseNode<> node(123.456);             // first parameter must be typeof 'int' rsp. 'IndexType'
+    BaseNode<> node(123);
+}
+
+void test_01_nodes()
+{
+    auto node = make_node<std::string> ( 111, std::string{ "Node A" } );
+    std::string s = toStringNode(node);
+    std::cout << s << std::endl;
+}
+
+void test_02_nodes()
+{
+    BaseNode<> node{ 112 };
+    std::string s = toStringNode<BaseNode<>>(node);
+    std::cout << s << std::endl;
+}
+
+void test_03_nodes()
+{
+    auto node = Node{ 113, std::string{ "Node A" }, 999 };
+    std::string s = toStringNode(node);
+    std::cout << s << std::endl;
+}
+
+void test_04_nodes()
+{
+    BaseNode<float, std::string> node = BaseNode<float, std::string>(114, 123.f, std::string{ "fhhfghfgh" });
+    std::string s = toStringNode(node);
+    std::cout << s << std::endl;
+}
+
+void test_05_nodes()
+{
+    BaseNode<std::string> node = BaseNode<std::string>( 115, std::string ("123f"));
+    std::string s = toStringNode(node);
+    std::cout << s << std::endl;
+}
+
+void test_06_nodes()
+{
+    auto node = MinimalNode{ 116 };
+    std::string s = toStringNode(node);
+    std::cout << s << std::endl;
+}
+
+void test_10_nodes()
+{
+    BaseNode<> n1{ 0 };
+    BaseNode<> n2{ 1 };
+    BaseNode<> n3{ 2 };
+    BaseNode<> n4{ 3 };
+    BaseNode<> n5{ 4 };
+    BaseNode<> n6{ 5 };
+
+    std::vector<BaseNode<>> nodes = {
+        n1, n2, n3, n4, n5, n6
+    };
+
+    std::string s = toStringNodes<BaseNode<>>(std::begin(nodes), std::end(nodes));
+    std::cout << s << std::endl;
+}
+
+void test_11_nodes()
+{
+    Node n1{ 0, std::string("Node a"), 10 };
+    Node n2{ 1, std::string("Node b"), 20 };
+    Node n3{ 2, std::string("Node c"), 30 };
+    Node n4{ 3, std::string("Node d"), 40 };
+    Node n5{ 4, std::string("Node e"), 50 };
+    Node n6{ 5, std::string("Node f"), 60 };
+
+    std::vector<Node> nodes = {
+        n1, n2, n3, n4, n5, n6
+    };
+
+    std::string s = toStringNodes<Node>(std::begin(nodes), std::end(nodes));
+    std::cout << s << std::endl;
+}
+
+// =======================
+
+void test_00_weighted()
+{
+    auto edge1 = make_edge<int, std::string>(1, 2, 111, std::string{ "Node A" });
+    std::string s = toStringEdge<decltype(edge1), false>(edge1);
+    std::cout << s << std::endl;
+
+    auto edge2 = make_edge<double, int, std::string>(1, 2, 50.0, 111, std::string{ "Node A" });
+    s = toStringEdge<decltype(edge2), true>(edge2);
+    std::cout << s << std::endl;
+}
 
 void test_01_weighted()
 {
@@ -54,6 +146,8 @@ void test_04_unweighted()
     std::string s = toStringEdge<MinimalUnweightedEdge, false>(edge);
     std::cout << s << std::endl;
 }
+
+// =======================
 
 void test_10_weighted ()
 {
@@ -129,306 +223,223 @@ void test_13_unweighted()
     std::cout << s << std::endl;
 }
 
-void test_10_nodes()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+using SantaClausNode = BaseNode<std::string>;
+
+using SantaClausEdgeUnweighted = BaseEdge<std::string>;
+using SantaClausEdgeWeighted = BaseEdgeWeighted<int, std::string>;
+
+void test_01_House_of_Santa_Claus_unweighted_undirected()
 {
-    BaseNode<> node;
+    // =====================================================
+    // Haus des Nikolas: ungerichtet, ungewichtet
 
-    //std::string s = toStringNode<BaseNode<>>(node);
-    //std::cout << s << std::endl;
-}
+    SantaClausNode n1{ 0, { "Node 1"} };
+    SantaClausNode n2{ 1, { "Node 2"} };
+    SantaClausNode n3{ 2, { "Node 3"} };
+    SantaClausNode n4{ 3, { "Node 4"} };
+    SantaClausNode n5{ 4, { "Node 5"} };
 
-
-void test_11_nodes()
-{
-    Node n1{ 1, std::string("Node a") };
-    Node n2{ 2, std::string("Node b") };
-    Node n3{ 3, std::string("Node c") };
-    Node n4{ 4, std::string("Node d") };
-    Node n5{ 5, std::string("Node e") };
-    Node n6{ 6, std::string("Node f") };
-
-    std::vector<Node> nodes = {
-        n1, n2, n3, n4, n5, n6
+    std::vector<SantaClausNode> nodes = {
+        n1, n2, n3, n4, n5
     };
 
-    //std::string s = toStringEdges<Edge, true>(std::begin(edges), std::end(edges));
-    //std::cout << s << std::endl;
-}
-
-void test_10_nodes()
-{
-    BaseNode<> n1;
-    BaseNode<> n2;
-    BaseNode<> n3;
-    BaseNode<> n4;
-    BaseNode<> n5;
-    BaseNode<> n6;
-
-    std::vector<BaseNode<>> nodes = {
-        n1, n2, n3, n4, n5, n6
+    // vector of graph edges (Haus des Nikolas, ungerichtet)
+    std::vector<SantaClausEdgeUnweighted> edges = {
+        {0, 1, { "Kante zwischen 0 und 1" } }, 
+        {0, 2, { "Kante zwischen 0 und 2" } }, 
+        {0, 3, { "Kante zwischen 0 und 3" } },
+        {1, 2, { "Kante zwischen 1 und 2" } }, 
+        {1, 3, { "Kante zwischen 1 und 3" } },
+        {2, 3, { "Kante zwischen 2 und 3" } }, 
+        {2, 4, { "Kante zwischen 2 und 4" } },
+        {3, 4, { "Kante zwischen 3 und 4" } }
     };
 
-    //std::string s = toStringNodes<BaseNode<>>(std::begin(nodes), std::end(nodes));
-    //std::cout << s << std::endl;
+    std::string nodesDisplay = toStringNodes<SantaClausNode>(std::begin(nodes), std::end(nodes));
+    std::cout << nodesDisplay << std::endl;
+
+    std::string edgesDisplay = toStringEdges<SantaClausEdgeUnweighted, false>(std::begin(edges), std::end(edges));
+    std::cout << edgesDisplay << std::endl;
 }
 
-
-void test_11_nodes()
+void test_02_House_of_Santa_Claus_weighted_directed()
 {
-    Node n1{ 1, std::string("Node a") };
-    Node n2{ 2, std::string("Node b") };
-    Node n3{ 3, std::string("Node c") };
-    Node n4{ 4, std::string("Node d") };
-    Node n5{ 5, std::string("Node e") };
-    Node n6{ 6, std::string("Node f") };
+    // =====================================================
+    // Haus des Nikolas: gerichtet, gewichtet
 
-    std::vector<Node> nodes = {
-        n1, n2, n3, n4, n5, n6
+    SantaClausNode n1{ 0, { "Node 1"} };
+    SantaClausNode n2{ 1, { "Node 2"} };
+    SantaClausNode n3{ 2, { "Node 3"} };
+    SantaClausNode n4{ 3, { "Node 4"} };
+    SantaClausNode n5{ 4, { "Node 5"} };
+
+    std::vector<SantaClausNode> nodes = {
+        n1, n2, n3, n4, n5
     };
 
-    //std::string s = toStringEdges<Edge, true>(std::begin(edges), std::end(edges));
-    //std::cout << s << std::endl;
+    // vector of graph edges
+    std::vector<SantaClausEdgeWeighted> edges = {
+        {0, 1, 100, { "Kante zwischen 0 und 1" } },
+        {0, 2, 101, { "Kante zwischen 0 und 2" } },
+        {0, 3, 102, { "Kante zwischen 0 und 3" } },
+        {1, 2, 103, { "Kante zwischen 1 und 2" } },
+        {1, 3, 104, { "Kante zwischen 1 und 3" } },
+        {2, 3, 105, { "Kante zwischen 2 und 3" } },
+        {2, 4, 106, { "Kante zwischen 2 und 4" } },
+        {3, 4, 107, { "Kante zwischen 3 und 4" } }
+    };
+
+    std::string nodesDisplay = toStringNodes<SantaClausNode>(std::begin(nodes), std::end(nodes));
+    std::cout << nodesDisplay << std::endl;
+
+    std::string edgesDisplay = toStringEdges<SantaClausEdgeWeighted, true>(std::begin(edges), std::end(edges));
+    std::cout << edgesDisplay << std::endl;
 }
 
 
+void test_03_House_of_Santa_Claus_unweighted_directed()
+{
+    // =====================================================
+    // Haus des Nikolas: gerichtet, ungewichtet
 
+    SantaClausNode n1{ 0, { "Node 1"} };
+    SantaClausNode n2{ 1, { "Node 2"} };
+    SantaClausNode n3{ 2, { "Node 3"} };
+    SantaClausNode n4{ 3, { "Node 4"} };
+    SantaClausNode n5{ 4, { "Node 5"} };
 
+    std::vector<SantaClausNode> nodes = {
+        n1, n2, n3, n4, n5
+    };
 
+    // vector of graph edges (Haus des Nikolas, ungerichtet)
+    std::vector<SantaClausEdgeUnweighted> edges = {
+        {0, 1, { "Kante zwischen 0 und 1" } },
+        {0, 2, { "Kante zwischen 0 und 2" } },
+        {0, 3, { "Kante zwischen 0 und 3" } },
+        {1, 2, { "Kante zwischen 1 und 2" } },
+        {1, 3, { "Kante zwischen 1 und 3" } },
+        {2, 3, { "Kante zwischen 2 und 3" } },
+        {2, 4, { "Kante zwischen 2 und 4" } },
+        {3, 4, { "Kante zwischen 3 und 4" } }
+    };
 
+    std::string nodesDisplay = toStringNodes<SantaClausNode>(std::begin(nodes), std::end(nodes));
+    std::cout << nodesDisplay << std::endl;
 
+    std::string edgesDisplay = toStringEdges<SantaClausEdgeUnweighted, false>(std::begin(edges), std::end(edges));
+    std::cout << edgesDisplay << std::endl;
+}
 
+void test_04_House_of_Santa_Claus_weighted_undirected()
+{
+    // =====================================================
+    // Haus des Nikolas: gerichtet, gewichtet
 
+    SantaClausNode n1{ 0, { "Node 1"} };
+    SantaClausNode n2{ 1, { "Node 2"} };
+    SantaClausNode n3{ 2, { "Node 3"} };
+    SantaClausNode n4{ 3, { "Node 4"} };
+    SantaClausNode n5{ 4, { "Node 5"} };
 
+    std::vector<SantaClausNode> nodes = {
+        n1, n2, n3, n4, n5
+    };
 
+    // vector of graph edges
+    std::vector<SantaClausEdgeWeighted> edges = {
+        {0, 1, 200, { "Kante zwischen 0 und 1" } },
+        {0, 2, 201, { "Kante zwischen 0 und 2" } },
+        {0, 3, 202, { "Kante zwischen 0 und 3" } },
+        {1, 2, 203, { "Kante zwischen 1 und 2" } },
+        {1, 3, 204, { "Kante zwischen 1 und 3" } },
+        {2, 3, 205, { "Kante zwischen 2 und 3" } },
+        {2, 4, 206, { "Kante zwischen 2 und 4" } },
+        {3, 4, 207, { "Kante zwischen 3 und 4" } }
+    };
 
+    std::string nodesDisplay = toStringNodes<SantaClausNode>(std::begin(nodes), std::end(nodes));
+    std::cout << nodesDisplay << std::endl;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// General testing functions for nodes, edges and graphs
-//
-//
-//void test_01_unweighted_undirected()
-//{
-//    // =====================================================
-//    // Haus des Nikolas: ungerichtet, ungewichtet
-//
-//    using namespace NodeDetailsTest;
-//    using namespace EdgeDetailsTest;
-//
-//    Node<TestNodeDetails> n1{ 0, { "Node 1"} };
-//    Node<TestNodeDetails> n2{ 1, { "Node 2"} };
-//    Node<TestNodeDetails> n3{ 2, { "Node 3"} };
-//    Node<TestNodeDetails> n4{ 3, { "Node 4"} };
-//    Node<TestNodeDetails> n5{ 4, { "Node 5"} };
-//
-//    std::vector<Node<TestNodeDetails>> nodes = {
-//        n1, n2, n3, n4, n5
-//    };
-//
-//    // vector of graph edges (Haus des Nikolas, ungerichtet)
-//    std::vector<UnweightedEdge<TestEdgeDetails>> edges = {
-//        {0, 1, { "Kante zwischen 0 und 1" } }, 
-//        {0, 2, { "Kante zwischen 0 und 2" } }, 
-//        {0, 3, { "Kante zwischen 0 und 3" } },
-//        {1, 2, { "Kante zwischen 1 und 2" } }, 
-//        {1, 3, { "Kante zwischen 1 und 3" } },
-//        {2, 3, { "Kante zwischen 2 und 3" } }, 
-//        {2, 4, { "Kante zwischen 2 und 4" } },
-//        {3, 4, { "Kante zwischen 3 und 4" } }
-//    };
-//
-//    // graph with 5 nodes (vertices)
-//    GraphAdjMatrix<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> testGraph(Direction::undirected);
-//
-//    testGraph.addNodes(nodes);
-//    testGraph.addEdges(edges);
-//
-//    std::string graph = testGraph.toString();
-//    std::cout << graph << std::endl;
-//
-//    std::string nodesDisplay = testGraph.toStringNodes();
-//    std::cout << nodesDisplay << std::endl;
-//
-//    std::string edgesDisplay = testGraph.toStringEdges<TestEdgeDetails>();
-//    std::cout << edgesDisplay << std::endl;
-//}
-//
-//void test_01_weighted_directed()
-//{
-//    // =====================================================
-//    // Haus des Nikolas: gerichtet, gewichtet
-//
-//    using namespace NodeDetailsTest;
-//    using namespace EdgeDetailsTest;
-//
-//    Node<TestNodeDetails> n1{ 0, { "Node 1"} };
-//    Node<TestNodeDetails> n2{ 1, { "Node 2"} };
-//    Node<TestNodeDetails> n3{ 2, { "Node 3"} };
-//    Node<TestNodeDetails> n4{ 3, { "Node 4"} };
-//    Node<TestNodeDetails> n5{ 4, { "Node 5"} };
-//
-//    std::vector<Node<TestNodeDetails>> nodes = {
-//        n1, n2, n3, n4, n5
-//    };
-//
-//    // vector of graph edges
-//    std::vector<WeightedEdge<int, TestEdgeDetails>> edges = {
-//        {0, 1, 100, { "Kante zwischen 0 und 1" } },
-//        {0, 2, 101, { "Kante zwischen 0 und 2" } },
-//        {0, 3, 102, { "Kante zwischen 0 und 3" } },
-//        {1, 2, 103, { "Kante zwischen 1 und 2" } },
-//        {1, 3, 104, { "Kante zwischen 1 und 3" } },
-//        {2, 3, 105, { "Kante zwischen 2 und 3" } },
-//        {2, 4, 106, { "Kante zwischen 2 und 4" } },
-//        {3, 4, 107, { "Kante zwischen 3 und 4" } }
-//    };
-//
-//    // graph with 5 nodes (vertices)
-//    GraphAdjMatrix<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> testGraph(Direction::directed);
-//
-//    testGraph.addNodes(nodes);
-//    testGraph.addEdges(edges);
-//
-//    std::string graph = testGraph.toString();
-//    std::cout << graph << std::endl;
-//
-//    std::string nodesDisplay = testGraph.toStringNodes();
-//    std::cout << nodesDisplay << std::endl;
-//
-//    std::string edgesDisplay = testGraph.toStringEdges<TestEdgeDetails>();
-//    std::cout << edgesDisplay << std::endl;
-//}
-//
-//
-//void test_01_unweighted_directed()
-//{
-//    // =====================================================
-//    // Haus des Nikolas: gerichtet, ungewichtet
-//
-//    using namespace NodeDetailsTest;
-//    using namespace EdgeDetailsTest;
-//
-//    Node<TestNodeDetails> n1{ 0, { "Node 1"} };
-//    Node<TestNodeDetails> n2{ 1, { "Node 2"} };
-//    Node<TestNodeDetails> n3{ 2, { "Node 3"} };
-//    Node<TestNodeDetails> n4{ 3, { "Node 4"} };
-//    Node<TestNodeDetails> n5{ 4, { "Node 5"} };
-//
-//    std::vector<Node<TestNodeDetails>> nodes = {
-//        n1, n2, n3, n4, n5
-//    };
-//
-//    // vector of graph edges (Haus des Nikolas, ungerichtet)
-//    std::vector<UnweightedEdge<TestEdgeDetails>> edges = {
-//        {0, 1, { "Kante zwischen 0 und 1" } },
-//        {0, 2, { "Kante zwischen 0 und 2" } },
-//        {0, 3, { "Kante zwischen 0 und 3" } },
-//        {1, 2, { "Kante zwischen 1 und 2" } },
-//        {1, 3, { "Kante zwischen 1 und 3" } },
-//        {2, 3, { "Kante zwischen 2 und 3" } },
-//        {2, 4, { "Kante zwischen 2 und 4" } },
-//        {3, 4, { "Kante zwischen 3 und 4" } }
-//    };
-//
-//    // graph with 5 nodes (vertices)
-//    GraphAdjMatrix<Node<TestNodeDetails>, UnweightedEdge<TestEdgeDetails>> testGraph(Direction::directed);
-//
-//    testGraph.addNodes(nodes);
-//    testGraph.addEdges(edges);
-//
-//    std::string graph = testGraph.toString();
-//    std::cout << graph << std::endl;
-//
-//    std::string nodesDisplay = testGraph.toStringNodes();
-//    std::cout << nodesDisplay << std::endl;
-//
-//    std::string edgesDisplay = testGraph.toStringEdges<TestEdgeDetails>();
-//    std::cout << edgesDisplay << std::endl;
-//}
-//
-//void test_01_weighted_undirected()
-//{
-//    // =====================================================
-//    // Haus des Nikolas: gerichtet, gewichtet
-//
-//    using namespace NodeDetailsTest;
-//    using namespace EdgeDetailsTest;
-//
-//    Node<TestNodeDetails> n1{ 0, { "Node 1"} };
-//    Node<TestNodeDetails> n2{ 1, { "Node 2"} };
-//    Node<TestNodeDetails> n3{ 2, { "Node 3"} };
-//    Node<TestNodeDetails> n4{ 3, { "Node 4"} };
-//    Node<TestNodeDetails> n5{ 4, { "Node 5"} };
-//
-//    std::vector<Node<TestNodeDetails>> nodes = {
-//        n1, n2, n3, n4, n5
-//    };
-//
-//    // vector of graph edges
-//    std::vector<WeightedEdge<int, TestEdgeDetails>> edges = {
-//        {0, 1, 200, { "Kante zwischen 0 und 1" } },
-//        {0, 2, 201, { "Kante zwischen 0 und 2" } },
-//        {0, 3, 202, { "Kante zwischen 0 und 3" } },
-//        {1, 2, 203, { "Kante zwischen 1 und 2" } },
-//        {1, 3, 204, { "Kante zwischen 1 und 3" } },
-//        {2, 3, 205, { "Kante zwischen 2 und 3" } },
-//        {2, 4, 206, { "Kante zwischen 2 und 4" } },
-//        {3, 4, 207, { "Kante zwischen 3 und 4" } }
-//    };
-//
-//    // graph with 5 nodes (vertices)
-//    GraphAdjMatrix<Node<TestNodeDetails>, WeightedEdge<int, TestEdgeDetails>> testGraph(Direction::undirected);
-//
-//    testGraph.addNodes(nodes);
-//    testGraph.addEdges(edges);
-//
-//    std::string graph = testGraph.toString();
-//    std::cout << graph << std::endl;
-//
-//    std::string nodesDisplay = testGraph.toStringNodes();
-//    std::cout << nodesDisplay << std::endl;
-//
-//    std::string edgesDisplay = testGraph.toStringEdges<TestEdgeDetails>();
-//    std::cout << edgesDisplay << std::endl;
-//}
+    std::string edgesDisplay = toStringEdges<SantaClausEdgeWeighted, true>(std::begin(edges), std::end(edges));
+    std::cout << edgesDisplay << std::endl;
+}
 
 int main()
-{
+//{
     std::cout << "General testing functions for nodes, edges and graphs" << std::endl << std::endl;
 
-    //test_01_weighted();
-    //test_02_unweighted();
-    //test_03_weighted();
-    //test_04_unweighted();
-
-    //test_10_weighted();
-    //test_11_unweighted();
-    //test_12_weighted();
-    //test_13_unweighted();
+    test_01_nodes();
+    test_02_nodes();
+    test_03_nodes();
+    test_04_nodes();
+    test_05_nodes();
+    test_06_nodes();
 
     test_10_nodes();
-    //test_11_nodes();
+    test_11_nodes();
+
+    test_00_weighted();
+    test_01_weighted();
+    test_02_unweighted();
+    test_03_weighted();
+    test_04_unweighted();
+
+    test_10_weighted();
+    test_11_unweighted();
+    test_12_weighted();
+    test_13_unweighted();
+
+    test_01_House_of_Santa_Claus_unweighted_undirected();
+    test_02_House_of_Santa_Claus_weighted_directed();
+    test_03_House_of_Santa_Claus_unweighted_directed();
+    test_04_House_of_Santa_Claus_weighted_undirected();
 
     return 0;
 }
+
+
 
 // =====================================================================================
 // End-of-File

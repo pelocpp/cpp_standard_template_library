@@ -9,6 +9,8 @@ constexpr int IndexSource = 0;
 constexpr int IndexTarget = 1;
 constexpr int IndexWeight = 2;
 
+constexpr int IndexNodeId = 0;
+
 enum class Direction { directed, undirected };
 //
 //template <>
