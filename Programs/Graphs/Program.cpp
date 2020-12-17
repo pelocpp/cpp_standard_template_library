@@ -407,7 +407,7 @@ void test_04_House_of_Santa_Claus_weighted_undirected()
 }
 
 int main()
-//{
+{
     std::cout << "General testing functions for nodes, edges and graphs" << std::endl << std::endl;
 
     test_01_nodes();
