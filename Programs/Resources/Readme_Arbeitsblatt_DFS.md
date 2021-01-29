@@ -154,7 +154,7 @@ Das Format könnte bei dem bisherigen Beispiel so aussehen:
 5  6 
 6  7
 ```
-Ergänzen Sie Ihre Implementierung um eine Eingabe des Graphgen aus Dateien dieses Formats.
+Ergänzen Sie Ihre Implementierung um eine Eingabe des Graphen aus Dateien dieses Formats.
 
 
 ##### Bezug zur STL:
