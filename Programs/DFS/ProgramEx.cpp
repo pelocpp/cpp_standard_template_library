@@ -34,10 +34,10 @@
 
 // PeLo: Hmmm, ist das eine zentrale Stelle ???
 using MyNodeType = BaseNode<int, std::string>;
-
-auto my_make_edge(int id, std::string text) -> MyNodeType {
-    return make_node<int, std::string>(id, text);
-};
+//
+//auto my_make_edge(int id, std::string text) -> MyNodeType {
+//    return make_node<int, std::string>(id, text);
+//};
 
 void test_DFS_01()
 {

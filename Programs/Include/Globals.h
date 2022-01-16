@@ -2,7 +2,7 @@
 // Globals.h
 // =====================================================================================
 
-using IndexType = size_t;   // PeLo     size_t ausprobieren !!!!!!!!!!!!!!!!
+using IndexType = int;   // PeLo     size_t ausprobieren !!!!!!!!!!!!!!!!
 
 // PeLo: Alle std::get  durchforsten ....
 constexpr int IndexSource = 0;
