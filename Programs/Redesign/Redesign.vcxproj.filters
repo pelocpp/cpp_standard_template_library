@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Redesign.cpp">
+    <ClCompile Include="Redesign01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Redesign02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

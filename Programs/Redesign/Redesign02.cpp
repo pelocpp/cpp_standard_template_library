@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <deque>
 #include <utility>
@@ -42,6 +43,9 @@ namespace Graph_Theory_Redesign
     template<typename Weight>
     using WeightedEdge = std::tuple<size_t, size_t, Weight>;
 
+    template<typename Weight>
+    using Track = std::pair<size_t, Weight>;
+
     template<typename Edge>
     size_t getSource(const Edge& edge) {
         return std::get<0>(edge);
@@ -60,12 +64,8 @@ namespace Graph_Theory_Redesign
     //    return std::get<1>(edge);
     //}
 
-
-    // TODO: ACHTUNG: habe da jetzt man nen Namenskonflikt mit Ex gelöst
-    // Der Bezeichner getWeight kommt auch als Methode in den Klassen vor !?!?!?!
-    // das ist zu klären
     template<typename Weight>
-    auto getWeightEx(const WeightedEdge<Weight>& edge) {
+    auto getEdgeWeight(const WeightedEdge<Weight>& edge) {
         return std::get<2>(edge);
     }
 
@@ -74,16 +74,11 @@ namespace Graph_Theory_Redesign
     class IGraphRepresentation
     {
     public:
-        virtual size_t countNodes() const = 0;  // Hnmmm, ist auch doppelt ?!?!
-        virtual size_t countEdges() const = 0;  // Hnmmm, ist auch doppelt ?!?!
-
-        //virtual void addEdge(std::pair<size_t, size_t>) = 0;
-        //virtual void addEdges(const std::initializer_list<std::pair<size_t, size_t>>  list ) = 0;
-
-        // Hmmmm, das ist zu klären, ob das hier in Ordnung ist !?!?!?!?!?!
-        virtual std::vector<size_t> getNeighbouringNodes(size_t) = 0;
-
-        //  virtual ~IGraphRepresentation() = 0;
+        virtual bool isDirected() const = 0;
+        virtual bool isWeighted() const = 0;
+        virtual size_t countNodes() const = 0;
+        virtual size_t countEdges() const = 0;
+        virtual std::string toString() const = 0;
     };
 
     // -------------------------------------------------------------
@@ -92,8 +87,10 @@ namespace Graph_Theory_Redesign
     {
     public:
         virtual void addEdge(size_t, size_t) = 0;
-        virtual void addEdge(Edge) = 0;
-        virtual std::vector<Edge> getAllEdges() = 0;
+        virtual void addEdge(const Edge&) = 0;
+        virtual void addEdges(const std::initializer_list<Edge> list) = 0;
+        virtual std::vector<Edge> getAllEdges() const = 0;
+        virtual std::vector<size_t> getNeighbouringNodes(size_t) const = 0;
     };
 
     template <typename Weight>
@@ -101,9 +98,12 @@ namespace Graph_Theory_Redesign
     {
     public:
         virtual void addEdge(size_t, size_t, Weight) = 0;
-        virtual void addEdge(WeightedEdge<Weight>) = 0;
+        virtual void addEdge(const WeightedEdge<Weight>&) = 0;
+        virtual void addEdges(const std::initializer_list<WeightedEdge<Weight>> list) = 0;
         virtual Weight getWeight(size_t n, size_t m) = 0;
-        virtual std::vector<WeightedEdge<Weight>> getAllEdges() = 0;
+        virtual std::vector<WeightedEdge<Weight>> getAllEdges() const = 0;
+        virtual std::vector<WeightedEdge<Weight>> getNeighbouringEdges(size_t) const = 0;
+        virtual std::vector<size_t> getNeighbouringNodes(size_t) const = 0;
     };
 
     // -------------------------------------------------------------
@@ -118,6 +118,9 @@ namespace Graph_Theory_Redesign
             m_adjacencyList.resize(nodes);
         }
 
+        virtual bool isDirected() const override { return true; }
+        virtual bool isWeighted() const override { return false; }
+
         virtual size_t countNodes() const final { return m_adjacencyList.size(); }
 
         virtual size_t countEdges() const final { return 0; } // TO BE DONE
@@ -126,28 +129,59 @@ namespace Graph_Theory_Redesign
             m_adjacencyList[n].push_back(m);
         }
 
-        virtual void addEdge(Edge edge) override {
+        virtual void addEdge(const Edge& edge) final {
             addEdge(getSource(edge), getTarget(edge));
         }
 
-        virtual std::vector<size_t> getNeighbouringNodes(size_t node) override {
+        virtual void addEdges(const std::initializer_list<Edge> list) final {
+            for (const Edge& edge : list) {
+                addEdge(edge);
+            }
+        }
+
+        virtual std::vector<size_t> getNeighbouringNodes(size_t node) const override {
             return m_adjacencyList[node];
         }
 
-        virtual std::vector<Edge> getAllEdges() override {
+        virtual std::vector<Edge> getAllEdges() const override {
 
             std::vector<Edge> edges;
             for (size_t row = 0; const auto & vertices : m_adjacencyList) {
                 for (size_t column : vertices) {
                     edges.push_back({ row, column });
                 }
-
-                //if (!isEmpty(edge)) {      
-                //    edges.push_back(edge);
-                //}
             }
 
             return edges;
+        }
+
+        virtual std::string toString() const override {
+
+            std::ostringstream oss;
+
+            oss << "Graph: directed, unweighted:" << "\n";
+
+            bool isFirstEdge = true;
+
+            std::string separator = " <=> ";
+
+            for (int source = 0; const std::vector<size_t>& list : m_adjacencyList) {
+
+                oss << "[" << source << "] ";
+                for (int col = 0; size_t target : list) {
+
+                    oss << source << separator << target;
+
+                    if (source != list.size() - 1) {
+                        oss << " | ";
+                    }
+
+                }
+                oss << '\n';
+                ++source;
+            }
+
+            return oss.str();
         }
     };
 
@@ -156,9 +190,18 @@ namespace Graph_Theory_Redesign
     public:
         UnweightedUndirectedGraphAdjListRepresentation(size_t nodes) : UnweightedDirectedGraphAdjListRepresentation{ nodes } { }
 
+        virtual bool isDirected() const final { return false; }
+        virtual bool isWeighted() const final { return false; }
+
         virtual void addEdge(size_t n, size_t m) override {
             m_adjacencyList[n].push_back(m);
             m_adjacencyList[m].push_back(n);
+        }
+
+        virtual std::string toString() const override {
+            std::ostringstream oss;
+            oss << "To be Done!";
+            return oss.str();
         }
     };
 
@@ -175,22 +218,32 @@ namespace Graph_Theory_Redesign
             : m_adjacencyList{ std::vector<std::vector<std::optional<Weight>>>(nodes, std::vector<std::optional<Weight>>(nodes, std::nullopt)) }
         {}
 
+        virtual bool isDirected() const override { return true; }
+        virtual bool isWeighted() const override { return true; }
+
         virtual size_t countNodes() const final { return m_adjacencyList.size(); }
         virtual size_t countEdges() const final { return 0; } // TO BE DONE
 
-        virtual void addEdge(size_t n, size_t m, Weight weight) override {
+        virtual void addEdge(size_t n, size_t m, Weight weight) override
+        {
             m_adjacencyList[n][m] = weight;
         }
 
-        virtual void addEdge(WeightedEdge<Weight> edge) override {
-            addEdge(getSource(edge), getTarget(edge), getWeightEx<Weight>(edge));
+        virtual void addEdge(const WeightedEdge<Weight>& edge) final {
+            addEdge(getSource(edge), getTarget(edge), getEdgeWeight<Weight>(edge));
         }
 
-        virtual Weight getWeight(size_t n, size_t m) override {
+        virtual void addEdges(const std::initializer_list<WeightedEdge<Weight>> list) final {
+            for (const WeightedEdge<Weight>& edge : list) {
+                addEdge(edge);
+            }
+        }
+
+        virtual Weight getWeight(size_t n, size_t m) final {
             return m_adjacencyList[n][m].value();
         }
 
-        virtual std::vector<size_t>  getNeighbouringNodes(size_t node) override {
+        virtual std::vector<size_t> getNeighbouringNodes(size_t node) const final {
 
             std::vector<size_t> neighbours;
 
@@ -198,36 +251,48 @@ namespace Graph_Theory_Redesign
                 std::begin(m_adjacencyList[node]),
                 std::end(m_adjacencyList[node]),
                 [&, index = 0](const auto& entry) mutable {
-                if (entry.has_value()) {
-                    neighbours.push_back(index);
+                    if (entry.has_value()) {
+                        neighbours.push_back(index);
+                    }
+                    ++index;
                 }
-                ++index;
-            }
             );
 
             return neighbours;
         }
 
-        virtual std::vector<WeightedEdge<Weight>> getAllEdges() override {
-
+        virtual std::vector<WeightedEdge<Weight>> getAllEdges() const final {
             std::vector<WeightedEdge<Weight>> edges;
-
             for (size_t row = 0; const auto & vertices : m_adjacencyList) {
-
                 for (size_t column = 0; auto entry : vertices) {
-
                     if (entry.has_value()) {
-
                         edges.push_back({ row, column, entry.value() });
                     }
-
                     ++column;
                 }
-
                 ++row;
             }
-
             return edges;
+        }
+
+        virtual std::vector<WeightedEdge<Weight>> getNeighbouringEdges(size_t node) const final {
+
+            std::vector<WeightedEdge<Weight>> edges;
+            std::vector<std::optional<Weight>> row = m_adjacencyList[node];
+
+            for (int column = 0; const auto& entry : row) {
+                if (entry.has_value()) {
+                    edges.push_back({ node, column, entry.value() });
+                }
+                ++column;
+            }
+            return edges;
+        }
+
+        virtual std::string toString() const override {
+            std::ostringstream oss;
+            oss << "To be Done!";
+            return oss.str();
         }
     };
 
@@ -247,6 +312,9 @@ namespace Graph_Theory_Redesign
 
         WeightedUndirectedGraphAdjListRepresentation(size_t nodes) : WeightedDirectedGraphAdjListRepresentation<Weight>{ nodes } { }
 
+        virtual bool isDirected() const final { return false; }
+        virtual bool isWeighted() const final { return true; }
+
         virtual void addEdge(size_t n, size_t m, Weight weight) override {
 
             //WeightedDirectedGraphAdjListRepresentation<Weight>::addEdge(n, m, weight);
@@ -256,105 +324,12 @@ namespace Graph_Theory_Redesign
             m_adjacencyList[n][m] = weight;
             m_adjacencyList[m][n] = weight;
         }
-    };
 
-    // -------------------------------------------------------------
-
-    class IGraph
-    {
-    public:
-        virtual size_t countNodes() const = 0;
-        virtual size_t countEdges() const = 0;
-
-        //  virtual void set(IGraphRepresentation& r) = 0;
-        virtual std::vector<size_t>  getNeighbouringNodes(size_t) = 0;  // TODO: Hmmm, ist diese Methode an dieser Stelle richtig ?!?!?!? WIEDERHOLUNG
-    };
-
-    // soll eine abstrakte Basisklasse sein .................
-    class UnweightedGraph : public IGraph
-    {
-    protected:
-        IUnweightedGraphRepresentation& m_r;
-
-    public:
-        virtual size_t countNodes() const override { return m_r.countNodes(); }
-        virtual size_t countEdges() const override { return 0; }
-
-        virtual std::vector<size_t>  getNeighbouringNodes(size_t node) {
-            return m_r.getNeighbouringNodes(node);
+        virtual std::string toString() const override {
+            std::ostringstream oss;
+            oss << "To be Done!";
+            return oss.str();
         }
-
-        // Das ist auch eine Wiederholung !?!?!?!?!?!
-        virtual std::vector<Edge> getAllEdges() {
-            return m_r.getAllEdges();
-        }
-
-        UnweightedGraph(IUnweightedGraphRepresentation& r) : m_r{ r } {}
-    };
-
-    // soll eine abstrakte Basisklasse sein .................
-    template <typename Weight>
-    class WeightedGraph : public IGraph
-    {
-    protected:
-        IWeightedGraphRepresentation<Weight>& m_r;
-
-    public:
-        // Das ist auch eine Wiederholung !?!?!?!?!?!
-        virtual size_t countNodes() const override { return m_r.countNodes(); }
-        virtual size_t countEdges() const override { return 0; }
-
-        // Das ist auch eine Wiederholung !?!?!?!?!?!
-        std::vector<size_t> getNeighbouringNodes(size_t node) {
-            return m_r.getNeighbouringNodes(node);
-        }
-
-        // Das ist auch eine Wiederholung !?!?!?!?!?!
-        virtual std::vector<WeightedEdge<Weight>> getAllEdges() {
-            return m_r.getAllEdges();
-        }
-
-        // Das ist auch eine Wiederholung !?!?!?!?!?!
-        Weight getWeight(size_t n, size_t m) { return m_r.getWeight(n, m); }
-
-        WeightedGraph(IWeightedGraphRepresentation<Weight>& r) : m_r{ r } {}
-    };
-
-    // -------------------------------------------------------------
-
-   /*
-      template <typename TRepresentation>
-      class DirectedGraph {
-          TRepresentation m_graph;
-          ....
-   */
-
-    class UnweightedDirectedGraph : public UnweightedGraph
-    {
-    public:
-        UnweightedDirectedGraph(IUnweightedGraphRepresentation& r) : UnweightedGraph{ r } {}
-    };
-
-    class UnweightedUndirectedGraph : public UnweightedGraph
-    {
-    public:
-        UnweightedUndirectedGraph(IUnweightedGraphRepresentation& r) : UnweightedGraph{ r } {}
-    };
-
-    // -------------------------------------------------------------
-
-    template <typename TWEIGHT>
-    class WeightedDirectedGraph : public WeightedGraph<TWEIGHT>
-    {
-    public:
-        WeightedDirectedGraph(IWeightedGraphRepresentation<TWEIGHT>& r) : WeightedGraph<TWEIGHT>{ r } {}
-    };
-
-    template <typename TWEIGHT>
-    class WeightedUndirectedGraph : public WeightedGraph<TWEIGHT>
-    {
-    public:
-        WeightedUndirectedGraph(IWeightedGraphRepresentation<TWEIGHT>& r) : WeightedGraph<TWEIGHT>{ r } {}
     };
 
     // -------------------------------------------------------------
@@ -362,13 +337,12 @@ namespace Graph_Theory_Redesign
     class DFSSolver
     {
     private:
-        UnweightedGraph& m_graph;    // ist für gerichtete oder ungerichtete Graphen ????
+        IUnweightedGraphRepresentation& m_graph;    // ist für gerichtete oder ungerichtete Graphen ????
         std::vector<bool> m_visited;
         std::deque<std::vector<size_t>> m_paths;
 
     public:
-        // DFSSolver(UnweightedDirectedGraph& r) : m_graph{ r } {}
-        DFSSolver(UnweightedGraph& r) : m_graph{ r } {}
+        DFSSolver(IUnweightedGraphRepresentation& graph) : m_graph{ graph } {}
 
         size_t countFoundPaths() { return m_paths.size(); }
 
@@ -485,13 +459,12 @@ namespace Graph_Theory_Redesign
     class BFSSolver
     {
     private:
-        UnweightedGraph& m_graph;   // TODO: zu klären: Ist dieser Algo für gerichtete oder ungerichtete Graphen ????
-
+        IUnweightedGraphRepresentation& m_graph;   // TODO: zu klären: Ist dieser Algo für gerichtete oder ungerichtete Graphen ????
         std::deque<size_t> m_queue;
         std::vector<bool> m_visited;
 
     public:
-        BFSSolver(UnweightedGraph& r) : m_graph{ r } {}
+        BFSSolver(IUnweightedGraphRepresentation& graph) : m_graph{ graph } {}
 
         std::vector<std::optional<size_t>> solve(size_t start) {
 
@@ -531,6 +504,7 @@ namespace Graph_Theory_Redesign
             // reconstruct path going backwards from 'target'
             std::vector<size_t> path;
 
+            // TODO: Diese Zeile compiliert mit GCC nicht !!!!!!
             for (size_t pos = target; pos != -1; pos = prev.at(pos).has_value() ? prev.at(pos).value() : -1) {
                 path.push_back(pos);
             }
@@ -569,20 +543,17 @@ namespace Graph_Theory_Redesign
 
     // Dijkstra
 
-    template<typename W>
-    using Track = std::pair<size_t, W>;
-
     constexpr size_t MaxSize = static_cast<size_t>(-1);
 
     template <typename Weight>
     class DijkstraSolver {
     private:
-        WeightedDirectedGraph<Weight>& m_graph;
-        std::vector<size_t> m_distances;
-        size_t m_start; // start vertex
+        IWeightedGraphRepresentation<Weight>&  m_graph;
+        std::vector<size_t>                    m_distances;
+        size_t                                 m_start; // start vertex
 
     public:
-        DijkstraSolver(WeightedDirectedGraph<Weight>& r) : m_graph{ r }, m_start{} {}
+        DijkstraSolver(IWeightedGraphRepresentation<Weight>& graph) : m_graph{ graph }, m_start{} {}
 
         bool computeShortestPaths(size_t startVertex) {
 
@@ -622,22 +593,17 @@ namespace Graph_Theory_Redesign
             while (!pq.empty()) {
 
                 // get minimum distance vertex from priority queue - we call it 'vertex'
-                Track<size_t> track = pq.top();
+                Track<Weight> track = pq.top();
                 size_t vertex = track.first;
                 pq.pop();
 
-                // get all adjacent vertices of the dequeued vertex
-                std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(vertex);
+                // get all adjacent edges of the dequeued vertex
+                std::vector<WeightedEdge<Weight>> edges = m_graph.getNeighbouringEdges(vertex);
 
-                // TODO - Pelo - entscheiden: Da geht / ginge auch getAllEdges !?!?! in der Weighted Variante !!!! - für die neighbours!!!!
+                for (const WeightedEdge<Weight>& edge : edges) {
 
-                for (size_t target : neighbours) {
-
-                    // size_t target = getTarget<EDGE>(edge);
-                    //    IndexType weight = getWeight<EDGE, int>(edge);
-
-                    // auto weight = getWeight<EDGE>(edge);
-                    Weight weight = m_graph.getWeight(vertex, target);
+                    size_t target = getTarget(edge);
+                    Weight weight = getEdgeWeight(edge);
 
                     // if the distance to 'target' is shorter by going through 'vertex' ...
                     if (m_distances[target] == MaxSize || m_distances[target] > m_distances[vertex] + weight) {
@@ -672,7 +638,6 @@ namespace Graph_Theory_Redesign
 
             }
         }
-
     };
 
     // -------------------------------------------------------------
@@ -681,12 +646,12 @@ namespace Graph_Theory_Redesign
     class KruskalSolver
     {
     private:
-        WeightedUndirectedGraph<Weight>& m_graph;
-        std::vector<size_t>               m_root;  // root nodes ('Union Find' algorithm)
-        std::vector<WeightedEdge<Weight>> m_mst;        // minimum spanning tree (described with edges)
+        IWeightedGraphRepresentation<Weight>&  m_graph;
+        std::vector<size_t>                    m_root;      // root nodes ('Union Find' algorithm)
+        std::vector<WeightedEdge<Weight>>      m_mst;       // minimum spanning tree (described with edges)
 
     public:
-        KruskalSolver(WeightedUndirectedGraph<Weight>& r) : m_graph{ r } {}
+        KruskalSolver(IWeightedGraphRepresentation<Weight>& graph) : m_graph{ graph } {}
 
         void initRootNodes() {
             // initialize root nodes
@@ -708,8 +673,8 @@ namespace Graph_Theory_Redesign
                 std::end(edges),
                 [](const WeightedEdge<Weight>& edge1, const WeightedEdge<Weight>& edge2) -> bool {
 
-                    Weight x1 = getWeightEx(edge1);
-                    Weight x2 = getWeightEx(edge2);
+                    Weight x1 = getEdgeWeight(edge1);
+                    Weight x2 = getEdgeWeight(edge2);
 
                     return x1 < x2;
 
@@ -743,7 +708,6 @@ namespace Graph_Theory_Redesign
                 // call 'findSet' on its parent
                 return findSet(m_root[index]);
             }
-
         }
 
         void unionSet(size_t u, size_t v) {
@@ -756,7 +720,7 @@ namespace Graph_Theory_Redesign
                 std::cout
                     << getSource(edge) << " - "
                     << getTarget(edge) << " : "
-                    << getWeightEx<Weight>(edge);
+                    << getEdgeWeight<Weight>(edge);
                 std::cout << std::endl;
             }
         }
@@ -771,22 +735,21 @@ namespace Graph_Theory_Redesign
 
         // DIRECTED Graph -  NOT WEIGHTED
 
-        UnweightedDirectedGraphAdjListRepresentation data{ 8 };
+        UnweightedDirectedGraphAdjListRepresentation graph{ 8 };
 
-        data.addEdge(0, 3);
-        data.addEdge(1, 0);
-        data.addEdge(1, 2);
-        data.addEdge(1, 4);
-        data.addEdge(2, 7);
-        data.addEdge(3, 4);
-        data.addEdge(3, 5);
-        data.addEdge(4, 3);
-        data.addEdge(4, 6);
-        data.addEdge(5, 6);
-        data.addEdge(6, 7);
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 0);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(7, 6);
 
-        // UnweightedDirectedGraph graph{ data };
-        UnweightedGraph graph{ data };  // Geht auch !!!
+        std::cout << graph.toString() << std::endl;;
 
         DFSSolver dfs{ graph };
 
@@ -810,22 +773,19 @@ namespace Graph_Theory_Redesign
 
         // UNDIRECTED Graph -  NOT WEIGHTED
 
-        UnweightedUndirectedGraphAdjListRepresentation data{ 8 };
+        UnweightedUndirectedGraphAdjListRepresentation graph{ 8 };
 
-        data.addEdge(0, 3);
-        data.addEdge(1, 0);
-        data.addEdge(1, 2);
-        data.addEdge(1, 4);
-        data.addEdge(2, 7);
-        data.addEdge(3, 4);
-        data.addEdge(3, 5);
-        data.addEdge(4, 3);
-        data.addEdge(4, 6);
-        data.addEdge(5, 6);
-        data.addEdge(6, 7);
-
-        //  UnweightedUndirectedGraph graph{ data };
-        UnweightedGraph graph{ data };  // Geht auch !!!
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 0);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
 
         DFSSolver dfs{ graph };
 
@@ -848,21 +808,19 @@ namespace Graph_Theory_Redesign
     {
         std::cout << "Redesign Graph Theory - DFS" << std::endl;
 
-        UnweightedDirectedGraphAdjListRepresentation data{ 8 };
+        UnweightedDirectedGraphAdjListRepresentation graph{ 8 };
 
-        data.addEdge(0, 3);
-        data.addEdge(1, 0);
-        data.addEdge(1, 2);
-        data.addEdge(1, 4);
-        data.addEdge(2, 7);
-        data.addEdge(3, 4);
-        data.addEdge(3, 5);
-        data.addEdge(4, 3);
-        data.addEdge(4, 6);
-        data.addEdge(5, 6);
-        data.addEdge(6, 7);
-
-        UnweightedDirectedGraph graph{ data };
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 0);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
 
         DFSSolver dfs{ graph };
 
@@ -888,21 +846,19 @@ namespace Graph_Theory_Redesign
     {
         std::cout << "Redesign Graph Theory - BFS" << std::endl;
 
-        UnweightedDirectedGraphAdjListRepresentation data{ 8 };
+        UnweightedDirectedGraphAdjListRepresentation graph{ 8 };
 
-        data.addEdge(0, 3);
-        data.addEdge(1, 0);
-        data.addEdge(1, 2);
-        data.addEdge(1, 4);
-        data.addEdge(2, 7);
-        data.addEdge(3, 4);
-        data.addEdge(3, 5);
-        data.addEdge(4, 3);
-        data.addEdge(4, 6);
-        data.addEdge(5, 6);
-        data.addEdge(6, 7);
-
-        UnweightedDirectedGraph graph{ data };
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 0);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
 
         BFSSolver bfs{ graph };
 
@@ -918,19 +874,17 @@ namespace Graph_Theory_Redesign
     {
         // Beispiel "LMU_Muenchen"
 
-        WeightedDirectedGraphAdjListRepresentation<size_t> data{ 6 };
+        WeightedDirectedGraphAdjListRepresentation<size_t> graph{ 6 };
 
-        data.addEdge(0, 1, 10);
-        data.addEdge(0, 2, 20);
-        data.addEdge(1, 4, 10);
-        data.addEdge(1, 3, 50);
-        data.addEdge(2, 4, 33);
-        data.addEdge(2, 3, 20);
-        data.addEdge(3, 4, 20);
-        data.addEdge(3, 5, 2);
-        data.addEdge(4, 5, 1);
-
-        WeightedDirectedGraph<size_t> graph{ data };
+        graph.addEdge(0, 1, 10);
+        graph.addEdge(0, 2, 20);
+        graph.addEdge(1, 4, 10);
+        graph.addEdge(1, 3, 50);
+        graph.addEdge(2, 4, 33);
+        graph.addEdge(2, 3, 20);
+        graph.addEdge(3, 4, 20);
+        graph.addEdge(3, 5, 2);
+        graph.addEdge(4, 5, 1);
 
         // create solver
         DijkstraSolver<size_t> dijkstra{ graph };
@@ -944,7 +898,7 @@ namespace Graph_Theory_Redesign
     {
         // Beispiel "TU München Europakarte"
 
-        WeightedDirectedGraphAdjListRepresentation<size_t> data{ 10 };
+        WeightedDirectedGraphAdjListRepresentation<size_t> graph{ 10 };
 
         // Beispiel TUM München Europakarte
         constexpr int a = 0;
@@ -958,36 +912,35 @@ namespace Graph_Theory_Redesign
         constexpr int i = 8;
         constexpr int j = 9;
 
-        data.addEdge(i, a, 464);
-        data.addEdge(a, i, 464);
-        data.addEdge(c, f, 1054);
-        data.addEdge(f, c, 1054);
-        data.addEdge(a, f, 343);
-        data.addEdge(f, a, 343);
-        data.addEdge(c, e, 1364);
-        data.addEdge(e, c, 1364);
-        data.addEdge(a, h, 1435);
-        data.addEdge(h, a, 1435);
-        data.addEdge(f, b, 879);
-        data.addEdge(b, f, 879);
-        data.addEdge(f, e, 1106);
-        data.addEdge(e, f, 1106);
-        data.addEdge(h, g, 837);
-        data.addEdge(g, h, 837);
-        data.addEdge(b, g, 954);
-        data.addEdge(g, b, 954);
-        data.addEdge(j, d, 1053);
-        data.addEdge(d, j, 1053);
-        data.addEdge(g, d, 433);
-        data.addEdge(d, g, 433);
-        data.addEdge(b, h, 811);
-        data.addEdge(h, b, 811);
-        data.addEdge(b, j, 524);
-        data.addEdge(j, b, 524);
-        data.addEdge(j, e, 766);
-        data.addEdge(e, j, 766);
+        graph.addEdge(i, a, 464);
+        graph.addEdge(a, i, 464);
+        graph.addEdge(c, f, 1054);
+        graph.addEdge(f, c, 1054);
+        graph.addEdge(a, f, 343);
+        graph.addEdge(f, a, 343);
+        graph.addEdge(c, e, 1364);
+        graph.addEdge(e, c, 1364);
+        graph.addEdge(a, h, 1435);
+        graph.addEdge(h, a, 1435);
+        graph.addEdge(f, b, 879);
+        graph.addEdge(b, f, 879);
+        graph.addEdge(f, e, 1106);
+        graph.addEdge(e, f, 1106);
+        graph.addEdge(h, g, 837);
+        graph.addEdge(g, h, 837);
+        graph.addEdge(b, g, 954);
+        graph.addEdge(g, b, 954);
+        graph.addEdge(j, d, 1053);
+        graph.addEdge(d, j, 1053);
+        graph.addEdge(g, d, 433);
+        graph.addEdge(d, g, 433);
+        graph.addEdge(b, h, 811);
+        graph.addEdge(h, b, 811);
+        graph.addEdge(b, j, 524);
+        graph.addEdge(j, b, 524);
+        graph.addEdge(j, e, 766);
+        graph.addEdge(e, j, 766);
 
-        WeightedDirectedGraph<size_t> graph{ data };
         DijkstraSolver<size_t> dijkstra{ graph };
         dijkstra.computeShortestPaths(2);
         dijkstra.printDistances();
@@ -1012,18 +965,17 @@ namespace Graph_Theory_Redesign
         WeightedEdge<int> we7{ 3, 4, 3 };
         WeightedEdge<int> we8{ 5, 4, 3 };
 
-        WeightedUndirectedGraphAdjListRepresentation<int> data{ NumNodes };
+        WeightedUndirectedGraphAdjListRepresentation<int> graph{ NumNodes };
 
-        data.addEdge(we1);
-        data.addEdge(we2);
-        data.addEdge(we3);
-        data.addEdge(we4);
-        data.addEdge(we5);
-        data.addEdge(we6);
-        data.addEdge(we7);
-        data.addEdge(we8);
+        graph.addEdge(we1);
+        graph.addEdge(we2);
+        graph.addEdge(we3);
+        graph.addEdge(we4);
+        graph.addEdge(we5);
+        graph.addEdge(we6);
+        graph.addEdge(we7);
+        graph.addEdge(we8);
 
-        WeightedUndirectedGraph<int> graph{ data };
         KruskalSolver<int> kruskal{ graph };
         kruskal.solve();
         kruskal.printMST();
@@ -1034,13 +986,13 @@ namespace Graph_Theory_Redesign
 int main()
 {
     using namespace Graph_Theory_Redesign;
-    //test_01_A();
+    test_01_A();
     //test_01_B();
     //test_02();
     //test_03();
     //test_04_a();
     //test_04_b();
-    test_05();
+    //test_05();
 
     return 1;
 }
