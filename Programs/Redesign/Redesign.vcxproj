@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="Redesign01.cpp" />
     <ClCompile Include="Redesign02.cpp" />
+    <ClCompile Include="Redesign03.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
