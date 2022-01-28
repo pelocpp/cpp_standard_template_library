@@ -43,6 +43,7 @@ namespace Graph_Theory_Redesign
     template<typename Weight>
     using WeightedEdge = std::tuple<size_t, size_t, Weight>;
 
+    // TODO: Der wird nur bei Dijkstra verwendet ...
     template<typename Weight>
     using Track = std::pair<size_t, Weight>;
 
@@ -122,7 +123,6 @@ namespace Graph_Theory_Redesign
         virtual bool isWeighted() const override { return false; }
 
         virtual size_t countNodes() const final { return m_adjacencyList.size(); }
-
         virtual size_t countEdges() const final { return 0; } // TO BE DONE
 
         virtual void addEdge(size_t n, size_t m) override {
@@ -151,7 +151,6 @@ namespace Graph_Theory_Redesign
                     edges.push_back({ row, column });
                 }
             }
-
             return edges;
         }
 
@@ -161,21 +160,16 @@ namespace Graph_Theory_Redesign
 
             oss << "Graph: directed, unweighted:" << "\n";
 
-            bool isFirstEdge = true;
-
-            std::string separator = " <=> ";
-
-            for (int source = 0; const std::vector<size_t>& list : m_adjacencyList) {
+            std::string separator{ " <=> " };
+            for (size_t source = 0; const std::vector<size_t>& list : m_adjacencyList) {
 
                 oss << "[" << source << "] ";
-                for (int col = 0; size_t target : list) {
+                for (size_t target : list) {
 
                     oss << source << separator << target;
-
                     if (source != list.size() - 1) {
                         oss << " | ";
                     }
-
                 }
                 oss << '\n';
                 ++source;
@@ -474,19 +468,18 @@ namespace Graph_Theory_Redesign
             m_visited.at(start) = true;
 
             // setup 'previous' vector
-            std::vector<std::optional<size_t>> previous;
-            previous.resize(m_graph.countNodes());
+            std::vector<std::optional<size_t>> previous (m_graph.countNodes());
             std::fill(std::begin(previous), std::end(previous), std::nullopt);
 
             m_queue.push_back(start);
             while (!m_queue.empty()) {
 
                 // dequeue a vertex from queue
-                size_t node = m_queue.front();
+                size_t node{ m_queue.front() };
                 m_queue.pop_front();
 
                 // get all adjacent vertices of the dequeued vertex
-                std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
+                std::vector<size_t> neighbours{ m_graph.getNeighbouringNodes(node) };
                 for (size_t next : neighbours) {
                     if (!m_visited.at(next)) {
                         m_queue.push_back(next);
@@ -501,23 +494,26 @@ namespace Graph_Theory_Redesign
 
         std::vector<size_t> reconstructPath(size_t source, size_t target, std::vector<std::optional<size_t>> prev) {
 
-            // reconstruct path going backwards from 'target'
             std::vector<size_t> path;
+            bool done{ false };
+            size_t pos{ target };
 
-            // TODO: Diese Zeile compiliert mit GCC nicht !!!!!!
-            for (size_t pos = target; pos != -1; pos = prev.at(pos).has_value() ? prev.at(pos).value() : -1) {
+            // reconstruct path going backwards from 'target'
+            while (!done) {
                 path.push_back(pos);
+                if (prev.at(pos).has_value()) {
+                    pos = prev.at(pos).value();
+                }
+                else {
+                    done = true;
+                }
             }
 
+            // need to reverse the constructed path
             std::reverse(std::begin(path), std::end(path));
 
             // if 'source' and 'target' are connected, return the path
-            if (path.at(0) == source) {
-                return path;
-            }
-            else {
-                return {};
-            }
+            return (path.at(0) == source) ? path : std::vector<size_t>{};
         }
 
         void printSolution(std::vector<size_t> path) {
@@ -981,18 +977,120 @@ namespace Graph_Theory_Redesign
         kruskal.printMST();
     }
 
+    // =====================================================================================
+
+    // Flugverbindungen Nordamerika
+    // test_10
+    // Flug von New Yort nach Urbana
+    // Flug von Houston nach Calgary
+    // Am wenigsten Umsteigen
+    // In diesem Beispiel ist der Graph UNGERICHTET, man kann also immer in beide
+    // Richtungen fliegen
+
+    // BFS - all paths - UNDIRECTED Graph - NOT WEIGHTED
+    void test_10()
+    {
+        std::cout << "Flugverbindungen Nordamerika - BFS" << std::endl;
+        std::cout << "Flug von New Yort nach Urbana - Am wenigsten Umsteigen" << std::endl;
+
+        UnweightedUndirectedGraphAdjListRepresentation graph{ 8 };
+
+        // 0 New York
+        // 1 Toronto
+        // 2 Chicago
+        // 3 Urbana
+        // 4 Houston
+        // 5 Denver
+        // 6 Calgary
+        // 7 Los Angeles
+
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 2);
+        graph.addEdge(0, 5);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 6);
+        graph.addEdge(1, 7);
+        graph.addEdge(2, 5);
+        graph.addEdge(4, 7);
+        graph.addEdge(5, 3);
+        graph.addEdge(5, 4);
+        graph.addEdge(5, 7);
+
+        BFSSolver bfs{ graph };
+
+        std::vector<std::optional<size_t>> paths = bfs.solve(7);
+        std::vector<size_t> solution = bfs.reconstructPath(7, 0, paths);
+        bfs.printSolution(solution);
+    }
+
+    // =====================================================================================
+
+    // Flugverbindungen Nordamerika
+    // test_11
+    // Flug von New Yort nach Urbana
+    // Flug von Houston nach Calgary
+    // Am wenigsten Umsteigen
+
+    // BFS - all paths - DIRECTED Graph - NOT WEIGHTED
+    void test_11()
+    {
+        size_t source{ 0 };
+        size_t target{ 7 };
+
+
+        std::cout << "Flugverbindungen Nordamerika - BFS" << std::endl;
+        std::cout << "Flug von New Yort nach Urbana - Am wenigsten Umsteigen" << std::endl;
+
+        UnweightedDirectedGraphAdjListRepresentation graph{ 8 };
+
+        // 0 New York
+        // 1 Toronto
+        // 2 Chicago
+        // 3 Urbana
+        // 4 Houston
+        // 5 Denver
+        // 6 Calgary
+        // 7 Los Angeles
+
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 2);
+        graph.addEdge(0, 5);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 6);
+        graph.addEdge(1, 7);
+        graph.addEdge(2, 5);
+        graph.addEdge(4, 7);
+        graph.addEdge(5, 3);
+        graph.addEdge(5, 4);
+        graph.addEdge(5, 7);
+
+        BFSSolver bfs{ graph };
+
+        std::vector<std::optional<size_t>> paths = bfs.solve(7);
+        std::vector<size_t> solution = bfs.reconstructPath(7, 0, paths);
+        bfs.printSolution(solution);
+    }
+
+    // =====================================================================================
+
 }
+
+// =====================================================================================
+
 
 int main()
 {
     using namespace Graph_Theory_Redesign;
-    test_01_A();
+    //test_01_A();
     //test_01_B();
     //test_02();
     //test_03();
     //test_04_a();
     //test_04_b();
     //test_05();
+
+    //test_10();
+    test_11();
 
     return 1;
 }
