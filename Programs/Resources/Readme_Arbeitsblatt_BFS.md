@@ -58,7 +58,7 @@ Beim Studium von *Abbildung* 1 können Sie folgende Städte erkennen:
   * Calgary
   * Los Angeles
 
-Zwischen diesen Städten besteht eine Flugverbindung:
+Dabei besteht zwischen folgenden Städten eine Flugverbindung:
 
 | Von | Nach |
 | :-- | --|
@@ -85,9 +85,9 @@ ohne am wenigsten Umsteigen zu müssen?
 
 #### 2. Aufgabe
 
-Wir wollen annehmen, dass die Flugverbindungen aus *Tabelle* 2 nur für eine Richtung gelten:
-Man kann also von New York nach Toronto fliegen,
-der zu Grunde liegende Graph muss also gerichtet sein.
+Wir wollen annehmen, dass die Flugverbindungen aus *Tabelle* 2 nun nur für eine Richtung gelten:
+Man kann also von New York nach Toronto fliegen, aber nicht von Toronto nach New York,
+der zu Grunde liegende Graph muss gerichtet sein.
 Damit stellen wir die Frage: Wie kann man von New York nach Urbana fliegen,
 ohne am wenigsten Umsteigen zu müssen?
 
