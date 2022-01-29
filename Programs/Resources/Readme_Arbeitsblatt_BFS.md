@@ -91,6 +91,19 @@ der zu Grunde liegende Graph muss gerichtet sein.
 Damit stellen wir die Frage: Wie kann man von New York nach Urbana fliegen,
 ohne am wenigsten Umsteigen zu müssen?
 
+#### 3. Aufgabe
+
+Wir wollen unsere Realisierung noch ein einem zweiten Beispiel testen.
+Dabei wenden wir den BFS-Algorithmus sowohl auf einen ungerichteten als auf einen gerichteten Graphen an.
+In *Abbildung* 2 betrachten wir einen ungerichteten Beispielgraph:
+
+
+<img src="002_bfs_hans_werner_lang_03.svg" width="600">
+
+*Abbildung* 2: Beispiel aus dem Buch von Hans Werner Lang.
+
+
+
 ---
 
 [Zurück](../../Readme.md)

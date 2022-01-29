@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <optional>
 #include <queue>
+#include <type_traits>
 
 // TODO: final, override ... Vor allem final einsetzen, wenn man eine Methode nicht mehr überschreiben sollte
 
@@ -31,6 +32,18 @@
 // TWO PHASE LOOKUP !!!!
 // https://www.modernescpp.com/index.php/surprise-included-inheritance-and-member-functions-of-class-templates
 // HIER GEHT ES UM DAS using inmitten des Quellcode !!!!
+
+// TODO: 
+//// Die beiden Methoden 
+//virtual void setNodeDescription(size_t index, const NodeDescription& description) = 0;
+//virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) = 0;
+// sind derzeit doppelt implementiert ... das sollte man doch vermeiden
+// 
+
+// TODO:
+// oss << "[" << std::setw(12) << std::left << description << "] ";
+// Hier könnte man die maximale Feldbreite tatsächlich berechnen -- sieht dann doch besser aus ....
+// ODer gleich mit std::format von C++ 20 arbeiten !!!!
 
 // =====================================================================================
 
@@ -78,11 +91,15 @@ namespace Graph_Theory_Redesign
     public:
         virtual bool isDirected() const = 0;
         virtual bool isWeighted() const = 0;
+
         virtual size_t countNodes() const = 0;
         virtual size_t countEdges() const = 0;
-        virtual std::string toString() const = 0;
 
-        virtual void setNodeDescription(size_t, const NodeDescription &) = 0;
+        virtual void setNodeDescription(size_t index, const NodeDescription& description) = 0;
+        virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) = 0;
+        virtual std::optional<NodeDescription> getNodeDescription(size_t index) = 0;
+
+        virtual std::string toString() const = 0;
     };
 
     // -------------------------------------------------------------
@@ -118,10 +135,12 @@ namespace Graph_Theory_Redesign
     {
     protected:
         std::vector<std::vector<size_t>> m_adjacencyList;
+        std::vector<std::optional<NodeDescription>> m_nodeDescription;
 
     public:
         UnweightedDirectedGraphAdjListRepresentation(size_t nodes) {
             m_adjacencyList.resize(nodes);
+            m_nodeDescription.resize(nodes);
         }
 
         virtual bool isDirected() const override { return true; }
@@ -129,8 +148,6 @@ namespace Graph_Theory_Redesign
 
         virtual size_t countNodes() const final { return m_adjacencyList.size(); }
         virtual size_t countEdges() const final { return 0; } // TO BE DONE
-
-        virtual void setNodeDescription(size_t, const NodeDescription&) {} // TO BE DONE
 
         virtual void addEdge(size_t n, size_t m) override {
             m_adjacencyList[n].push_back(m);
@@ -144,6 +161,18 @@ namespace Graph_Theory_Redesign
             for (const Edge& edge : list) {
                 addEdge(edge);
             }
+        }
+
+        virtual void setNodeDescription(size_t index, const NodeDescription& description) {
+            m_nodeDescription[index] = description;
+        }
+
+        virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) {
+            m_nodeDescription.insert(std::begin(m_nodeDescription), std::begin(list), std::end(list));
+        }
+
+        virtual std::optional<NodeDescription> getNodeDescription(size_t index) {
+            return m_nodeDescription[index];
         }
 
         virtual std::vector<size_t> getNeighbouringNodes(size_t node) const override {
@@ -165,14 +194,27 @@ namespace Graph_Theory_Redesign
 
             std::ostringstream oss;
 
-            oss << "Graph: directed, unweighted:" << "\n";
+            oss << "Graph: Directed, Unweighted:" << "\n";
 
             std::string separator{ " <=> " };
             for (size_t source = 0; const std::vector<size_t>& list : m_adjacencyList) {
 
                 oss << "[" << source << "] ";
-                for (size_t target : list) {
 
+                if (m_nodeDescription[source].has_value()) {
+                    NodeDescription description = m_nodeDescription[source].value();
+
+                    using T = std::remove_cv<NodeDescription>::type;
+                    if constexpr (! std::is_same<T, std::string>::value) {
+                        std::string s{ std::to_string(description) };
+                        oss << "[" << std::setw(12) << std::left << s << "] ";
+                    }
+                    else {
+                        oss << "[" << std::setw(12) << std::left << description << "] ";
+                    }
+                }
+
+                for (size_t target : list) {
                     oss << source << separator << target;
                     if (source != list.size() - 1) {
                         oss << " | ";
@@ -185,6 +227,12 @@ namespace Graph_Theory_Redesign
             return oss.str();
         }
     };
+
+    template <typename NodeDescription>
+    std::ostream& operator<< (std::ostream& os, UnweightedDirectedGraphAdjListRepresentation<NodeDescription> graph) {
+        os << graph.toString();
+        return os;
+    }
 
     template <typename NodeDescription>
     class UnweightedUndirectedGraphAdjListRepresentation : public UnweightedDirectedGraphAdjListRepresentation<NodeDescription>
@@ -200,12 +248,18 @@ namespace Graph_Theory_Redesign
             this->m_adjacencyList[m].push_back(n);
         }
 
-        virtual std::string toString() const override {
-            std::ostringstream oss;
-            oss << "To be Done!";
-            return oss.str();
-        }
+        //virtual std::string toString() const override {
+        //    std::ostringstream oss;
+        //    oss << "To be Done!";
+        //    return oss.str();
+        //}
     };
+
+    template <typename NodeDescription>
+    std::ostream& operator<< (std::ostream& os, UnweightedUndirectedGraphAdjListRepresentation<NodeDescription> graph) {
+        os << graph.toString();
+        return os;
+    }
 
     // -------------------------------------------------------------
 
@@ -214,19 +268,21 @@ namespace Graph_Theory_Redesign
     {
     protected:
         std::vector<std::vector<std::optional<Weight>>> m_adjacencyList;
+        std::vector<std::optional<NodeDescription>> m_nodeDescription;
 
     public:
         WeightedDirectedGraphAdjListRepresentation(size_t nodes)
             : m_adjacencyList{ std::vector<std::vector<std::optional<Weight>>>(nodes, std::vector<std::optional<Weight>>(nodes, std::nullopt)) }
-        {}
+        {
+           // m_adjacencyList.resize(nodes);  // TODO HIer habe ich den Faden verloren: Geht das in der Liste oder im Rumpf vom c'tor
+            m_nodeDescription.resize(nodes);
+        }
 
         virtual bool isDirected() const override { return true; }
         virtual bool isWeighted() const override { return true; }
 
         virtual size_t countNodes() const final { return m_adjacencyList.size(); }
         virtual size_t countEdges() const final { return 0; } // TO BE DONE
-
-        virtual void setNodeDescription(size_t, const NodeDescription&) {} // TO BE DONE
 
         virtual void addEdge(size_t n, size_t m, Weight weight) override
         {
@@ -245,6 +301,18 @@ namespace Graph_Theory_Redesign
 
         virtual Weight getWeight(size_t n, size_t m) final {
             return m_adjacencyList[n][m].value();
+        }
+
+        virtual void setNodeDescription(size_t index, const NodeDescription& description) {
+            m_nodeDescription[index] = description;
+        }
+
+        virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) {
+            m_nodeDescription.insert(std::begin(m_nodeDescription), std::begin(list), std::end(list));
+        }
+
+        virtual std::optional<NodeDescription> getNodeDescription(size_t index) {
+            return m_nodeDescription[index];
         }
 
         virtual std::vector<size_t> getNeighbouringNodes(size_t node) const final {
@@ -531,19 +599,56 @@ namespace Graph_Theory_Redesign
         void printSolution(std::vector<size_t> path) {
             if (path.size() == 0) {
                 std::cout << "No Solution found !" << std::endl;
-                return;
             }
+            else {
+                std::for_each(
+                    std::begin(path),
+                    std::prev(std::end(path)), 
+                    [&](size_t vertex) {
+                        //  std::cout << "[" << vertex << "] => ";
 
-            // std__prev !!!!!!!!!!!!!!!!!!
-            std::for_each(std::begin(path), std::end(path) - 1, [](size_t vertex) {
-                std::cout << "[" << vertex << "] => ";
-                }
-            );
+                        std::optional<NodeDescription> description{ m_graph.getNodeDescription(vertex) };
 
-            // print last element without trailing comma :-)
-            size_t vertex = path.at(path.size() - 1);
-            std::cout << "[" << vertex << "].";
+                        if (description.has_value()) {
+
+                            using T = std::remove_cv<NodeDescription>::type;
+
+                            if constexpr (!std::is_same<T, std::string>::value) {
+                                std::string s{ std::to_string(description.value()) };
+                                std::cout << "[" << s << "] => ";
+                            }
+                            else {
+                                std::cout << "[" << description.value() << "] => ";
+                            }
+
+
+                           // std::cout << "[" << vertex << "] => ";
+                        }
+                        else {
+                            std::cout << "[" << vertex << "] => ";
+                        }
+                    }
+                );
+
+                // print last element without trailing comma :-)
+                size_t vertex = path.back();
+                // TODO: Hmmm, da muss man jetzt dieselbe std::optional Umwandlung machen wir kurz zuvor... das ist lästing
+                // Da könnte man eine Methode konzipieren, die ein std::pair zurückliefert ... und structured binding verwendet....
+                std::cout << "[" << vertex << "].";
+            }
         }
+
+        //using T = std::remove_cv<NodeDescription>::type;
+
+        ////     oss << std::setw(10) << std::left;
+
+        //if constexpr (!std::is_same<T, std::string>::value) {
+        //    std::string s{ std::to_string(description) };
+        //    oss << "[" << std::setw(12) << std::left << s << "] ";
+        //}
+        //else {
+        //    oss << "[" << std::setw(12) << std::left << description << "] ";
+        //}
 
     };
 
@@ -882,7 +987,7 @@ namespace Graph_Theory_Redesign
     {
         // Beispiel "LMU_Muenchen"
 
-        WeightedDirectedGraphAdjListRepresentation<int, size_t> graph{ 6 };
+        WeightedDirectedGraphAdjListRepresentation<size_t, int> graph{ 6 };
 
         graph.addEdge(0, 1, 10);
         graph.addEdge(0, 2, 20);
@@ -895,7 +1000,7 @@ namespace Graph_Theory_Redesign
         graph.addEdge(4, 5, 1);
 
         // create solver
-        DijkstraSolver<int, size_t> dijkstra{ graph };
+        DijkstraSolver<size_t, int> dijkstra{ graph };
 
         dijkstra.computeShortestPaths(0);
         // std::vector<size_t> distances = dijkstra.getDistances();
@@ -906,7 +1011,7 @@ namespace Graph_Theory_Redesign
     {
         // Beispiel "TU München Europakarte"
 
-        WeightedDirectedGraphAdjListRepresentation<int, size_t> graph{ 10 };
+        WeightedDirectedGraphAdjListRepresentation<size_t, int> graph{ 10 };
 
         // Beispiel TUM München Europakarte
         constexpr int a = 0;
@@ -949,7 +1054,7 @@ namespace Graph_Theory_Redesign
         graph.addEdge(j, e, 766);
         graph.addEdge(e, j, 766);
 
-        DijkstraSolver<int, size_t> dijkstra{ graph };
+        DijkstraSolver<size_t, int> dijkstra{ graph };
         dijkstra.computeShortestPaths(2);
         dijkstra.printDistances();
     }
@@ -1005,7 +1110,7 @@ namespace Graph_Theory_Redesign
         std::cout << "Flugverbindungen Nordamerika - BFS" << std::endl;
         std::cout << "Flug von New Yort nach Urbana - Am wenigsten Umsteigen" << std::endl;
 
-        UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 8 };
+        UnweightedUndirectedGraphAdjListRepresentation<std::string> graph{ 8 };
 
         // 0 New York
         // 1 Toronto
@@ -1015,6 +1120,15 @@ namespace Graph_Theory_Redesign
         // 5 Denver
         // 6 Calgary
         // 7 Los Angeles
+
+        graph.setNodeDescription(0, "New York");
+        graph.setNodeDescription(1, "Toronto");
+        graph.setNodeDescription(2, "Chicago");
+        graph.setNodeDescription(3, "Urbana");
+        graph.setNodeDescription(4, "Houston");
+        graph.setNodeDescription(5, "Denver");
+        graph.setNodeDescription(6, "Calgary");
+        graph.setNodeDescription(7, "Los Angeles");
 
         graph.addEdge(0, 1);
         graph.addEdge(0, 2);
@@ -1028,7 +1142,7 @@ namespace Graph_Theory_Redesign
         graph.addEdge(5, 4);
         graph.addEdge(5, 7);
 
-        BFSSolver<int> bfs{ graph };
+        BFSSolver<std::string> bfs{ graph };
 
         std::vector<std::optional<size_t>> paths = bfs.solve(7);
         std::vector<size_t> solution = bfs.reconstructPath(7, 0, paths);
@@ -1049,11 +1163,10 @@ namespace Graph_Theory_Redesign
         size_t source{ 0 };
         size_t target{ 7 };
 
-
         std::cout << "Flugverbindungen Nordamerika - BFS" << std::endl;
         std::cout << "Flug von New Yort nach Urbana - Am wenigsten Umsteigen" << std::endl;
 
-        UnweightedDirectedGraphAdjListRepresentation<int> graph{ 8 };
+        UnweightedDirectedGraphAdjListRepresentation<std::string> graph{ 8 };
 
         // 0 New York
         // 1 Toronto
@@ -1063,6 +1176,11 @@ namespace Graph_Theory_Redesign
         // 5 Denver
         // 6 Calgary
         // 7 Los Angeles
+
+        graph.setNodeDescriptions({
+            "New York","Toronto","Chicago","Urbana",
+            "Houston","Denver","Calgary","Los Angeles" 
+        });
 
         graph.addEdge(0, 1);
         graph.addEdge(0, 2);
@@ -1076,14 +1194,75 @@ namespace Graph_Theory_Redesign
         graph.addEdge(5, 4);
         graph.addEdge(5, 7);
 
-        BFSSolver<int> bfs{ graph };
+        std::cout << graph << std::endl;
 
-        std::vector<std::optional<size_t>> paths = bfs.solve(7);
-        std::vector<size_t> solution = bfs.reconstructPath(7, 0, paths);
+        BFSSolver<std::string> bfs{ graph };
+        std::vector<std::optional<size_t>> paths = bfs.solve(source);
+        std::vector<size_t> solution = bfs.reconstructPath(source, target, paths);
         bfs.printSolution(solution);
     }
 
     // =====================================================================================
+
+    // Buch von Hans Werner Lang
+    // test_12
+    // Ungerichteter Graph mit insgesamt 23 Knoten
+    // Kürzeste Verbindung
+    // Die Knoten sollen als Knotenbeschriftung int haben.
+
+    // BFS - all paths - UNDIRECTED Graph - NOT WEIGHTED
+    void test_12()
+    {
+        std::cout << "Buch von Hans Werner Lang - BFS" << std::endl;
+        std::cout << "Ungerichteter Graph mit insgesamt 23 Knoten - Kürzeste Verbindung" << std::endl;
+
+        UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 23 };
+
+        std::cout << graph << std::endl;
+
+        //graph.setNodeDescriptions({
+        //1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        //});
+
+
+        graph.addEdge(0, 5);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 6);
+        graph.addEdge(1, 7);
+        graph.addEdge(5, 8);
+        graph.addEdge(6, 10);
+        graph.addEdge(8, 9);
+        graph.addEdge(9, 10);
+        graph.addEdge(7, 11);
+        graph.addEdge(8, 15);
+        graph.addEdge(11, 12);
+        graph.addEdge(12, 13);
+        graph.addEdge(13, 14);
+        graph.addEdge(14, 15);
+        graph.addEdge(11, 16);
+        graph.addEdge(12, 17);
+        graph.addEdge(13, 18);
+        graph.addEdge(15, 19);
+        graph.addEdge(16, 17);
+        graph.addEdge(17, 18);
+        graph.addEdge(19, 20);
+        graph.addEdge(20, 21);
+        graph.addEdge(18, 22);
+
+        BFSSolver<int> bfs{ graph };
+
+        size_t source{ 7 };
+        size_t target{ 15 };
+
+        std::vector<std::optional<size_t>> paths = bfs.solve(source);
+        std::vector<size_t> solution = bfs.reconstructPath(source, target, paths);
+        bfs.printSolution(solution);
+    }
+
+
 
 }
 
@@ -1101,8 +1280,9 @@ int main()
     //test_04_b();
     //test_05();
 
-    //test_10();
-    test_11();
+    // test_10();
+    // test_11();
+    test_12();
 
     return 1;
 }

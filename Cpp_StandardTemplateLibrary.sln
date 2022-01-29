@@ -7,6 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BFS", "Programs\BFS\BFS.vcx
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{9D31A6E6-AFC8-43DC-B274-82502EB91D1F}"
 	ProjectSection(SolutionItems) = preProject
+		Programs\Resources\002_bfs_hans_werner_lang_03.svg = Programs\Resources\002_bfs_hans_werner_lang_03.svg
 		Programs\Resources\cpp_cheat_sheet.png = Programs\Resources\cpp_cheat_sheet.png
 		Programs\Resources\Entfernungs_Tabelle_Deutschland.png = Programs\Resources\Entfernungs_Tabelle_Deutschland.png
 		Programs\Resources\FlightMap.png = Programs\Resources\FlightMap.png
