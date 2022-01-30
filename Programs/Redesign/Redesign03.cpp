@@ -85,7 +85,7 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     class IGraphRepresentation
     {
     public:
@@ -104,7 +104,7 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     class IUnweightedGraphRepresentation : public IGraphRepresentation<NodeDescription>
     {
     public:
@@ -115,7 +115,7 @@ namespace Graph_Theory_Redesign
         virtual std::vector<size_t> getNeighbouringNodes(size_t) const = 0;
     };
 
-    template <typename NodeDescription, typename Weight>
+    template <typename Weight, typename NodeDescription = int>
     class IWeightedGraphRepresentation : public IGraphRepresentation<NodeDescription>
     {
     public:
@@ -130,7 +130,7 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     class UnweightedDirectedGraphAdjListRepresentation : public IUnweightedGraphRepresentation<NodeDescription>
     {
     protected:
@@ -192,14 +192,10 @@ namespace Graph_Theory_Redesign
 
         virtual std::string toString() const override {
 
+            std::string separator{ isDirected() ? " -> " : " <=> " };
+
             std::ostringstream oss;
-
-            oss << "Graph: Directed, Unweighted:" << "\n";
-
-            std::string separator{ " <=> " };
             for (size_t source = 0; const std::vector<size_t>& list : m_adjacencyList) {
-
-                oss << "[" << source << "] ";
 
                 if (m_nodeDescription[source].has_value()) {
                     NodeDescription description = m_nodeDescription[source].value();
@@ -207,19 +203,24 @@ namespace Graph_Theory_Redesign
                     using T = std::remove_cv<NodeDescription>::type;
                     if constexpr (! std::is_same<T, std::string>::value) {
                         std::string s{ std::to_string(description) };
-                        oss << "[" << std::setw(12) << std::left << s << "] ";
+                        oss << "[" << /* std::setw(12) << */ std::left << s << "] ";
                     }
                     else {
-                        oss << "[" << std::setw(12) << std::left << description << "] ";
+                        oss << "[" << /* std::setw(12) << */ std::left << description << "] ";
                     }
+                }
+                else {
+                    oss << "[" << source << "] ";
                 }
 
-                for (size_t target : list) {
+                for (size_t index = 0; size_t target : list) {
                     oss << source << separator << target;
-                    if (source != list.size() - 1) {
+                    if (index != list.size() - 1) {
                         oss << " | ";
                     }
+                    ++index;
                 }
+
                 oss << '\n';
                 ++source;
             }
@@ -228,13 +229,14 @@ namespace Graph_Theory_Redesign
         }
     };
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     std::ostream& operator<< (std::ostream& os, UnweightedDirectedGraphAdjListRepresentation<NodeDescription> graph) {
+        os << "Graph: Directed, Unweighted:" << std::endl;
         os << graph.toString();
         return os;
     }
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     class UnweightedUndirectedGraphAdjListRepresentation : public UnweightedDirectedGraphAdjListRepresentation<NodeDescription>
     {
     public:
@@ -247,24 +249,19 @@ namespace Graph_Theory_Redesign
             this->m_adjacencyList[n].push_back(m);
             this->m_adjacencyList[m].push_back(n);
         }
-
-        //virtual std::string toString() const override {
-        //    std::ostringstream oss;
-        //    oss << "To be Done!";
-        //    return oss.str();
-        //}
     };
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     std::ostream& operator<< (std::ostream& os, UnweightedUndirectedGraphAdjListRepresentation<NodeDescription> graph) {
+        os << "Graph: Undirected, Unweighted:" << std::endl;
         os << graph.toString();
         return os;
     }
 
     // -------------------------------------------------------------
 
-    template <typename NodeDescription, typename Weight>
-    class WeightedDirectedGraphAdjListRepresentation : public IWeightedGraphRepresentation<NodeDescription, Weight>
+    template <typename Weight, typename NodeDescription = int>
+    class WeightedDirectedGraphAdjListRepresentation : public IWeightedGraphRepresentation<Weight, NodeDescription>
     {
     protected:
         std::vector<std::vector<std::optional<Weight>>> m_adjacencyList;
@@ -368,8 +365,8 @@ namespace Graph_Theory_Redesign
         }
     };
 
-    template <typename NodeDescription, typename Weight>
-    class WeightedUndirectedGraphAdjListRepresentation : public WeightedDirectedGraphAdjListRepresentation<NodeDescription, Weight>
+    template <typename Weight, typename NodeDescription = int>
+    class WeightedUndirectedGraphAdjListRepresentation : public WeightedDirectedGraphAdjListRepresentation<Weight, NodeDescription>
     {
     public:
         // Siehe hier
@@ -379,10 +376,10 @@ namespace Graph_Theory_Redesign
         // ein erstes Mal bzgl. der Zugriffs auf m_adjacencyList
         // ein zweites Mal beim Aufruf von addEdge im Anwendungsbeispiel
 
-        using WeightedDirectedGraphAdjListRepresentation<NodeDescription, Weight>::addEdge;
-        using WeightedDirectedGraphAdjListRepresentation<NodeDescription, Weight>::m_adjacencyList;
+        using WeightedDirectedGraphAdjListRepresentation<Weight, NodeDescription>::addEdge;
+        using WeightedDirectedGraphAdjListRepresentation<Weight, NodeDescription>::m_adjacencyList;
 
-        WeightedUndirectedGraphAdjListRepresentation(size_t nodes) : WeightedDirectedGraphAdjListRepresentation<NodeDescription, Weight>{ nodes } { }
+        WeightedUndirectedGraphAdjListRepresentation(size_t nodes) : WeightedDirectedGraphAdjListRepresentation<Weight, NodeDescription>{ nodes } { }
 
         virtual bool isDirected() const final { return false; }
         virtual bool isWeighted() const final { return true; }
@@ -406,7 +403,7 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     class DFSSolver
     {
     private:
@@ -529,7 +526,7 @@ namespace Graph_Theory_Redesign
 
     // BFS
 
-    template <typename NodeDescription>
+    template <typename NodeDescription = int>
     class BFSSolver
     {
     private:
@@ -658,15 +655,15 @@ namespace Graph_Theory_Redesign
 
     constexpr size_t MaxSize = static_cast<size_t>(-1);
 
-    template <typename NodeDescription, typename Weight>
+    template <typename Weight, typename NodeDescription = int>
     class DijkstraSolver {
     private:
-        IWeightedGraphRepresentation<NodeDescription, Weight>&  m_graph;
+        IWeightedGraphRepresentation<Weight, NodeDescription>&  m_graph;
         std::vector<size_t>                    m_distances;
         size_t                                 m_start; // start vertex
 
     public:
-        DijkstraSolver(IWeightedGraphRepresentation<NodeDescription, Weight>& graph) : m_graph{ graph }, m_start{} {}
+        DijkstraSolver(IWeightedGraphRepresentation<Weight, NodeDescription>& graph) : m_graph{ graph }, m_start{} {}
 
         bool computeShortestPaths(size_t startVertex) {
 
@@ -755,16 +752,16 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------
 
-    template <typename NodeDescription, typename Weight>
+    template <typename Weight, typename NodeDescription = int>
     class KruskalSolver
     {
     private:
-        IWeightedGraphRepresentation<NodeDescription, Weight>&  m_graph;
+        IWeightedGraphRepresentation<Weight, NodeDescription>&  m_graph;
         std::vector<size_t>                    m_root;      // root nodes ('Union Find' algorithm)
         std::vector<WeightedEdge<Weight>>      m_mst;       // minimum spanning tree (described with edges)
 
     public:
-        KruskalSolver(IWeightedGraphRepresentation<NodeDescription, Weight>& graph) : m_graph{ graph } {}
+        KruskalSolver(IWeightedGraphRepresentation<Weight, NodeDescription>& graph) : m_graph{ graph } {}
 
         void initRootNodes() {
             // initialize root nodes
@@ -987,7 +984,7 @@ namespace Graph_Theory_Redesign
     {
         // Beispiel "LMU_Muenchen"
 
-        WeightedDirectedGraphAdjListRepresentation<size_t, int> graph{ 6 };
+        WeightedDirectedGraphAdjListRepresentation<int, size_t> graph{ 6 };
 
         graph.addEdge(0, 1, 10);
         graph.addEdge(0, 2, 20);
@@ -1000,7 +997,7 @@ namespace Graph_Theory_Redesign
         graph.addEdge(4, 5, 1);
 
         // create solver
-        DijkstraSolver<size_t, int> dijkstra{ graph };
+        DijkstraSolver<int, size_t> dijkstra{ graph };
 
         dijkstra.computeShortestPaths(0);
         // std::vector<size_t> distances = dijkstra.getDistances();
@@ -1011,7 +1008,7 @@ namespace Graph_Theory_Redesign
     {
         // Beispiel "TU München Europakarte"
 
-        WeightedDirectedGraphAdjListRepresentation<size_t, int> graph{ 10 };
+        WeightedDirectedGraphAdjListRepresentation<int, size_t> graph{ 10 };
 
         // Beispiel TUM München Europakarte
         constexpr int a = 0;
@@ -1054,7 +1051,7 @@ namespace Graph_Theory_Redesign
         graph.addEdge(j, e, 766);
         graph.addEdge(e, j, 766);
 
-        DijkstraSolver<size_t, int> dijkstra{ graph };
+        DijkstraSolver<int, size_t> dijkstra{ graph };
         dijkstra.computeShortestPaths(2);
         dijkstra.printDistances();
     }
@@ -1262,6 +1259,82 @@ namespace Graph_Theory_Redesign
         bfs.printSolution(solution);
     }
 
+    // =====================================================================================
+
+    // testing only graphs
+    // a) Undirected, Unweighted, No Node Descriptions
+    // b) Undirected, Unweighted, Node Descriptions
+    // c) Directed,   Unweighted, No Node Descriptions
+    // d) Directed,   Unweighted, Node Descriptions
+    // 
+    // Same with Weighted Graphs - To be Done
+
+    void test_90_a()
+    {
+        std::cout << "Undirected, Unweighted, No Node Descriptions" << std::endl;
+
+        UnweightedUndirectedGraphAdjListRepresentation graph{ 4 };
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+
+        std::cout << graph << std::endl;
+    }
+
+    void test_90_b()
+    {
+        std::cout << "Undirected, Unweighted, Node Descriptions" << std::endl;
+
+        UnweightedUndirectedGraphAdjListRepresentation<std::string> graph{ 4 };
+
+        graph.setNodeDescriptions({
+            std::string{"A"}, std::string{"B"}, std::string{"C"}, std::string{"C"}
+        });
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+
+        std::cout << graph << std::endl;
+    }
+
+    void test_90_c()
+    {
+        std::cout << "Directed, Unweighted, No Node Descriptions" << std::endl;
+
+        UnweightedDirectedGraphAdjListRepresentation<int> graph{ 4 };
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+
+        std::cout << graph << std::endl;
+    }
+
+    void test_90_d()
+    {
+        std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
+
+        UnweightedDirectedGraphAdjListRepresentation<std::string> graph{ 4 };
+
+        graph.setNodeDescriptions({
+            std::string{"A"}, std::string{"B"}, std::string{"C"}, std::string{"C"}
+        });
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+
+        std::cout << graph << std::endl;
+    }
+
+
+    // =====================================================================================
 
 
 }
@@ -1282,7 +1355,12 @@ int main()
 
     // test_10();
     // test_11();
-    test_12();
+    //test_12();
+
+    test_90_a();
+    test_90_b();
+    test_90_c();
+    test_90_d();
 
     return 1;
 }
