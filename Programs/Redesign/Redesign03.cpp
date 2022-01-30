@@ -147,7 +147,19 @@ namespace Graph_Theory_Redesign
         virtual bool isWeighted() const override { return false; }
 
         virtual size_t countNodes() const final { return m_adjacencyList.size(); }
-        virtual size_t countEdges() const final { return 0; } // TO BE DONE
+
+        virtual size_t countEdges() const final {
+            int count = 0;
+            std::for_each(
+                std::begin(m_adjacencyList), 
+                std::end(m_adjacencyList),
+                [&](const std::vector<size_t>& row) {
+                    count += row.size();
+                }
+            );
+            // return (isDirected()) ? count : count / 2;
+            return count;
+        }
 
         virtual void addEdge(size_t n, size_t m) override {
             m_adjacencyList[n].push_back(m);
@@ -195,6 +207,8 @@ namespace Graph_Theory_Redesign
             std::string separator{ isDirected() ? " -> " : " <=> " };
 
             std::ostringstream oss;
+            oss << "Nodes: " << countNodes() << ", Edges: " << countEdges() << std::endl;
+
             for (size_t source = 0; const std::vector<size_t>& list : m_adjacencyList) {
 
                 if (m_nodeDescription[source].has_value()) {
@@ -203,14 +217,15 @@ namespace Graph_Theory_Redesign
                     using T = std::remove_cv<NodeDescription>::type;
                     if constexpr (! std::is_same<T, std::string>::value) {
                         std::string s{ std::to_string(description) };
-                        oss << "[" << /* std::setw(12) << */ std::left << s << "] ";
+                        oss << "[" << /* std::setw(12) << std::left << */ s << "] ";
                     }
                     else {
-                        oss << "[" << /* std::setw(12) << */ std::left << description << "] ";
+                        oss << "[" << /* std::setw(12) << std::left << */ description << "] ";
                     }
                 }
                 else {
-                    oss << "[" << source << "] ";
+                    std::string s{ source < 10 ? "0" + std::to_string(source) : std::to_string(source) };
+                    oss << "[" << s << "] ";
                 }
 
                 for (size_t index = 0; size_t target : list) {
@@ -232,6 +247,7 @@ namespace Graph_Theory_Redesign
     template <typename NodeDescription = int>
     std::ostream& operator<< (std::ostream& os, UnweightedDirectedGraphAdjListRepresentation<NodeDescription> graph) {
         os << "Graph: Directed, Unweighted:" << std::endl;
+      //  os << "Nodes: " << graph.countNodes() << ", Edges: " << graph.countNodes() << std::endl;
         os << graph.toString();
         return os;
     }
@@ -1205,55 +1221,53 @@ namespace Graph_Theory_Redesign
     // test_12
     // Ungerichteter Graph mit insgesamt 23 Knoten
     // Kürzeste Verbindung
-    // Die Knoten sollen als Knotenbeschriftung int haben.
+    // Keine Knotenbeschriftung
 
-    // BFS - all paths - UNDIRECTED Graph - NOT WEIGHTED
     void test_12()
     {
-        std::cout << "Buch von Hans Werner Lang - BFS" << std::endl;
-        std::cout << "Ungerichteter Graph mit insgesamt 23 Knoten - Kürzeste Verbindung" << std::endl;
+        UnweightedUndirectedGraphAdjListRepresentation graph{ 23 };
 
-        UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 23 };
+        graph.addEdges({
+            {0, 5}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}, {1, 7}, {5, 8}, {6, 10}, {8, 9},
+            {9, 10}, {7, 11}, {8, 15}, {11, 12}, {12, 13}, {13, 14}, {14, 15}, {11, 16},
+            {12, 17}, {13, 18}, {15, 19}, {16, 17}, {17, 18}, {19, 20}, {20, 21}, {18, 22}
+            });
 
         std::cout << graph << std::endl;
 
-        //graph.setNodeDescriptions({
-        //1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-        //});
-
-
-        graph.addEdge(0, 5);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 4);
-        graph.addEdge(4, 5);
-        graph.addEdge(5, 6);
-        graph.addEdge(1, 7);
-        graph.addEdge(5, 8);
-        graph.addEdge(6, 10);
-        graph.addEdge(8, 9);
-        graph.addEdge(9, 10);
-        graph.addEdge(7, 11);
-        graph.addEdge(8, 15);
-        graph.addEdge(11, 12);
-        graph.addEdge(12, 13);
-        graph.addEdge(13, 14);
-        graph.addEdge(14, 15);
-        graph.addEdge(11, 16);
-        graph.addEdge(12, 17);
-        graph.addEdge(13, 18);
-        graph.addEdge(15, 19);
-        graph.addEdge(16, 17);
-        graph.addEdge(17, 18);
-        graph.addEdge(19, 20);
-        graph.addEdge(20, 21);
-        graph.addEdge(18, 22);
+        size_t source{ 0 };
+        size_t target{ 22 };
 
         BFSSolver<int> bfs{ graph };
+        std::vector<std::optional<size_t>> paths = bfs.solve(source);
+        std::vector<size_t> solution = bfs.reconstructPath(source, target, paths);
+        bfs.printSolution(solution);
+    }
 
-        size_t source{ 7 };
-        size_t target{ 15 };
+    // =====================================================================================
 
+    // Buch von Hans Werner Lang
+    // test_13
+    // Gerichteter Graph mit insgesamt 23 Knoten
+    // Kürzeste Verbindung
+    // Keine Knotenbeschriftung
+
+    void test_13()
+    {
+        UnweightedDirectedGraphAdjListRepresentation graph{ 23 };
+
+        graph.addEdges({
+            {0, 5}, {5, 4}, {4, 3}, {3, 2}, {2, 1}, {5, 6}, {1, 7}, {5, 8}, {6, 10}, {9, 8},
+            {10, 9}, {7, 11}, {8, 15}, {15, 14}, {14, 13}, {11, 12}, {12, 13}, {11, 16}, {12, 17},
+            {13, 18}, {15, 19}, {16, 17}, {17, 18}, {20, 19}, {21, 20}, {18, 22}
+        });
+
+        std::cout << graph << std::endl;
+
+        size_t source{ 6 };
+        size_t target{ 18 };
+
+        BFSSolver<int> bfs{ graph };
         std::vector<std::optional<size_t>> paths = bfs.solve(source);
         std::vector<size_t> solution = bfs.reconstructPath(source, target, paths);
         bfs.printSolution(solution);
@@ -1356,11 +1370,12 @@ int main()
     // test_10();
     // test_11();
     //test_12();
+    test_13();
 
-    test_90_a();
-    test_90_b();
-    test_90_c();
-    test_90_d();
+    //test_90_a();
+    //test_90_b();
+    //test_90_c();
+    //test_90_d();
 
     return 1;
 }
