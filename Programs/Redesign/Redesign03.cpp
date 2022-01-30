@@ -45,6 +45,9 @@
 // Hier könnte man die maximale Feldbreite tatsächlich berechnen -- sieht dann doch besser aus ....
 // ODer gleich mit std::format von C++ 20 arbeiten !!!!
 
+// TODO:
+// Viele Methoden können mit const qualifiziert werden
+
 // =====================================================================================
 
 namespace Graph_Theory_Redesign
@@ -224,7 +227,7 @@ namespace Graph_Theory_Redesign
                     }
                 }
                 else {
-                    std::string s{ (countNodes() < 10 && source < 10) ? "0" + std::to_string(source) : std::to_string(source) };
+                    std::string s{ (countNodes() >= 10 && source < 10) ? "0" + std::to_string(source) : std::to_string(source) };
                     oss << "[" << s << "] ";
                 }
 
@@ -427,8 +430,79 @@ namespace Graph_Theory_Redesign
         std::vector<bool>                                 m_visited;
         std::deque<std::vector<size_t>>                   m_paths;
 
+        std::vector<size_t>                               m_components;
+        size_t                                            m_count;
+
     public:
-        DFSSolver(IUnweightedGraphRepresentation<NodeDescription>& graph) : m_graph{ graph } {}
+        DFSSolver(IUnweightedGraphRepresentation<NodeDescription>& graph) : m_graph{ graph }, m_count{} {}
+
+        // NEU - BEGIN
+
+        void computeComponents() {
+
+            m_visited.resize(m_graph.countNodes());
+            std::fill(std::begin(m_visited), std::end(m_visited), false);
+
+            m_components.resize(m_graph.countNodes());
+            std::fill(std::begin(m_components), std::end(m_components), 0);
+
+            m_count = 0;
+
+            for (size_t node{}; node != m_graph.countNodes(); ++node) {
+
+                if (!m_visited.at(node)) {
+
+                    ++m_count;
+
+                    depthFirstSearch(node);
+                }
+
+            }
+
+            // NUR ZUM ANHALTEN
+            size_t dummy = m_count;
+        }
+
+        // TODO: Privatea machen .....
+        void depthFirstSearch(size_t node) {
+
+            // mark current node as discovered
+            m_visited.at(node) = true;
+
+            m_components.at(node) = m_count;
+
+            // do for all adjacent vertices of the current vertex
+            std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
+
+            for (size_t next : neighbours) {
+
+                // next is not discovered
+                if (!m_visited.at(next)) {
+
+                    depthFirstSearch(next);
+                }
+            }
+        }
+
+        std::vector<size_t> getNumberOfComponents() const { return m_count; }
+
+        std::vector<size_t> getComponent(size_t node) const {
+
+            std::vector<size_t> result;
+
+            for (size_t index{}; size_t vertex : m_components) {
+
+                if (vertex == node) {
+                    result.push_back(index);
+                }
+
+                ++index;
+            }
+
+            return result;
+        }
+
+        // NEU - ENDE
 
         size_t countFoundPaths() { return m_paths.size(); }
 
@@ -1285,6 +1359,56 @@ namespace Graph_Theory_Redesign
         }
     }
 
+    void test_22()
+    {
+        std::cout << "Redesign Graph Theory - DFS - Connected Components" << std::endl;
+
+        UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 18 };
+
+        graph.addEdges({
+
+            {6, 7},
+            {6, 11},
+            {7, 11},
+
+            {0, 4},
+            {0, 8},
+            {0, 13},
+            {0, 14},
+            {4, 8},
+            {8, 14},
+            {13, 14},
+
+            {1, 5},
+            {5, 17},
+            {5, 16},
+
+            {3, 9},
+            {9, 15},
+            {2, 15},
+            {2, 9},
+            {10, 15}
+        });
+
+        std::cout << graph << std::endl;
+
+        DFSSolver dfs{ graph };
+
+        //constexpr size_t Source{ 2 };
+        //constexpr size_t Target{ 7 };
+
+        dfs.computeComponents();
+
+        //if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
+        //{
+        //    std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
+        //    dfs.printPath(resultPath);
+        //}
+        //else {
+        //    std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        //}
+    }
+
     // =====================================================================================
     // =====================================================================================
 
@@ -1388,7 +1512,8 @@ int main()
 
     // DFS
     //test_20();
-    test_21();
+    //test_21();
+    test_22();
 
     //test_90_a();
     //test_90_b();
