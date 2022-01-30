@@ -224,7 +224,7 @@ namespace Graph_Theory_Redesign
                     }
                 }
                 else {
-                    std::string s{ source < 10 ? "0" + std::to_string(source) : std::to_string(source) };
+                    std::string s{ (countNodes() < 10 && source < 10) ? "0" + std::to_string(source) : std::to_string(source) };
                     oss << "[" << s << "] ";
                 }
 
@@ -423,9 +423,9 @@ namespace Graph_Theory_Redesign
     class DFSSolver
     {
     private:
-        IUnweightedGraphRepresentation<NodeDescription>& m_graph;    // ist für gerichtete oder ungerichtete Graphen ????
-        std::vector<bool> m_visited;
-        std::deque<std::vector<size_t>> m_paths;
+        IUnweightedGraphRepresentation<NodeDescription>&  m_graph;
+        std::vector<bool>                                 m_visited;
+        std::deque<std::vector<size_t>>                   m_paths;
 
     public:
         DFSSolver(IUnweightedGraphRepresentation<NodeDescription>& graph) : m_graph{ graph } {}
@@ -458,13 +458,13 @@ namespace Graph_Theory_Redesign
 
         void printPath(const std::vector<size_t>& path) {
 
-            // hier mit std::prev arbeiten !!!!
-            std::for_each(std::begin(path), std::end(path) - 1, [](size_t vertex) {
-                std::cout << vertex << " -> ";
-                }
+            std::for_each(
+                std::begin(path), 
+                std::prev(std::end(path)), 
+                [](auto vertex) { std::cout << vertex << " -> "; }
             );
 
-            size_t last = *(std::end(path) - 1);
+            auto last = path.back();
             std::cout << last << std::endl;
         }
 
@@ -488,7 +488,7 @@ namespace Graph_Theory_Redesign
                 return true;
             }
 
-            // do for all adjacent vertices of the dequeued vertex (source -> next)
+            // do for all adjacent vertices of the dequeued vertex
             std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
 
             for (size_t next : neighbours) {
@@ -521,9 +521,11 @@ namespace Graph_Theory_Redesign
                 m_visited.at(source) = false;  // unmark current node as discovered
             }
             else {
-                // do for every edge (source -> next)
+                // do for every edge
                 std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
+
                 for (size_t next : neighbours) {
+
                     // next is not discovered
                     if (!m_visited.at(next)) {
                         path.push_back(next);  // include current node in the path
@@ -650,19 +652,6 @@ namespace Graph_Theory_Redesign
                 std::cout << "[" << vertex << "].";
             }
         }
-
-        //using T = std::remove_cv<NodeDescription>::type;
-
-        ////     oss << std::setw(10) << std::left;
-
-        //if constexpr (!std::is_same<T, std::string>::value) {
-        //    std::string s{ std::to_string(description) };
-        //    oss << "[" << std::setw(12) << std::left << s << "] ";
-        //}
-        //else {
-        //    oss << "[" << std::setw(12) << std::left << description << "] ";
-        //}
-
     };
 
     // -------------------------------------------------------------
@@ -854,81 +843,6 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------
 
-    // DFS
-    void test_01_A()
-    {
-        std::cout << "Redesign Graph Theory - DFS" << std::endl;
-
-        // DIRECTED Graph -  NOT WEIGHTED
-
-        UnweightedDirectedGraphAdjListRepresentation<int> graph{ 8 };
-
-        graph.addEdge(0, 3);
-        graph.addEdge(1, 0);
-        graph.addEdge(1, 2);
-        graph.addEdge(1, 4);
-        graph.addEdge(2, 7);
-        graph.addEdge(3, 4);
-        graph.addEdge(3, 5);
-        graph.addEdge(4, 3);
-        graph.addEdge(4, 6);
-        graph.addEdge(5, 6);
-        graph.addEdge(7, 6);
-
-        std::cout << graph.toString() << std::endl;;
-
-        DFSSolver dfs{ graph };
-
-        constexpr size_t Source = 1;
-        constexpr size_t Target = 6;
-
-        if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
-        {
-            std::cout << "Path exists from vertex " << Source << " to vertex " << Target << std::endl;
-            std::cout << "The complete path is: ";
-            dfs.printPath(resultPath);
-        }
-        else {
-            std::cout << "No path exists between vertices " << Source << " and " << Target;
-        }
-    }
-
-    void test_01_B()
-    {
-        std::cout << "Redesign Graph Theory - DFS" << std::endl;
-
-        // UNDIRECTED Graph -  NOT WEIGHTED
-
-        UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 8 };
-
-        graph.addEdge(0, 3);
-        graph.addEdge(1, 0);
-        graph.addEdge(1, 2);
-        graph.addEdge(1, 4);
-        graph.addEdge(2, 7);
-        graph.addEdge(3, 4);
-        graph.addEdge(3, 5);
-        graph.addEdge(4, 3);
-        graph.addEdge(4, 6);
-        graph.addEdge(5, 6);
-        graph.addEdge(6, 7);
-
-        DFSSolver dfs{ graph };
-
-        constexpr size_t Source = 1;
-        constexpr size_t Target = 6;
-
-        if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
-        {
-            std::cout << "Path exists from vertex " << Source << " to vertex " << Target << std::endl;
-            std::cout << "The complete path is: ";
-            dfs.printPath(resultPath);
-        }
-        else {
-            std::cout << "No path exists between vertices " << Source << " and " << Target;
-        }
-    }
-
     // DFS - all paths - UNDIRECTED Graph - NOT WEIGHTED
     void test_02()
     {
@@ -950,8 +864,8 @@ namespace Graph_Theory_Redesign
 
         DFSSolver dfs{ graph };
 
-        constexpr size_t Source = 1;
-        constexpr size_t Target = 6;
+        constexpr size_t Source{ 1 };
+        constexpr size_t Target{ 6 };
 
         dfs.findPathAll(Source, Target);
 
@@ -1107,6 +1021,8 @@ namespace Graph_Theory_Redesign
         kruskal.printMST();
     }
 
+    // =====================================================================================
+    // =====================================================================================
     // =====================================================================================
 
     // Flugverbindungen Nordamerika
@@ -1274,6 +1190,103 @@ namespace Graph_Theory_Redesign
     }
 
     // =====================================================================================
+    // =====================================================================================
+
+    // DFS
+    void test_20()
+    {
+        std::cout << "Redesign Graph Theory - DFS" << std::endl;
+
+        UnweightedDirectedGraphAdjListRepresentation graph{ 8 };
+
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 0);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
+
+        std::cout << graph << std::endl;
+
+        DFSSolver dfs{ graph };
+
+        constexpr size_t Source{ 1 };
+        constexpr size_t Target{ 6 };
+
+        if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
+        {
+            std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
+            dfs.printPath(resultPath);
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
+
+        // -------------
+
+        dfs.findPathAll(Source, Target);
+
+        if (size_t count; (count = dfs.countFoundPaths()) != 0)
+        {
+            std::cout << "Found " << count << " solutions:" << std::endl;
+            dfs.printPaths();
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
+    }
+
+    void test_21()
+    {
+        std::cout << "Redesign Graph Theory - DFS" << std::endl;
+
+        UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 8 };
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
+
+        DFSSolver dfs{ graph };
+
+        constexpr size_t Source{ 2 };
+        constexpr size_t Target{ 7 };
+
+        if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
+        {
+            std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
+            dfs.printPath(resultPath);
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
+
+        // -------------
+
+        dfs.findPathAll(Source, Target);
+
+        if (size_t count; (count = dfs.countFoundPaths()) != 0)
+        {
+            std::cout << "Found " << count << " solutions:" << std::endl;
+            dfs.printPaths();
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
+    }
+
+    // =====================================================================================
+    // =====================================================================================
 
     // testing only graphs
     // a) Undirected, Unweighted, No Node Descriptions
@@ -1367,10 +1380,15 @@ int main()
     //test_04_b();
     //test_05();
 
+    // BFS
     // test_10();
     // test_11();
-    //test_12();
-    test_13();
+    // test_12();
+    // test_13();
+
+    // DFS
+    //test_20();
+    test_21();
 
     //test_90_a();
     //test_90_b();

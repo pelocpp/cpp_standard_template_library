@@ -54,22 +54,25 @@ bool findAny(int source, int target, vector path) {
 }
 ```
 
-Zum Testen ihrer Realisierung legen Sie bitte den Graphen aus der folgenden Abbildung zugrunde:
+Zum Testen ihrer Realisierung legen Sie bitte den Graphen aus der folgenden *Abbildung* 1 zugrunde:
 
-<img src="graphs_03_DFS_Testgraph.png" width="300">
+<img src="graphs_03_DFS_Testgraph_01.svg" width="300">
 
-Abbildung 5: Graph zum Testen des *Depth-First Search* Algorithmus.
+*Abbildung* 1: Graph zum Testen des *Depth-First Search* Algorithmus.
 
-Wir erkennen in Abbildung 5, dass es vom Knoten 0 zum Knoten 7 zwei Pfade gibt: 
+Wir erkennen in *Abbildung* 1, dass es vom Knoten 0 zum Knoten 7 zwei Pfade gibt: 
 
+```
 0 => 3  => 4  => 6  => 7
+```
 
 und
 
+```
 0  => 3 => 5  => 6  => 7
+```
 
 Welchen der beiden Pfade erhalten Sie bei Ihrer Realisierung als Ergebnis?
-
 
 ### Weiterarbeit: 
 
@@ -121,17 +124,44 @@ bool findAllHelper (int source, int target, vector path) {
 }
 ```
 
-Wählen Sie wiederum den Graphen aus Abbildung 5 zum Testen. Wieviel Pfade gibt es zwischen den Knoten 1 und 6?
+Wählen Sie wiederum den Graphen aus *Abbildung* 1 zum Testen. Wieviel Pfade gibt es zwischen den Knoten 1 und 6?
 
 *Antwort*:
 
-```cpp
+```
 Found 4 solutions:
 1 -> 0 -> 3 -> 4 -> 6
 1 -> 0 -> 3 -> 5 -> 6
 1 -> 4 -> 3 -> 5 -> 6
 1 -> 4 -> 6
 ```
+
+### Weiterarbeit: 
+
+Im letzten Beispiel haben wir einen gerichteten Graphen betrachten. Prinzipiell funktioniert der Algorithmus
+wie beschrieben auch für ungerichtete Graphen. Ohne großen Aufwand können wir den Graphen aus *Abbildung* 1
+auch &ldquo;ungerichtet&rdquo; betrachten, siehe dazu *Abbildung* 2:
+
+<img src="graphs_03_DFS_Testgraph_02.svg" width="300">
+
+*Abbildung* 2: Ein ungerichteter Graph zum Testen des *Depth-First Search* Algorithmus.
+
+  * Bestimmen Sie einen Pfad zwischen den Knoten 2 und 7?
+  * Wieviel Pfade gibt es zwischen den Knoten 2 und 7 ingesamt?
+
+*Antwort*:
+
+```
+Path exists from 2 to 7:
+2 -> 1 -> 0 -> 3 -> 4 -> 6 -> 7
+
+Found 4 solutions:
+2 -> 1 -> 0 -> 3 -> 4 -> 6 -> 7
+2 -> 1 -> 0 -> 3 -> 5 -> 6 -> 7
+2 -> 1 -> 4 -> 3 -> 5 -> 6 -> 7
+2 -> 1 -> 4 -> 6 -> 7
+```
+
 
 ### Eingabe aus Datei
 
