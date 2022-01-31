@@ -27,7 +27,7 @@ meine Empfehlung hierzu:
 
 https://www.youtube.com/watch?v=2poq1Pt32oE   (8 Minuten)
 
-Auch William Fiset hat sich diesem Algorithmus zugewendet, seine Beschreibung ist etwas länger geraten:
+Auch *William Fiset* hat sich diesem Algorithmus zugewendet, seine Beschreibung ist etwas länger geraten:
 
 https://www.youtube.com/watch?v=pSqmAO-m7Lk   (24 Minuten)
 

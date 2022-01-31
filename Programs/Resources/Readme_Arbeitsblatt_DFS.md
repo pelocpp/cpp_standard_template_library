@@ -11,7 +11,7 @@ Eine der Stärken des *Depth-First Search* Algorithmus ist die Lösung des folgend
 Damit ist auch verbunden die Antwort auf die Fragestellung, ob es zwischen zwei Knoten überhaupt eine Verbindung gibt.
 
 Eine - wiederum empfehlenswerte - Beschreibung des DFS-Algorithmus, die auch auf das soeben skizzierte Problem eingeht,
-gibt Willial Fiset in
+gibt *William Fiset* in
 
 https://www.youtube.com/watch?v=7fujbpJ0LB4  (10 Minuten).
 

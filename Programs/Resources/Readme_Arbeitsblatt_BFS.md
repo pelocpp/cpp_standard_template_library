@@ -7,7 +7,7 @@ Der BFS-Algorithmus findet die kürzeste Entfernung aufgrund seines radialen Such
 das Knoten in der Reihenfolge ihrer Entfernung vom Startpunkt berücksichtigt
 
 
-Eine (empfehlenswerte) Beschreibung des Algorithmus gibt *Willial* Fiset in
+Eine (empfehlenswerte) Beschreibung des Algorithmus gibt *William Fiset* in
 
 https://www.youtube.com/watch?v=oDqjPvD54Ss (7 Minuten).
 

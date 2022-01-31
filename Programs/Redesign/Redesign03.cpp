@@ -388,12 +388,8 @@ namespace Graph_Theory_Redesign
     class WeightedUndirectedGraphAdjListRepresentation : public WeightedDirectedGraphAdjListRepresentation<Weight, NodeDescription>
     {
     public:
-        // Siehe hier
+        // Note: Two-Phase Name Lookup (see usings 10 lines below)
         // https://www.modernescpp.com/index.php/surprise-included-inheritance-and-member-functions-of-class-templates
-
-        // Das Problem taucht gleich ZWEIMAL auf !!!!
-        // ein erstes Mal bzgl. der Zugriffs auf m_adjacencyList
-        // ein zweites Mal beim Aufruf von addEdge im Anwendungsbeispiel
 
         using WeightedDirectedGraphAdjListRepresentation<Weight, NodeDescription>::addEdge;
         using WeightedDirectedGraphAdjListRepresentation<Weight, NodeDescription>::m_adjacencyList;
@@ -405,10 +401,7 @@ namespace Graph_Theory_Redesign
 
         virtual void addEdge(size_t n, size_t m, Weight weight) override {
 
-            //WeightedDirectedGraphAdjListRepresentation<Weight>::addEdge(n, m, weight);
-            //WeightedDirectedGraphAdjListRepresentation<Weight>::addEdge(m, n, weight);
-
-            // TODO: Warum lässt sich das nicht übersetzen ?!?!?! ES GEHT DOCH !!!!!! Siehe 10 Zeilen weiter obem
+            // Note: Two-Phase Name Lookup (see usings 10 lines above)
             m_adjacencyList[n][m] = weight;
             m_adjacencyList[m][n] = weight;
         }
@@ -436,8 +429,6 @@ namespace Graph_Theory_Redesign
     public:
         DFSSolver(IUnweightedGraphRepresentation<NodeDescription>& graph) : m_graph{ graph }, m_count{} {}
 
-        // NEU - BEGIN
-
         void computeComponents() {
 
             m_visited.resize(m_graph.countNodes());
@@ -449,50 +440,22 @@ namespace Graph_Theory_Redesign
             m_count = 0;
 
             for (size_t node{}; node != m_graph.countNodes(); ++node) {
-
                 if (!m_visited.at(node)) {
-
                     ++m_count;
-
                     depthFirstSearch(node);
                 }
-
-            }
-
-            // NUR ZUM ANHALTEN
-            size_t dummy = m_count;
-        }
-
-        // TODO: Privatea machen .....
-        void depthFirstSearch(size_t node) {
-
-            // mark current node as discovered
-            m_visited.at(node) = true;
-
-            m_components.at(node) = m_count;
-
-            // do for all adjacent vertices of the current vertex
-            std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
-
-            for (size_t next : neighbours) {
-
-                // next is not discovered
-                if (!m_visited.at(next)) {
-
-                    depthFirstSearch(next);
-                }
             }
         }
 
-        std::vector<size_t> getNumberOfComponents() const { return m_count; }
+        size_t getNumberOfComponents() const { return m_count; }
 
-        std::vector<size_t> getComponent(size_t node) const {
+        std::vector<size_t> getComponent(size_t mark) const {
 
             std::vector<size_t> result;
 
             for (size_t index{}; size_t vertex : m_components) {
 
-                if (vertex == node) {
+                if (vertex == mark) {
                     result.push_back(index);
                 }
 
@@ -501,8 +464,6 @@ namespace Graph_Theory_Redesign
 
             return result;
         }
-
-        // NEU - ENDE
 
         size_t countFoundPaths() { return m_paths.size(); }
 
@@ -549,6 +510,23 @@ namespace Graph_Theory_Redesign
         }
 
     private:
+        void depthFirstSearch(size_t node) {
+
+            m_visited.at(node) = true;          // mark current node as discovered
+            m_components.at(node) = m_count;    // set mark
+
+            // do for all adjacent vertices of the current vertex
+            std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
+            for (size_t next : neighbours) {
+
+                // next is not discovered
+                if (!m_visited.at(next)) {
+
+                    depthFirstSearch(next);
+                }
+            }
+        }
+
         bool findPathAnyHelper(size_t source, size_t target, std::vector<size_t>& path) {
 
             // mark current node as discovered
@@ -1393,20 +1371,22 @@ namespace Graph_Theory_Redesign
         std::cout << graph << std::endl;
 
         DFSSolver dfs{ graph };
-
-        //constexpr size_t Source{ 2 };
-        //constexpr size_t Target{ 7 };
-
         dfs.computeComponents();
+        size_t count{ dfs.getNumberOfComponents() };
 
-        //if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
-        //{
-        //    std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
-        //    dfs.printPath(resultPath);
-        //}
-        //else {
-        //    std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
-        //}
+        for (size_t index{}; index != count; ++index) {
+
+            auto component = dfs.getComponent(index + 1);
+
+            for (size_t last{}; size_t vertex : component) {
+                std::cout << "[" << vertex << "]";
+                if (last < component.size() - 1) {
+                    std::cout << ", ";
+                }
+                ++last;
+            }
+            std::cout << std::endl;
+        }
     }
 
     // =====================================================================================

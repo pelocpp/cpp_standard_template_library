@@ -20,6 +20,8 @@
     
   * #### [Der Depth-First Search Algorithmus (DFS)](Programs/Resources/Readme_Arbeitsblatt_DFS.md)
     
+  * #### [Zusammenhangskomponenten eines Graphen](Programs/Resources/Readme_Arbeitsblatt_Zusammenhangskomponenten.md)
+
   * #### [Der Algorithmus von Dijkstra](Programs/Resources/Readme_Arbeitsblatt_Dijkstra.md)
     
   * #### [Kruskal's Algorithmus](Programs/Resources/Readme_Arbeitsblatt_Kruskal.md)
