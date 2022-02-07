@@ -48,6 +48,12 @@
 // TODO:
 // Viele Methoden können mit const qualifiziert werden
 
+
+// TODO:
+// Iteratoren für die "benachbarten" Konten schreiben !!!
+// Im Beispiel findet man das hier:
+// Mein Scratch - Projekt - Datei Source17_Graphs_Another_Approach.cpp
+
 // =====================================================================================
 
 namespace Graph_Theory_Redesign

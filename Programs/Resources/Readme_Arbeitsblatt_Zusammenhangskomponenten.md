@@ -40,10 +40,47 @@ Zum Testen ihrer Realisierung legen Sie bitte den Graphen aus der folgenden *Abb
 
 Welchen Zusammenhangskomponenten können Sie rechnerisch bestimmen?
 
+Das folgende Code-Fragment bietet eine Hilfestellung:
+
+```cpp
+01: UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 18 };
+02: 
+03: graph.addEdges({
+04:     {6, 7},{6, 11},{7, 11},
+05:     {0, 4},{0, 8},{0, 13},{0, 14},{4, 8},{8, 14},{13, 14},
+06:     {1, 5},{5, 17},{5, 16},
+07:     {3, 9},{9, 15},{2, 15},{2, 9},{10, 15}
+08: });
+09: 
+10: std::cout << graph << std::endl;
+11: 
+12: DFSSolver dfs{ graph };
+13: dfs.computeComponents();
+14: size_t count{ dfs.getNumberOfComponents() };
+15: 
+16: for (size_t index{}; index != count; ++index) {
+17: 
+18:     auto component = dfs.getComponent(index + 1);
+19: 
+20:     for (size_t last{}; size_t vertex : component) {
+21:         std::cout << "[" << vertex << "]";
+22:         if (last < component.size() - 1) {
+23:             std::cout << ", ";
+24:         }
+25:         ++last;
+26:     }
+27:     std::cout << std::endl;
+28: } 
+```
 
 *Antwort*:
 
 ```
+[0], [4], [8], [13], [14]
+[1], [5], [16], [17]
+[2], [3], [9], [10], [15]
+[6], [7], [11]
+[12]
 ```
 
 
