@@ -53,7 +53,9 @@
 // Iteratoren für die "benachbarten" Konten schreiben !!!
 // Im Beispiel findet man das hier:
 // Mein Scratch - Projekt - Datei Source17_Graphs_Another_Approach.cpp
-
+// Oder hier:
+// https://blog.cppse.nl/cpp-multiple-iterators-with-traits
+// 
 // =====================================================================================
 
 namespace Graph_Theory_Redesign
