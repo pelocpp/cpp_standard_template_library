@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29926.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BFS", "Programs\BFS\BFS.vcxproj", "{7824B991-2819-4CCC-BDB1-CB818DD1CC7F}"
 EndProject
@@ -50,10 +50,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{
 		Programs\Resources\Readme_STL_Iterators.md = Programs\Resources\Readme_STL_Iterators.md
 		Programs\Resources\Readme_STL_Overview.md = Programs\Resources\Readme_STL_Overview.md
 		Programs\Resources\stl_container_sequence_vs_associative.png = Programs\Resources\stl_container_sequence_vs_associative.png
+		Programs\Resources\stl_iterators.png = Programs\Resources\stl_iterators.png
 		Programs\Resources\stl_iterator_categories.png = Programs\Resources\stl_iterator_categories.png
 		Programs\Resources\stl_iterator_general.png = Programs\Resources\stl_iterator_general.png
 		Programs\Resources\stl_iterator_range.png = Programs\Resources\stl_iterator_range.png
-		Programs\Resources\stl_iterators.png = Programs\Resources\stl_iterators.png
 		Programs\Resources\Ulysses_01.png = Programs\Resources\Ulysses_01.png
 		Programs\Resources\Ulysses_02.png = Programs\Resources\Ulysses_02.png
 		Programs\Resources\Ulysses_03.png = Programs\Resources\Ulysses_03.png
@@ -96,6 +96,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Experimental", "Programs\Experimental\Experimental.vcxproj", "{A5080F63-8A75-4D2C-9CDF-662DC6C15686}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Redesign", "Programs\Redesign\Redesign.vcxproj", "{3DDB9CAE-62F3-43DA-8702-9A821D8CE578}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RedesignEx", "Programs\RedesignEx\RedesignEx.vcxproj", "{97D3A436-E2FC-4456-8223-63AE7C880CEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,6 +179,14 @@ Global
 		{3DDB9CAE-62F3-43DA-8702-9A821D8CE578}.Release|x64.Build.0 = Release|x64
 		{3DDB9CAE-62F3-43DA-8702-9A821D8CE578}.Release|x86.ActiveCfg = Release|Win32
 		{3DDB9CAE-62F3-43DA-8702-9A821D8CE578}.Release|x86.Build.0 = Release|Win32
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Debug|x64.ActiveCfg = Debug|x64
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Debug|x64.Build.0 = Debug|x64
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Debug|x86.ActiveCfg = Debug|Win32
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Debug|x86.Build.0 = Debug|Win32
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Release|x64.ActiveCfg = Release|x64
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Release|x64.Build.0 = Release|x64
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Release|x86.ActiveCfg = Release|Win32
+		{97D3A436-E2FC-4456-8223-63AE7C880CEE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

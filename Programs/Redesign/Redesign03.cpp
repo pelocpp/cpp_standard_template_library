@@ -160,7 +160,7 @@ namespace Graph_Theory_Redesign
         virtual size_t countNodes() const final { return m_adjacencyList.size(); }
 
         virtual size_t countEdges() const final {
-            int count = 0;
+            size_t count = 0;
             std::for_each(
                 std::begin(m_adjacencyList), 
                 std::end(m_adjacencyList),
@@ -422,6 +422,8 @@ namespace Graph_Theory_Redesign
     };
 
     // -------------------------------------------------------------
+    // -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     template <typename NodeDescription = int>
     class DFSSolver
@@ -435,7 +437,8 @@ namespace Graph_Theory_Redesign
         size_t                                            m_count;
 
     public:
-        DFSSolver(IUnweightedGraphRepresentation<NodeDescription>& graph) : m_graph{ graph }, m_count{} {}
+        DFSSolver(IUnweightedGraphRepresentation<NodeDescription>& graph)
+            : m_graph{ graph }, m_count{} {}
 
         void computeComponents() {
 
@@ -1429,7 +1432,10 @@ namespace Graph_Theory_Redesign
         UnweightedUndirectedGraphAdjListRepresentation<std::string> graph{ 4 };
 
         graph.setNodeDescriptions({
-            std::string{"A"}, std::string{"B"}, std::string{"C"}, std::string{"C"}
+            std::string{"A"}, 
+            std::string{"B"}, 
+            std::string{"C"}, 
+            std::string{"C"}
         });
 
         graph.addEdge(0, 1);
