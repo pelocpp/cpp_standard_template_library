@@ -1505,9 +1505,9 @@ int main()
     // test_13();
 
     // DFS
-    //test_20();
+    test_20();
     //test_21();
-    test_22();
+    //test_22();
 
     //test_90_a();
     //test_90_b();

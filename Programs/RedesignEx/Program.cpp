@@ -1,3 +1,8 @@
+
+// [[ nodiscard ]]
+
+
+
 namespace Graph_Theory_Graphs
 {
     extern void test_00();
@@ -7,7 +12,7 @@ namespace Graph_Theory_Graphs
 int main()
 {
     Graph_Theory_Graphs::test_00();
-    Graph_Theory_Graphs::test_b();
+  //  Graph_Theory_Graphs::test_b();
 
     return 1;
 }

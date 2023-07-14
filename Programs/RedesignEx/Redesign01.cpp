@@ -22,22 +22,22 @@
 namespace Graph_Theory_Redesign
 {
     // hmmm, muss das mit der Vorbelegung sein ...
-    template <typename NodeDescription>
-    class IGraphRepresentation
-    {
-    public:
-        virtual bool isDirected() const = 0;
-        virtual bool isWeighted() const = 0;
+    //template <typename NodeDescription>
+    //class IGraphRepresentation
+    //{
+    //public:
+    //    virtual bool isDirected() const = 0;
+    //    virtual bool isWeighted() const = 0;
 
-        virtual size_t countNodes() const = 0;
-        virtual size_t countEdges() const = 0;
+    //    virtual size_t countNodes() const = 0;
+    //    virtual size_t countEdges() const = 0;
 
-        virtual void setNodeDescription(size_t index, const NodeDescription& description) = 0;
-        virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) = 0;
-        virtual std::optional<NodeDescription> getNodeDescription(size_t index) = 0;
+    //    virtual void setNodeDescription(size_t index, const NodeDescription& description) = 0;
+    //    virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) = 0;
+    //    virtual std::optional<NodeDescription> getNodeDescription(size_t index) = 0;
 
-        virtual std::string toString() const = 0;
-    };
+    //    virtual std::string toString() const = 0;
+    //};
 
     // -------------------------------------------------------------------------------------
 
@@ -45,6 +45,10 @@ namespace Graph_Theory_Redesign
     class GraphNode
     {
     public:
+
+        // added: PeLo
+        using GraphNodeValueType = T;
+
         // TODO: Hmmm, das sollte irgendwie generell global oder überhaupt nicht deklariert werden
         // type alias for the container type used to store the adjacency list
         using adjacency_list_type = std::set<size_t>;
@@ -71,12 +75,12 @@ namespace Graph_Theory_Redesign
    // TODO: Das sollte möglicherweise nur die const Version ausreichen
    // 
         // returns a reference to the adjacency list
-        adjacency_list_type& get_adjacent_nodes_indices()
+        adjacency_list_type& getAdjacentNodesIndices()
         {
             return m_adjacentNodeIndices;
         }
 
-        const adjacency_list_type& get_adjacent_nodes_indices() const
+        const adjacency_list_type& getAdjacentNodesIndices() const
         {
             return m_adjacentNodeIndices;
         }
@@ -84,11 +88,15 @@ namespace Graph_Theory_Redesign
 
 
     // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
 
 
     template<typename T>
     class Graph
     {
+        using GraphNodeValueType = T;
+
     private:
         friend GraphNode<T>;  // hmm, wo wird da in GraphNode reingelangt ....
 
@@ -147,9 +155,9 @@ namespace Graph_Theory_Redesign
 
             const size_t to_index{ get_index_of_node(to) };
 
-            // return from->get_adjacent_nodes_indices().insert(to_index).second;
+            // return from->getAdjacentNodesIndices().insert(to_index).second;
 
-            std::set<size_t>& list = from->get_adjacent_nodes_indices();
+            std::set<size_t>& list = from->getAdjacentNodesIndices();
 
             auto [pos, succeeded] = list.insert(to_index);
 
@@ -184,7 +192,7 @@ namespace Graph_Theory_Redesign
                 return std::set<T>{};
             }
 
-            return get_adjacent_nodes_values(iter->get_adjacent_nodes_indices());
+            return get_adjacent_nodes_values(iter->getAdjacentNodesIndices());
         }
 
     //private:
@@ -226,8 +234,7 @@ namespace Graph_Theory_Redesign
 
         // Given a set of adjacency node indices, returns the corresponding
         // set of node values.
-        std::set<T> get_adjacent_nodes_values(
-            const typename GraphNode<T>::adjacency_list_type& indices) const
+        std::set<T> get_adjacent_nodes_values(const typename GraphNode<T>::adjacency_list_type& indices) const
         {
             std::set<T> values;
 
@@ -246,12 +253,48 @@ namespace Graph_Theory_Redesign
 
             return static_cast<size_t>(index);
         }
+
+        // added: PeLo - NEU
+
+        T getNodeDescription(size_t index) {
+            return m_nodes[index].value();
+        }
+
+         bool isDirected() const { return true; }
+
+         size_t countEdges() const
+         {
+             size_t count = 0;
+             std::for_each(
+                 std::begin(m_nodes),
+                 std::end(m_nodes),
+                 [&](const auto& node) {
+
+                     const typename GraphNode<T>::adjacency_list_type& list = node.getAdjacentNodesIndices();
+
+                     count += list.size();
+                 }
+             );
+             // return (isDirected()) ? count : count / 2;
+             return count;
+         }
+
+         typename GraphNode<T>::adjacency_list_type& getAdjacentNodesIndices(size_t index)
+         {
+             return m_nodes[index].getAdjacentNodesIndices();
+         }
+
+         const typename GraphNode<T>::adjacency_list_type& getAdjacentNodesIndices(size_t index) const
+         {
+             return m_nodes[index].getAdjacentNodesIndices();
+         }
+
     };
 
 
     // -------------------------------------------------------------------------------------
 
-// Returns a given graph in DOT format.
+    // Returns a given graph in DOT format.
     template <typename T>
     std::string toDot(const Graph<T>& graph, std::string_view graph_name)
     {
@@ -259,7 +302,7 @@ namespace Graph_Theory_Redesign
 
         ss << std::format("digraph {} {{", graph_name.data()) << std::endl;
 
-        for (size_t index{ 0 }; index < graph.size(); ++index)
+        for (size_t index{ 0 }; index < graph.countNodes(); ++index)
         {
             const auto& node_value{ graph[index] };
 
@@ -280,6 +323,70 @@ namespace Graph_Theory_Redesign
         ss << "}" << std::endl;
 
         return ss.str();
+    }
+
+    // second version
+    template <typename T>
+    std::string toString(const Graph<T>& graph) {
+
+        std::string separator{ graph.isDirected() ? " -> " : " <=> " };
+
+        std::ostringstream oss;
+        oss << "Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl;
+
+
+        // Original:
+        // for (size_t source = 0; const std::vector<size_t>&list : graph.m_adjacencyList) {
+
+        for (size_t index = 0; index < graph.countNodes(); ++index) {
+
+            // if (m_nodeDescription[source].has_value())
+            if (true)
+            {
+                T description = graph[index]; // overloaded index operator
+
+                // using T = std::remove_cv<NodeDescription>::type;
+                using NodeType = std::remove_cv<T>::type;
+   
+                if constexpr (!std::is_same<NodeType, std::string>::value) {
+                    std::string s{ std::to_string(description) };
+                    oss << "[" << /* std::setw(12) << std::left << */ s << "] ";
+                }
+                else {
+                    oss << "[" << /* std::setw(12) << std::left << */ description << "] ";
+                }
+            }
+            else {
+                std::string s{ (graph.countNodes() >= 10 && index < 10) ? "0" + std::to_string(index) : std::to_string(index) };
+                oss << "[" << s << "] ";
+            }
+
+            //typename GraphNode<T>::adjacency_list_type& getAdjacentNodesIndices(size_t index)
+            //{
+            //    return m_nodes[index].getAdjacentNodesIndices();
+            //}
+
+            //const typename GraphNode<T>::adjacency_list_type& getAdjacentNodesIndices(size_t index) const
+            //{
+            //    return m_nodes[index].getAdjacentNodesIndices();
+
+            //}
+
+            const typename GraphNode<T>::adjacency_list_type& list = graph.getAdjacentNodesIndices(index);
+
+            for (size_t n = 0; size_t target : list) {
+                oss << index << separator << target;
+                if (n != list.size() - 1) {
+                    oss << " | ";
+                }
+                ++n;
+            }
+
+            oss << '\n';
+           // ++source;
+        }
+
+        return oss.str();
     }
 }
 
@@ -319,8 +426,9 @@ namespace Graph_Theory_Graphs
         graph.insertEdge(44, 55);
 
         std::string dot = toDot<int>(graph, "Beispiel");
-
         std::cout << dot << std::endl;
+
+        std::cout << "Graph: " << toString(graph) << std::endl;
     }
 
     //void test_a()
@@ -578,7 +686,12 @@ namespace Graph_Theory_DFS
             }
             else {
                 // do for every edge
+                
+                
+                // Original
                 std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
+
+                // std::vector<size_t> neighbours = m_graph.
 
                 for (size_t next : neighbours) {
 
@@ -618,21 +731,24 @@ namespace Graph_Theory_DFS
         graph.insertEdge(5, 6);
         graph.insertEdge(6, 7);
 
-        DFSSolver dfs{ graph };
+        std::cout << "Graph " << toString(graph) << std::endl;
 
-        constexpr size_t Source{ 1 };
-        constexpr size_t Target{ 6 };
 
-        dfs.findPathAll(Source, Target);
+        //DFSSolver dfs{ graph };
 
-        if (size_t count; (count = dfs.countFoundPaths()) != 0)
-        {
-            std::cout << "Found " << count << " solutions:" << std::endl;
-            dfs.printPaths();
-        }
-        else {
-            std::cout << "No path exists between vertices " << Source << " and " << Target;
-        }
+        //constexpr size_t Source{ 1 };
+        //constexpr size_t Target{ 6 };
+
+        //dfs.findPathAll(Source, Target);
+
+        //if (size_t count; (count = dfs.countFoundPaths()) != 0)
+        //{
+        //    std::cout << "Found " << count << " solutions:" << std::endl;
+        //    dfs.printPaths();
+        //}
+        //else {
+        //    std::cout << "No path exists between vertices " << Source << " and " << Target;
+        //}
     }
 }
 
