@@ -41,34 +41,34 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------------------------------
 
-    template<typename T>
+    template<typename TNodeDescription>
     class GraphNode
     {
     public:
 
         // added: PeLo
-        using GraphNodeValueType = T;
+        using GraphNodeValueType = TNodeDescription;
 
         // TODO: Hmmm, das sollte irgendwie generell global oder überhaupt nicht deklariert werden
         // type alias for the container type used to store the adjacency list
         using adjacency_list_type = std::set<size_t>;
 
     private:
-        T m_data;
+        TNodeDescription m_data;
         std::set<size_t> m_adjacentNodeIndices;
 
     public:
         // constructs a graph_node for the given value
-        GraphNode(const T& data)
+        GraphNode(const TNodeDescription& data)
             : m_data{ data } { }
 
-        GraphNode(T&& data)
+        GraphNode(TNodeDescription&& data)
             : m_data{ std::move(data) } { }
 
         // returns a reference to the stored value
-        T& value() noexcept { return m_data; }
+        TNodeDescription& value() noexcept { return m_data; }
 
-        const T& value() const noexcept { return m_data; }
+        const TNodeDescription& value() const noexcept { return m_data; }
 
    // private:
    // 
@@ -104,20 +104,34 @@ namespace Graph_Theory_Redesign
 
         nodes_container_type m_nodes;
 
+        bool m_isDirected;
+        bool m_isWeighted;
+
     public:
+
+        Graph() {
+            m_isDirected = true;
+            m_isWeighted = false;
+        }
+
+        Graph(bool isDirected, bool isWeighted) {
+            m_isDirected = isDirected;
+            m_isWeighted = isWeighted;
+        }
+
+
         // For an insert to be successful, the value shall not be in the graph yet. 
         // Returns true if a new node with given value has been added to
         // the graph, and false if there was already a node with the given value.
         
         bool addNode(const T& node_value) {
-            T copy{ node_value };
-            
-            // return addNode(std::move(copy));
 
-            return true;
+            T copy{ node_value };
+            return addNode(std::move(copy));
         }
 
         bool addNode(T&& node_value) {
+
             auto iter{ findNode(node_value) };
 
             if (iter != std::end(m_nodes)) {
@@ -513,15 +527,34 @@ namespace Graph_Theory_Graphs
     //    std::cout << graph << std::endl;
     //}
 
+    void test_04_a()
+    {
+        // Beispiel "LMU_Muenchen"
+
+        WEITER: Irgendwie mit Template Specializtion Weigthed und UnWeighted !!!
+
+        Graph<int, size_t> graph{ 6 };
+
+        graph.addEdge(0, 1, 10);
+        graph.addEdge(0, 2, 20);
+        graph.addEdge(1, 4, 10);
+        graph.addEdge(1, 3, 50);
+        graph.addEdge(2, 4, 33);
+        graph.addEdge(2, 3, 20);
+        graph.addEdge(3, 4, 20);
+        graph.addEdge(3, 5, 2);
+        graph.addEdge(4, 5, 1);
+
+        std::cout << graph << std::endl;
+    }
+
     void test_graphs()
     {
         test_00();
     }
 }
 
-
 // =====================================================================================
-
 
 namespace Graph_Theory_DFS
 {
@@ -532,6 +565,7 @@ namespace Graph_Theory_DFS
     {
     private:
         Graph<T>&                          m_graph;
+
         std::vector<bool>                  m_visited;
         std::deque<std::vector<size_t>>    m_paths;
 
@@ -653,7 +687,11 @@ namespace Graph_Theory_DFS
             }
 
             // do for all adjacent vertices of the dequeued vertex
-            std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
+            
+            // Original
+            // std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
+
+            std::set<size_t> neighbours = m_graph.getAdjacentNodesIndices(source);
 
             for (size_t next : neighbours) {
 
@@ -687,11 +725,10 @@ namespace Graph_Theory_DFS
             else {
                 // do for every edge
                 
-                
                 // Original
-                std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
+                // std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
 
-                // std::vector<size_t> neighbours = m_graph.
+                std::set<size_t> neighbours = m_graph.getAdjacentNodesIndices(source);
 
                 for (size_t next : neighbours) {
 
@@ -710,14 +747,53 @@ namespace Graph_Theory_DFS
     };
 
     // DFS - all paths - UNDIRECTED Graph - NOT WEIGHTED
-    void test_dfs_01()
+    //void test_dfs_01()
+    //{
+    //    std::cout << "Redesign Graph Theory - DFS" << std::endl;
+
+    //    // Graph<int> graph{ 8 };
+    //    Graph<int> graph;
+
+    //    graph.addNodes({0, 1, 2, 3, 4, 5, 6, 7});
+
+    //    graph.insertEdge(0, 3);
+    //    graph.insertEdge(1, 0);
+    //    graph.insertEdge(1, 2);
+    //    graph.insertEdge(1, 4);
+    //    graph.insertEdge(2, 7);
+    //    graph.insertEdge(3, 4);
+    //    graph.insertEdge(3, 5);
+    //    graph.insertEdge(4, 3);
+    //    graph.insertEdge(4, 6);
+    //    graph.insertEdge(5, 6);
+    //    graph.insertEdge(6, 7);
+
+    //    std::cout << "Graph " << toString(graph) << std::endl;
+
+    //    DFSSolver dfs{ graph };
+
+    //    constexpr size_t Source{ 1 };
+    //    constexpr size_t Target{ 6 };
+
+    //    dfs.findPathAll(Source, Target);
+
+    //    if (size_t count; (count = dfs.countFoundPaths()) != 0)
+    //    {
+    //        std::cout << "Found " << count << " solutions:" << std::endl;
+    //        dfs.printPaths();
+    //    }
+    //    else {
+    //        std::cout << "No path exists between vertices " << Source << " and " << Target;
+    //    }
+    //}
+
+    void test_20()
     {
         std::cout << "Redesign Graph Theory - DFS" << std::endl;
 
-        // Graph<int> graph{ 8 };
         Graph<int> graph;
 
-        graph.addNodes({0, 1, 2, 3, 4, 5, 6, 7});
+        graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
         graph.insertEdge(0, 3);
         graph.insertEdge(1, 0);
@@ -733,22 +809,32 @@ namespace Graph_Theory_DFS
 
         std::cout << "Graph " << toString(graph) << std::endl;
 
+        DFSSolver dfs{ graph };
 
-        //DFSSolver dfs{ graph };
+        constexpr size_t Source{ 1 };
+        constexpr size_t Target{ 6 };
 
-        //constexpr size_t Source{ 1 };
-        //constexpr size_t Target{ 6 };
+        if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
+        {
+            std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
+            dfs.printPath(resultPath);
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
 
-        //dfs.findPathAll(Source, Target);
+        // -------------
 
-        //if (size_t count; (count = dfs.countFoundPaths()) != 0)
-        //{
-        //    std::cout << "Found " << count << " solutions:" << std::endl;
-        //    dfs.printPaths();
-        //}
-        //else {
-        //    std::cout << "No path exists between vertices " << Source << " and " << Target;
-        //}
+        dfs.findPathAll(Source, Target);
+
+        if (size_t count; (count = dfs.countFoundPaths()) != 0)
+        {
+            std::cout << "Found " << count << " solutions:" << std::endl;
+            dfs.printPaths();
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
     }
 }
 

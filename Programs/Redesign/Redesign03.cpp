@@ -1411,6 +1411,30 @@ namespace Graph_Theory_Redesign
     // 
     // Same with Weighted Graphs - To be Done
 
+
+    void test_89()
+    {
+        UnweightedDirectedGraphAdjListRepresentation<int> graph { 5 };
+
+        // Insert some nodes and edges.
+        graph.setNodeDescriptions({
+            11,
+            22,
+            33,
+            44,
+            55,
+        });
+
+        graph.addEdge(0, 2);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+
+        std::cout << graph << std::endl;
+    }
+
     void test_90_a()
     {
         std::cout << "Undirected, Unweighted, No Node Descriptions" << std::endl;
@@ -1505,14 +1529,15 @@ int main()
     // test_13();
 
     // DFS
-    test_20();
+    //test_20();
     //test_21();
     //test_22();
 
-    //test_90_a();
-    //test_90_b();
-    //test_90_c();
-    //test_90_d();
+    //test_89();
+    test_90_a();
+    test_90_b();
+    test_90_c();
+    test_90_d();
 
     return 1;
 }
