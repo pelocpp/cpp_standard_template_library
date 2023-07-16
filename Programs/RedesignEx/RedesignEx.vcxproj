@@ -130,6 +130,11 @@
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Redesign01.cpp" />
+    <ClCompile Include="TestDFS.cpp" />
+    <ClCompile Include="TestGraph.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graph.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
