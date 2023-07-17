@@ -4,19 +4,20 @@ namespace Graph_Theory_Graphs
 {
     using namespace Graph_Theory_Redesign;
 
-    // testing only graphs
-    // a) Undirected, Unweighted, No Node Descriptions
-    // b) Undirected, Unweighted, Node Descriptions
-    // c) Directed,   Unweighted, No Node Descriptions
-    // d) Directed,   Unweighted, Node Descriptions
+    // Testing only graphs
+    // a) Undirected,  Unweighted,  Node Descriptions
+    // b) Undirected,  Weighted,    Node Descriptions
+    // c) Directed,    Unweighted,  Node Descriptions
+    // d) Directed,    Weighted,    Node Descriptions
     // 
     // Same with Weighted Graphs - To be Done
 
     void test_00()
     {
-        Graph<int> graph;
+        // c)
+        std::cout << "Undirected, Unweighted, Node Descriptions" << std::endl;
 
-        // Insert some nodes and edges.
+        Graph<int> graph;
 
         graph.addNode(11);
         graph.addNode(22);
@@ -38,26 +39,11 @@ namespace Graph_Theory_Graphs
         std::cout << "Graph: " << toString(graph) << std::endl;
     }
 
-    //void test_a()
-    //{
-    //    std::cout << "Undirected, Unweighted, No Node Descriptions" << std::endl;
-
-    //    Graph graph{ 4 };
-
-    //    graph.addEdge(0, 1);
-    //    graph.addEdge(1, 2);
-    //    graph.addEdge(2, 3);
-    //    graph.addEdge(3, 0);
-
-    //    std::cout << graph << std::endl;
-    //}
-
-    void test_b()
+    void test_01()
     {
+        // c)
         std::cout << "Undirected, Unweighted, Node Descriptions" << std::endl;
 
-        // TODO: Klären, ob ein Konstruktor mit der Knotenanzahl Sinn ergibt
-        //  Graph<std::string> graph{ 4 };
         Graph<std::string> graph;
 
         graph.addNodes({
@@ -80,43 +66,10 @@ namespace Graph_Theory_Graphs
         std::cout << "Graph: " << toString(graph) << std::endl;
     }
 
-    //void test_c()
-    //{
-    //    std::cout << "Directed, Unweighted, No Node Descriptions" << std::endl;
-
-    //    UnweightedDirectedGraphAdjListRepresentation<int> graph{ 4 };
-
-    //    graph.addEdge(0, 1);
-    //    graph.addEdge(1, 2);
-    //    graph.addEdge(2, 3);
-    //    graph.addEdge(3, 0);
-
-    //    std::cout << graph << std::endl;
-    //}
-
-    //void test_d()
-    //{
-    //    std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
-
-    //    UnweightedDirectedGraphAdjListRepresentation<std::string> graph{ 4 };
-
-    //    graph.seTNodeDatas({
-    //        std::string{"A"}, std::string{"B"}, std::string{"C"}, std::string{"C"}
-    //        });
-
-    //    graph.addEdge(0, 1);
-    //    graph.addEdge(1, 2);
-    //    graph.addEdge(2, 3);
-    //    graph.addEdge(3, 0);
-
-    //    std::cout << graph << std::endl;
-    //}
-
-    void test_04_a()
+    void test_02()
     {
-        // Beispiel "LMU_Muenchen"
-
-        // WEITER: Irgendwie mit Template Specializtion Weigthed und UnWeighted !!!
+        // d)
+        std::cout << "Directed, Weighted, Node Descriptions" << std::endl;
 
         Graph<int, size_t> graph;
 
@@ -146,6 +99,8 @@ namespace Graph_Theory_Graphs
 
     void test_graphs()
     {
-        test_00();
+        //test_00();
+        //test_01();
+        test_02();
     }
 }
