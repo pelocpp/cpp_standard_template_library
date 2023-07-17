@@ -1531,13 +1531,13 @@ int main()
     // DFS
     //test_20();
     //test_21();
-    //test_22();
+    test_22();
 
     //test_89();
-    test_90_a();
-    test_90_b();
-    test_90_c();
-    test_90_d();
+    //test_90_a();
+    //test_90_b();
+    //test_90_c();
+    //test_90_d();
 
     return 1;
 }

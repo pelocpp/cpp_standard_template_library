@@ -124,21 +124,21 @@ namespace Graph_Theory_DFS
 
         DFSSolver dfs{ graph };
         dfs.computeComponents();
-        //size_t count{ dfs.getNumberOfComponents() };
+        size_t count{ dfs.getNumberOfComponents() };
 
-        //for (size_t index{}; index != count; ++index) {
+        for (size_t index{}; index != count; ++index) {
 
-        //    auto component = dfs.getComponent(index + 1);
+            auto component = dfs.getComponent(index + 1);
 
-        //    for (size_t last{}; size_t vertex : component) {
-        //        std::cout << "[" << vertex << "]";
-        //        if (last < component.size() - 1) {
-        //            std::cout << ", ";
-        //        }
-        //        ++last;
-        //    }
-        //    std::cout << std::endl;
-        //}
+            for (size_t last{}; size_t vertex : component) {
+                std::cout << "[" << vertex << "]";
+                if (last < component.size() - 1) {
+                    std::cout << ", ";
+                }
+                ++last;
+            }
+            std::cout << std::endl;
+        }
     }
 }
 

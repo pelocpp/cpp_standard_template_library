@@ -708,14 +708,16 @@ namespace Graph_Theory_DFS
         }
 
     private:
-        void depthFirstSearch(size_t node) {
+        void depthFirstSearch(size_t index) {
 
-            m_visited.at(node) = true;          // mark current node as discovered
-            m_components.at(node) = m_count;    // set mark
+            m_visited.at(index) = true;          // mark current node as discovered
+            m_components.at(index) = m_count;    // set mark
 
             // do for all adjacent vertices of the current vertex
-            std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
-            for (size_t next : neighbours) {
+            // std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
+            const AdjacencyListType<std::nullptr_t>& neighbours = m_graph[index].getAdjacentNodes();
+
+            for (const auto& [next, weight] : neighbours) {
 
                 // next is not discovered
                 if (!m_visited.at(next)) {
