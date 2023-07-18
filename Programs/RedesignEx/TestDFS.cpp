@@ -63,7 +63,7 @@ namespace Graph_Theory_DFS
 
         Graph<int> graph;
 
-        graph.addNodes({ 6, 7, 11, 7, 0, 4, 8, 13, 14, 1, 5, 17, 16, 3, 9, 15, 2, 10});
+        graph.addNodes({ 0, 3, 6, 7, 11, 4, 8, 13, 14, 1, 5, 17, 16, 9, 15, 2, 10});
 
         graph.addEdge(0, 3);
 
@@ -89,9 +89,9 @@ namespace Graph_Theory_DFS
         graph.addEdge(2, 9);
         graph.addEdge(10, 15);
 
-        std::string dot = toDot<int>(graph, "Beispiel");
+        //std::string dot = toDot<int>(graph, "Beispiel");
 
-        std::cout << dot << std::endl;
+        //std::cout << dot << std::endl;
 
         std::cout << "Graph: " << toString(graph) << std::endl;
 
@@ -123,7 +123,9 @@ namespace Graph_Theory_DFS
 
 
         DFSSolver dfs{ graph };
+
         dfs.computeComponents();
+
         size_t count{ dfs.getNumberOfComponents() };
 
         for (size_t index{}; index != count; ++index) {

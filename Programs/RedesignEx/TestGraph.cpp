@@ -19,11 +19,9 @@ namespace Graph_Theory_Graphs
 
         Graph<int> graph;
 
-        graph.addNode(11);
-        graph.addNode(22);
-        graph.addNode(33);
-        graph.addNode(44);
-        graph.addNode(55);
+        graph.addNodes({ 11, 22, 33, 44 });
+
+        graph.sort();
 
         graph.addEdge(11, 33);
         graph.addEdge(22, 33);
@@ -73,12 +71,7 @@ namespace Graph_Theory_Graphs
 
         Graph<int, size_t> graph;
 
-        graph.addNode(0);
-        graph.addNode(1);
-        graph.addNode(2);
-        graph.addNode(3);
-        graph.addNode(4);
-        graph.addNode(5);
+        graph.addNodes({ 0, 1, 2, 3, 4, 5 });
 
         graph.addEdge(0, 1, 10);
         graph.addEdge(0, 2, 20);
@@ -99,8 +92,8 @@ namespace Graph_Theory_Graphs
 
     void test_graphs()
     {
-        //test_00();
+        test_00();
         //test_01();
-        test_02();
+        //test_02();
     }
 }

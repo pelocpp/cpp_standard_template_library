@@ -22,68 +22,6 @@
 
 // =====================================================================================
 
-        // TODO: Klären, ob ein Konstruktor mit der Knotenanzahl Sinn ergibt
-        //  Graph<std::string> graph{ 4 };
-
-// TODO:
-// [[ nodiscard ]]
-
-
-// Hmmm, die könnte man massenhaft einbauen .. sieht halt dann nicht mehr so gut aus ...
-
-
-// =====================================================================================
-
-// von der anderen Datei ....
-
-// TODO: final, override ... Vor allem final einsetzen, wenn man eine Methode nicht mehr überschreiben sollte
-
-// TODO: Hier ist beschrieben, wie man in einer Klasse ZWEI ITeratoren unterbekommt:
-// https://blog.cppse.nl/cpp-multiple-iterators-with-traits
-
-// TODO:
-// Man sollte die Klassen auch mit C++ Iteratoren ausstatten
-// Dazu benötigt man das Thema "c++ implementing iterator as nested class"  ( Google Search ) !!!
-
-// // TODO:
-// ACHTUNG: Habe jetzt überall size_t verwendet - da geht aber -1 nicht !!!!!!!!!!!!!!!!!!!!
-
-// TODO:
-// Es sind derzeit keinerlei Fehlerberprüfungen drin: doppelte Kanten ... wieso wird da eigenlich nicht mehr eine std::set verwendet ????
-
-// TWO PHASE LOOKUP !!!!
-// https://www.modernescpp.com/index.php/surprise-included-inheritance-and-member-functions-of-class-templates
-// HIER GEHT ES UM DAS using inmitten des Quellcode !!!!
-
-// TODO: 
-//// Die beiden Methoden 
-//virtual void setNodeDescription(size_t index, const NodeDescription& description) = 0;
-//virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) = 0;
-// sind derzeit doppelt implementiert ... das sollte man doch vermeiden
-// 
-
-// TODO:
-// oss << "[" << std::setw(12) << std::left << description << "] ";
-// Hier könnte man die maximale Feldbreite tatsächlich berechnen -- sieht dann doch besser aus ....
-// ODer gleich mit std::format von C++ 20 arbeiten !!!!
-
-// TODO:
-// Viele Methoden können mit const qualifiziert werden
-
-
-// TODO:
-// Iteratoren für die "benachbarten" Konten schreiben !!!
-// Im Beispiel findet man das hier:
-// Mein Scratch - Projekt - Datei Source17_Graphs_Another_Approach.cpp
-// Oder hier:
-// https://blog.cppse.nl/cpp-multiple-iterators-with-traits
-// 
-// =====================================================================================
-
-
-// =====================================================================================
-
-
 namespace Graph_Theory_Redesign
 {
     // hmmm, muss das mit der Vorbelegung sein ...
@@ -115,12 +53,13 @@ namespace Graph_Theory_Redesign
 
     // Fazit : Sollte in die Klasse GraphNode verlagert werden
 
+    using EmptyType = std::nullptr_t;  //   hmm, void geht nicht ...
 
     template<typename Weight>
     using Edge = std::pair<size_t, std::optional<Weight>>;
 
     // needed as key compare function for std::set
-    template<typename Weight = std::nullptr_t>
+    template<typename Weight = EmptyType>
     auto cmp = [](Edge<Weight> edge1, Edge<Weight> edge2) {
         
         auto [key1, weight1] = edge1;
@@ -129,7 +68,7 @@ namespace Graph_Theory_Redesign
         return key1 < key2;
     };
 
-    template<typename Weight = std::nullptr_t>
+    template<typename Weight = EmptyType>
     using AdjacencyListType = std::set<Edge<Weight>, decltype(cmp<Weight>)>;
 
     // -------------------------------------------------------------------------------------
@@ -144,7 +83,7 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------------------------------
 
-    template<typename T, typename W = std::nullptr_t>
+    template<typename T, typename W = EmptyType>
     class GraphNode
     {
     public:
@@ -157,7 +96,7 @@ namespace Graph_Theory_Redesign
         AdjacencyListType<W> m_adjacentNodes;
 
     public:
-        // constructs a graph_node for the given value
+        // constructing a graph_node for a given value
         GraphNode(const T& data) : m_data{ data } { }
 
         GraphNode(T&& data) : m_data{ std::move(data) } { }
@@ -190,22 +129,19 @@ namespace Graph_Theory_Redesign
     template<typename T, typename W>
     using NodesContainerType = std::vector<GraphNode<T, W>>;
 
-    template<typename T, typename W = std::nullptr_t>
+    template<typename T, typename W = EmptyType>
     class Graph
     {
         using GraphNodeValueType = T;
         using GraphNodeWeightType = W;
 
     private:
-        //friend GraphNode<T, W>;  // hmm, wo wird da in GraphNode reingelangt ....
-
         NodesContainerType<T, W> m_nodes;
 
         bool m_isDirected;
         bool m_isWeighted;
 
     public:
-
         Graph() {
             m_isDirected = true;
             m_isWeighted = false;
@@ -216,17 +152,31 @@ namespace Graph_Theory_Redesign
             m_isWeighted = isWeighted;
         }
 
+    private:
         // For an insert to be successful, the value shall not be in the graph yet. 
         // Returns true if a new node with given value has been added to
         // the graph, and false if there was already a node with the given value.
 
+        //bool addNode(const T& data) {
+
+        //    T copy{ data };
+        //    return addNode(std::move(copy));
+        //}
+
+        //bool addNode(T&& data) {
+
+        //    auto iter{ findNode(data) };
+
+        //    if (iter != std::end(m_nodes)) {
+        //        // value is already in the graph, return false
+        //        return false;
+        //    }
+
+        //    m_nodes.emplace_back(std::move(data));
+        //    return true;
+        //}
+
         bool addNode(const T& data) {
-
-            T copy{ data };
-            return addNode(std::move(copy));
-        }
-
-        bool addNode(T&& data) {
 
             auto iter{ findNode(data) };
 
@@ -235,8 +185,33 @@ namespace Graph_Theory_Redesign
                 return false;
             }
 
-            m_nodes.emplace_back(std::move(data));
+            T copy{ data };
+            m_nodes.emplace_back(std::move(copy));
             return true;
+        }
+
+    public:
+
+        // PeLo: Neu -- später am Ende von addNodes verstecken
+
+        void sort() {
+
+            std::sort(
+                std::begin(m_nodes),
+                std::end(m_nodes),
+
+                // GraphNode<T, W>
+
+                [](const WeightedEdge<Weight>& edge1, const WeightedEdge<Weight>& edge2) -> bool {
+
+                    Weight x1 = getEdgeWeight(edge1);
+                    Weight x2 = getEdgeWeight(edge2);
+
+                    return x1 < x2;
+
+                    // return getWeight<EDGE, int>(edge1) < getWeight<EDGE, int>(edge2);
+                }
+            );
         }
 
         void addNodes(const std::initializer_list<T> list) {
@@ -244,8 +219,8 @@ namespace Graph_Theory_Redesign
             std::for_each(
                 list.begin(),
                 list.end(),
-                [&](const auto& value) {
-                    addNode(value);
+                [&](const auto& data) {
+                    addNode(data);
                 }
             );
         }
@@ -258,21 +233,21 @@ namespace Graph_Theory_Redesign
 
 
         // Returns true if the edge was successfully created, false otherwise.
-        bool addEdge(const T& fromNodeData, const T& toNodeData)
+        bool addEdge(const T& fromNode, const T& toNode)
         {
             if (m_isWeighted) {
                 throw std::logic_error("Graph should be unweighted!");
             }
 
-            const auto from{ findNode(fromNodeData) };
+            const auto from{ findNode(fromNode) };
 
-            const auto to{ findNode(toNodeData) };
+            const auto to{ findNode(toNode) };
 
             if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
                 return false;
             }
 
-            const size_t toIndex{ get_index_of_node(to) };
+            const size_t toIndex{ getIndexOfNode(to) };
 
             AdjacencyListType<W>& list = from->getAdjacentNodes();
 
@@ -283,21 +258,21 @@ namespace Graph_Theory_Redesign
             return succeeded;
         }
 
-        bool addEdge(const T& fromNodeData, const T& toNodeData, const W& weight) {
+        bool addEdge(const T& fromNode, const T& toNode, const W& weight) {
 
             if (m_isWeighted) {
                 throw std::logic_error("Graph should be weighted!");
             }
 
-            const auto from{ findNode(fromNodeData) };
+            const auto from{ findNode(fromNode) };
 
-            const auto to{ findNode(toNodeData) };
+            const auto to{ findNode(toNode) };
 
             if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
                 return false;
             }
 
-            const size_t toIndex{ get_index_of_node(to) };
+            const size_t toIndex{ getIndexOfNode(to) };
 
             AdjacencyListType<W>& list = from->getAdjacentNodes();
 
@@ -431,8 +406,8 @@ namespace Graph_Theory_Redesign
 
 
         // Given an iterator to a node, returns the index of that node in the nodes container.
-        // size_t get_index_of_node(const typename nodes_container_type::const_iterator& node) const noexcept
-        size_t get_index_of_node(const typename NodesContainerType<T, W>::const_iterator& node) const noexcept
+        // size_t getIndexOfNode(const typename nodes_container_type::const_iterator& node) const noexcept
+        size_t getIndexOfNode(const typename NodesContainerType<T, W>::const_iterator& node) const noexcept
         {
             const auto index{ std::distance(std::cbegin(m_nodes), node) };
 
@@ -441,9 +416,10 @@ namespace Graph_Theory_Redesign
 
         // added: PeLo - NEU
 
-        T geTNodeData(size_t index) {
-            return m_nodes[index].value();
-        }
+        // eher nicht benötigt - ich arbeite nicht Index Orientiert ...................
+        //T getNodeData(size_t index) {
+        //    return m_nodes[index].value();
+        //}
 
         bool isDirected() const { return m_isDirected; }
         bool isWeighted() const { return m_isWeighted; }
@@ -496,7 +472,7 @@ namespace Graph_Theory_Redesign
 
     // TODO: Der graph Parameter ist im Original als const markiert ....
 
-    template <typename T, typename W = std::nullptr_t>
+    template <typename T, typename W = EmptyType>
     std::string toDot(Graph<T, W>& graph, std::string_view graph_name)
     {
         std::stringstream ss;
@@ -571,28 +547,31 @@ namespace Graph_Theory_Redesign
             // auto& node{ graph[index] };  // da steht im Original ein const vorne ....
             GraphNode<T, W>& node{ graph[index] };  // da steht im Original ein const vorne ....
 
-            T& description = node.value();
+            T& fromValue = node.value();
 
             // using T = std::remove_cv<NodeDescription>::type;
             using NodeType = std::remove_cv<T>::type;
 
             if constexpr (!std::is_same<NodeType, std::string>::value) {
-                std::string s{ std::to_string(description) };
+                std::string s{ std::to_string(fromValue) };
                 oss << "[" << /* std::setw(12) << std::left << */ s << "] ";
             }
             else {
-                oss << "[" << /* std::setw(12) << std::left << */ description << "] ";
+                oss << "[" << /* std::setw(12) << std::left << */ fromValue << "] ";
             }
 
             // HIER WEITER ...
             // const typename GraphNode<T>::adjacency_list_type& list = graph.getAdjacentNodesIndices(index);
 
-            AdjacencyListType<W> list = graph.getAdjacentNodes(description);
+            AdjacencyListType<W> list = graph.getAdjacentNodes(fromValue);
 
             // const&
             // OFFEN: Wie und wo wird das weight ausgegeben
             for (size_t n = 0; auto [next, weight] : list) {
-                oss << index << separator << next;
+
+                T toValue = graph[next].value();
+
+                oss << fromValue << separator << toValue;
                 if (n != list.size() - 1) {
                     oss << " | ";
                 }
@@ -715,7 +694,7 @@ namespace Graph_Theory_DFS
 
             // do for all adjacent vertices of the current vertex
             // std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
-            const AdjacencyListType<std::nullptr_t>& neighbours = m_graph[index].getAdjacentNodes();
+            const AdjacencyListType<>& neighbours = m_graph[index].getAdjacentNodes();
 
             for (const auto& [next, weight] : neighbours) {
 
@@ -750,7 +729,7 @@ namespace Graph_Theory_DFS
 
             GraphNode<T>& sourceNode = m_graph[source];
 
-            AdjacencyListType<std::nullptr_t>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
+            AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
 
             for (const auto& [next, weight] : neighbours) {
 
@@ -785,7 +764,7 @@ namespace Graph_Theory_DFS
                 // do for every edge
                 GraphNode<T>& sourceNode = m_graph[source];
 
-                AdjacencyListType<std::nullptr_t>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
+                AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
 
                 for (const auto& [index, weight] : neighbours) {
 
