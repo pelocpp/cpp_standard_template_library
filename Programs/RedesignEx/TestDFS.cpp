@@ -6,9 +6,11 @@ namespace Graph_Theory_DFS
 
     void test_20()
     {
-        std::cout << "Redesign Graph Theory - DFS" << std::endl;
+        // Siehe Bild im Markdown - das Beispiel funkioniert !!!
 
-        Graph<int> graph;
+        std::cout << "Graph Theory - DFS" << std::endl;
+
+        Graph<int> graph { true };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -28,11 +30,11 @@ namespace Graph_Theory_DFS
 
         DFSSolver dfs{ graph };
 
-        //constexpr size_t Source{ 1 };
-        //constexpr size_t Target{ 6 };
+        //constexpr size_t Source{ 0 };
+        //constexpr size_t Target{ 7 };
 
-        constexpr size_t Source{ 2 };
-        constexpr size_t Target{ 7 };
+        constexpr size_t Source{ 1 };
+        constexpr size_t Target{ 6 };
 
         if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
         {
@@ -42,6 +44,7 @@ namespace Graph_Theory_DFS
         else {
             std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
         }
+        std::cout << std::endl;
 
         // -------------
 
@@ -141,6 +144,12 @@ namespace Graph_Theory_DFS
             }
             std::cout << std::endl;
         }
+    }
+
+    void test_dfs()
+    {
+        test_20();
+        // test_22();
     }
 }
 

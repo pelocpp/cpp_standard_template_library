@@ -120,6 +120,12 @@ namespace Graph_Theory_Redesign
         {
             return m_adjacentNodes;
         }
+
+        // needed for constructing stl set container with 'GraphNode' objects
+        bool operator < (const GraphNode& other) {
+
+            return m_data < other.m_data;
+        }
     };
 
     // -------------------------------------------------------------------------------------
@@ -147,7 +153,7 @@ namespace Graph_Theory_Redesign
             m_isWeighted = false;
         }
 
-        Graph(bool isDirected, bool isWeighted) {
+        Graph(bool isDirected, bool isWeighted = false) {
             m_isDirected = isDirected;
             m_isWeighted = isWeighted;
         }
@@ -190,30 +196,15 @@ namespace Graph_Theory_Redesign
             return true;
         }
 
-    public:
-
-        // PeLo: Neu -- später am Ende von addNodes verstecken
-
         void sort() {
 
             std::sort(
                 std::begin(m_nodes),
-                std::end(m_nodes),
-
-                // GraphNode<T, W>
-
-                [](const WeightedEdge<Weight>& edge1, const WeightedEdge<Weight>& edge2) -> bool {
-
-                    Weight x1 = getEdgeWeight(edge1);
-                    Weight x2 = getEdgeWeight(edge2);
-
-                    return x1 < x2;
-
-                    // return getWeight<EDGE, int>(edge1) < getWeight<EDGE, int>(edge2);
-                }
+                std::end(m_nodes)
             );
         }
 
+    public:
         void addNodes(const std::initializer_list<T> list) {
 
             std::for_each(
@@ -223,6 +214,8 @@ namespace Graph_Theory_Redesign
                     addNode(data);
                 }
             );
+
+            sort();
         }
 
 
@@ -537,7 +530,10 @@ namespace Graph_Theory_Redesign
         std::string separator{ graph.isDirected() ? " -> " : " <=> " };
 
         std::ostringstream oss;
-        oss << "Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl;
+        oss << "Graph: " << std::endl;
+        oss << "  Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl;
+        oss << "  " << (graph.isDirected() ? "Directed" : "Undirected");
+        oss << "  " << (graph.isWeighted() ? "Weighted" : "Unweighted") << std::endl << std::endl;
 
         // Original:
         // for (size_t source = 0; const std::vector<size_t>&list : graph.m_adjacencyList) {

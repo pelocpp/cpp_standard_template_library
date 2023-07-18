@@ -12,16 +12,16 @@ namespace Graph_Theory_Graphs
     // 
     // Same with Weighted Graphs - To be Done
 
-    void test_00()
+    void test_01()
     {
         // c)
-        std::cout << "Undirected, Unweighted, Node Descriptions" << std::endl;
+        std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
 
         Graph<int> graph;
 
-        graph.addNodes({ 11, 22, 33, 44 });
+        graph.addNodes({ 22, 11, 33, 44 });
 
-        graph.sort();
+       // graph.sort();
 
         graph.addEdge(11, 33);
         graph.addEdge(22, 33);
@@ -34,13 +34,13 @@ namespace Graph_Theory_Graphs
 
         std::cout << dot << std::endl;
 
-        std::cout << "Graph: " << toString(graph) << std::endl;
+        std::cout << toString(graph) << std::endl;
     }
 
-    void test_01()
+    void test_02()
     {
         // c)
-        std::cout << "Undirected, Unweighted, Node Descriptions" << std::endl;
+        std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
 
         Graph<std::string> graph;
 
@@ -61,10 +61,10 @@ namespace Graph_Theory_Graphs
 
         std::cout << dot << std::endl;
 
-        std::cout << "Graph: " << toString(graph) << std::endl;
+        std::cout << toString(graph) << std::endl;
     }
 
-    void test_02()
+    void test_03()
     {
         // d)
         std::cout << "Directed, Weighted, Node Descriptions" << std::endl;
@@ -87,13 +87,37 @@ namespace Graph_Theory_Graphs
 
         std::cout << dot << std::endl;
 
-        std::cout << "Graph: " << toString(graph) << std::endl;
+        std::cout << toString(graph) << std::endl;
+    }
+
+    void test_04()
+    {
+        std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
+
+        Graph<int> graph { true };
+
+        graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
+
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 0);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
+
+        std::cout << toString(graph) << std::endl;
     }
 
     void test_graphs()
     {
-        test_00();
         //test_01();
         //test_02();
+        //test_03();
+        test_04();
     }
 }
