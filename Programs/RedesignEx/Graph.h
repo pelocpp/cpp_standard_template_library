@@ -242,13 +242,35 @@ namespace Graph_Theory_Redesign
 
             const size_t toIndex{ getIndexOfNode(to) };
 
-            AdjacencyListType<W>& list = from->getAdjacentNodes();
+            AdjacencyListType<W>& fromList = from->getAdjacentNodes();
 
             Edge<W> edge{toIndex, std::nullopt};
 
-            auto [pos, succeeded] = list.insert(edge);
+            auto [pos, succeeded] = fromList.insert(edge);
 
-            return succeeded;
+            if (succeeded) {
+
+                if (!m_isDirected) {
+
+                    GraphNode<T, W>& target = m_nodes[toIndex];
+
+                    AdjacencyListType<W>& toList = target.getAdjacentNodes();
+
+                    const size_t fromIndex{ getIndexOfNode(from) };
+
+                    Edge<W> edge{fromIndex, std::nullopt};
+
+                    auto [pos, succeeded] = toList.insert(edge);
+
+                    return succeeded;
+                }
+                else {
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
         }
 
         bool addEdge(const T& fromNode, const T& toNode, const W& weight) {

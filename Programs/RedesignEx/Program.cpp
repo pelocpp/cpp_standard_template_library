@@ -16,6 +16,14 @@
 // bzw. bin  jetzt bei AdjacencyListType<> angekommen !
 
 
+
+// Konstruktor:
+// 
+//         Graph<int> graph { false };
+// 
+// Das false ist mit enums besser behandelt ..........
+// 
+// 
 // =====================================================================================
 
 // von der anderen Datei ....
@@ -77,8 +85,8 @@ namespace Graph_Theory_DFS
 
 int main()
 {
-    Graph_Theory_Graphs::test_graphs();
-    //Graph_Theory_DFS::test_dfs();
+    // Graph_Theory_Graphs::test_graphs();
+    Graph_Theory_DFS::test_dfs();
 
     return 1;
 }

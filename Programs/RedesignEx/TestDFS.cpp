@@ -10,7 +10,9 @@ namespace Graph_Theory_DFS
 
         std::cout << "Graph Theory - DFS" << std::endl;
 
-        Graph<int> graph { true };
+        // Funktioniert für gerichtete und ungerichtete Graphgen !!!
+
+        Graph<int> graph { false };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -30,11 +32,8 @@ namespace Graph_Theory_DFS
 
         DFSSolver dfs{ graph };
 
-        //constexpr size_t Source{ 0 };
-        //constexpr size_t Target{ 7 };
-
-        constexpr size_t Source{ 1 };
-        constexpr size_t Target{ 6 };
+        constexpr size_t Source{ 2 };
+        constexpr size_t Target{ 7 };
 
         if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
         {
@@ -60,91 +59,91 @@ namespace Graph_Theory_DFS
         }
     }
 
-    void test_22()
-    {
-        std::cout << "Redesign Graph Theory - DFS - Connected Components" << std::endl;
+    //void test_22()
+    //{
+    //    std::cout << "Redesign Graph Theory - DFS - Connected Components" << std::endl;
 
-        Graph<int> graph;
+    //    Graph<int> graph;
 
-        graph.addNodes({ 0, 3, 6, 7, 11, 4, 8, 13, 14, 1, 5, 17, 16, 9, 15, 2, 10});
+    //    graph.addNodes({ 0, 3, 6, 7, 11, 4, 8, 13, 14, 1, 5, 17, 16, 9, 15, 2, 10});
 
-        graph.addEdge(0, 3);
+    //    graph.addEdge(0, 3);
 
-        graph.addEdge(6, 7);
-        graph.addEdge(6, 11);
-        graph.addEdge(7, 11);
+    //    graph.addEdge(6, 7);
+    //    graph.addEdge(6, 11);
+    //    graph.addEdge(7, 11);
 
-        graph.addEdge(0, 4);
-        graph.addEdge(0, 8);
-        graph.addEdge(0, 13);
-        graph.addEdge(0, 14);
-        graph.addEdge(4, 8);
-        graph.addEdge(8, 14);
-        graph.addEdge(13, 14);
+    //    graph.addEdge(0, 4);
+    //    graph.addEdge(0, 8);
+    //    graph.addEdge(0, 13);
+    //    graph.addEdge(0, 14);
+    //    graph.addEdge(4, 8);
+    //    graph.addEdge(8, 14);
+    //    graph.addEdge(13, 14);
 
-        graph.addEdge(1, 5);
-        graph.addEdge(5, 17);
-        graph.addEdge(5, 16);
+    //    graph.addEdge(1, 5);
+    //    graph.addEdge(5, 17);
+    //    graph.addEdge(5, 16);
 
-        graph.addEdge(3, 9);
-        graph.addEdge(9, 15);
-        graph.addEdge(2, 15);
-        graph.addEdge(2, 9);
-        graph.addEdge(10, 15);
+    //    graph.addEdge(3, 9);
+    //    graph.addEdge(9, 15);
+    //    graph.addEdge(2, 15);
+    //    graph.addEdge(2, 9);
+    //    graph.addEdge(10, 15);
 
-        //std::string dot = toDot<int>(graph, "Beispiel");
+    //    //std::string dot = toDot<int>(graph, "Beispiel");
 
-        //std::cout << dot << std::endl;
+    //    //std::cout << dot << std::endl;
 
-        std::cout << "Graph: " << toString(graph) << std::endl;
+    //    std::cout << "Graph: " << toString(graph) << std::endl;
 
-        //graph.addEdges({
+    //    //graph.addEdges({
 
-        //    {6, 7},
-        //    {6, 11},
-        //    {7, 11},
+    //    //    {6, 7},
+    //    //    {6, 11},
+    //    //    {7, 11},
 
-        //    {0, 4},
-        //    {0, 8},
-        //    {0, 13},
-        //    {0, 14},
-        //    {4, 8},
-        //    {8, 14},
-        //    {13, 14},
+    //    //    {0, 4},
+    //    //    {0, 8},
+    //    //    {0, 13},
+    //    //    {0, 14},
+    //    //    {4, 8},
+    //    //    {8, 14},
+    //    //    {13, 14},
 
-        //    {1, 5},
-        //    {5, 17},
-        //    {5, 16},
+    //    //    {1, 5},
+    //    //    {5, 17},
+    //    //    {5, 16},
 
-        //    {3, 9},
-        //    {9, 15},
-        //    {2, 15},
-        //    {2, 9},
-        //    {10, 15}
-        //    }
-        //);
+    //    //    {3, 9},
+    //    //    {9, 15},
+    //    //    {2, 15},
+    //    //    {2, 9},
+    //    //    {10, 15}
+    //    //    }
+    //    //);
 
 
-        DFSSolver dfs{ graph };
+    //    DFSSolver dfs{ graph };
 
-        dfs.computeComponents();
+    //    dfs.computeComponents();
 
-        size_t count{ dfs.getNumberOfComponents() };
+    //    size_t count{ dfs.getNumberOfComponents() };
 
-        for (size_t index{}; index != count; ++index) {
+    //    for (size_t index{}; index != count; ++index) {
 
-            auto component = dfs.getComponent(index + 1);
+    //        auto component = dfs.getComponent(index + 1);
 
-            for (size_t last{}; size_t vertex : component) {
-                std::cout << "[" << vertex << "]";
-                if (last < component.size() - 1) {
-                    std::cout << ", ";
-                }
-                ++last;
-            }
-            std::cout << std::endl;
-        }
-    }
+    //        for (size_t last{}; size_t vertex : component) {
+    //            std::cout << "[" << vertex << "]";
+    //            if (last < component.size() - 1) {
+    //                std::cout << ", ";
+    //            }
+    //            ++last;
+    //        }
+    //        std::cout << std::endl;
+    //    }
+    //}
 
     void test_dfs()
     {

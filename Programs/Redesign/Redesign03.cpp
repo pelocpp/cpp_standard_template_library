@@ -1320,6 +1320,8 @@ namespace Graph_Theory_Redesign
         graph.addEdge(5, 6);
         graph.addEdge(6, 7);
 
+        std::cout << graph << std::endl;
+
         DFSSolver dfs{ graph };
 
         constexpr size_t Source{ 2 };
@@ -1530,8 +1532,8 @@ int main()
 
     // DFS
     //test_20();
-    //test_21();
-    test_22();
+    test_21();
+   // test_22();
 
     //test_89();
     //test_90_a();

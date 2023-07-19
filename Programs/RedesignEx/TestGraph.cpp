@@ -113,11 +113,70 @@ namespace Graph_Theory_Graphs
         std::cout << toString(graph) << std::endl;
     }
 
+    void test_05()
+    {
+        std::cout << "Undirected, Unweighted" << std::endl;
+
+        Graph<int> graph { false };
+
+        graph.addNodes({ 0, 1, 2, 3 });
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+
+        std::cout << toString(graph) << std::endl;
+    }
+
+    void test_06()
+    {
+        std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
+
+        Graph<std::string> graph { false };
+
+        graph.addNodes({ "A", "B", "C", "D" });
+
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "D");
+        graph.addEdge("D", "A");
+
+        std::cout << toString(graph) << std::endl;
+    }
+
+    void test_10()
+    {
+        std::cout << "Directed, Unweighted" << std::endl;
+
+        Graph<int> graph { false };
+
+        graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
+
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 0);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
+
+        std::cout << toString(graph) << std::endl;
+    }
+
     void test_graphs()
     {
-        //test_01();
-        //test_02();
-        //test_03();
-        test_04();
+    //test_01();
+    //test_02();
+    //test_03();
+    // test_04();
+    //test_05();
+    // test_06();
+
+    test_10();
     }
 }
