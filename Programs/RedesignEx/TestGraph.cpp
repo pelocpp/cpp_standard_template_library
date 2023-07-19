@@ -94,7 +94,7 @@ namespace Graph_Theory_Graphs
     {
         std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
 
-        Graph<int> graph { true };
+        Graph<int> graph { Direction::Directed };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -117,7 +117,7 @@ namespace Graph_Theory_Graphs
     {
         std::cout << "Undirected, Unweighted" << std::endl;
 
-        Graph<int> graph { false };
+        Graph<int> graph { Direction::Undirected };
 
         graph.addNodes({ 0, 1, 2, 3 });
 
@@ -133,7 +133,7 @@ namespace Graph_Theory_Graphs
     {
         std::cout << "Directed, Unweighted, Node Descriptions" << std::endl;
 
-        Graph<std::string> graph { false };
+        Graph<std::string> graph { Direction::Undirected };
 
         graph.addNodes({ "A", "B", "C", "D" });
 
@@ -149,7 +149,7 @@ namespace Graph_Theory_Graphs
     {
         std::cout << "Directed, Unweighted" << std::endl;
 
-        Graph<int> graph { true };
+        Graph<int> graph  { Direction::Directed };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -173,7 +173,7 @@ namespace Graph_Theory_Graphs
     {
         std::cout << "undirected, Unweighted" << std::endl;
 
-        Graph<int> graph { false };
+        Graph<int> graph { Direction::Undirected };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 

@@ -15,15 +15,6 @@
 // AdjacencyListType&neighbours = ....
 // bzw. bin  jetzt bei AdjacencyListType<> angekommen !
 
-
-
-// Konstruktor:
-// 
-//         Graph<int> graph { false };
-// 
-// Das false ist mit enums besser behandelt ..........
-// 
-// 
 // =====================================================================================
 
 // von der anderen Datei ....

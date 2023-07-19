@@ -14,7 +14,7 @@ namespace Graph_Theory_DFS
         // Funktioniert für gerichtete und ungerichtete Graphen !!!
         // Aber die Ergebnisse sind unterschiedlich !!!!!!!!!!!!!!!!!!
 
-        Graph<int> graph { true };
+        Graph<int> graph { Direction::Directed };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -71,7 +71,7 @@ namespace Graph_Theory_DFS
         // Funktioniert für gerichtete und ungerichtete Graphen !!!
         // Aber die Ergebnisse sind unterschiedlich !!!!!!!!!!!!!!!!!!
 
-        Graph<int> graph { false };
+        Graph<int> graph {  Direction::Undirected };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 

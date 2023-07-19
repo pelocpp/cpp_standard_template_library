@@ -53,9 +53,6 @@ namespace Graph_Theory_Redesign
 
     // Fazit : Sollte in die Klasse GraphNode verlagert werden
 
-    enum class Direction { Directed, Undirected };
-    enum class Weight { Weighted, Unweighted };
-
     using EmptyType = std::nullptr_t;  //   hmm, void geht nicht ...
 
     template<typename Weight>
@@ -135,6 +132,9 @@ namespace Graph_Theory_Redesign
     // -------------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------------
 
+    enum class Direction { Directed, Undirected };
+    enum class Weight { Weighted, Unweighted };
+
     template<typename T, typename W>
     using NodesContainerType = std::vector<GraphNode<T, W>>;
 
@@ -147,18 +147,23 @@ namespace Graph_Theory_Redesign
     private:
         NodesContainerType<T, W> m_nodes;
 
-        bool m_isDirected;
-        bool m_isWeighted;
+        //bool m_isDirected;
+        //bool m_isWeighted;
 
        // Direction m_isDirected;
+        //enum class Direction { Directed, Undirected };
+        //enum class Weight { Weighted, Unweighted };
+
+        Direction m_isDirected;
+        Weight m_isWeighted;
 
     public:
         Graph() {
-            m_isDirected = true;
-            m_isWeighted = false;
+            m_isDirected = Direction::Directed;
+            m_isWeighted = Weight::Unweighted;
         }
 
-        Graph(bool isDirected, bool isWeighted = false) {
+        Graph(Direction isDirected, Weight isWeighted = Weight::Unweighted) {
             m_isDirected = isDirected;
             m_isWeighted = isWeighted;
         }
@@ -233,7 +238,7 @@ namespace Graph_Theory_Redesign
         // Returns true if the edge was successfully created, false otherwise.
         bool addEdge(const T& fromNode, const T& toNode)
         {
-            if (m_isWeighted) {
+            if (m_isWeighted == Weight::Weighted) {
                 throw std::logic_error("Graph should be unweighted!");
             }
 
@@ -255,7 +260,7 @@ namespace Graph_Theory_Redesign
 
             if (succeeded) {
 
-                if (!m_isDirected) {
+                if (m_isDirected == Direction::Undirected) {
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
@@ -280,7 +285,7 @@ namespace Graph_Theory_Redesign
 
         bool addEdge(const T& fromNode, const T& toNode, const W& weight) {
 
-            if (m_isWeighted) {
+            if (m_isWeighted == Weight::Unweighted) {
                 throw std::logic_error("Graph should be weighted!");
             }
 
@@ -441,8 +446,8 @@ namespace Graph_Theory_Redesign
         //    return m_nodes[index].value();
         //}
 
-        bool isDirected() const { return m_isDirected; }
-        bool isWeighted() const { return m_isWeighted; }
+        Direction isDirected() const { return m_isDirected; }
+        Weight isWeighted() const { return m_isWeighted; }
 
         size_t countEdges() const
         {
@@ -554,13 +559,13 @@ namespace Graph_Theory_Redesign
     template <typename T, typename W>
     std::string toString(Graph<T, W>& graph) {
 
-        std::string separator{ graph.isDirected() ? " -> " : " <=> " };
+        std::string separator{ graph.isDirected() == Direction::Directed ? " -> " : " <=> " };
 
         std::ostringstream oss;
         oss << "Graph: " << std::endl;
         oss << "  Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl;
-        oss << "  " << (graph.isDirected() ? "Directed" : "Undirected");
-        oss << "  " << (graph.isWeighted() ? "Weighted" : "Unweighted") << std::endl << std::endl;
+        oss << "  " << (graph.isDirected() == Direction::Directed ? "Directed" : "Undirected");
+        oss << "  " << (graph.isWeighted() == Weight::Weighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
 
         // Original:
         // for (size_t source = 0; const std::vector<size_t>&list : graph.m_adjacencyList) {
