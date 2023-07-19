@@ -4,18 +4,21 @@ namespace Graph_Theory_DFS
 {
     using namespace Graph_Theory_Redesign;
 
+
     void test_20()
     {
         // Siehe Bild im Markdown - das Beispiel funkioniert !!!
 
         std::cout << "Graph Theory - DFS" << std::endl;
 
-        // Funktioniert für gerichtete und ungerichtete Graphgen !!!
+        // Funktioniert für gerichtete und ungerichtete Graphen !!!
+        // Aber die Ergebnisse sind unterschiedlich !!!!!!!!!!!!!!!!!!
 
-        Graph<int> graph { false };
+        Graph<int> graph { true };
 
         graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
+        // Directed
         graph.addEdge(0, 3);
         graph.addEdge(1, 0);
         graph.addEdge(1, 2);
@@ -24,6 +27,62 @@ namespace Graph_Theory_DFS
         graph.addEdge(3, 4);
         graph.addEdge(3, 5);
         graph.addEdge(4, 3);
+        graph.addEdge(4, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
+
+        std::cout << "Graph " << toString(graph) << std::endl;
+
+        DFSSolver dfs{ graph };
+
+        constexpr size_t Source{ 1 };
+        constexpr size_t Target{ 6 };
+
+        if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
+        {
+            std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
+            dfs.printPath(resultPath);
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
+        std::cout << std::endl;
+
+        // -------------
+
+        dfs.findPathAll(Source, Target);
+
+        if (size_t count; (count = dfs.countFoundPaths()) != 0)
+        {
+            std::cout << "Found " << count << " solutions:" << std::endl;
+            dfs.printPaths();
+        }
+        else {
+            std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        }
+    }
+
+    void test_21()
+    {
+        // Siehe Bild im Markdown - das Beispiel funkioniert !!!
+
+        std::cout << "Graph Theory - DFS" << std::endl;
+
+        // Funktioniert für gerichtete und ungerichtete Graphen !!!
+        // Aber die Ergebnisse sind unterschiedlich !!!!!!!!!!!!!!!!!!
+
+        Graph<int> graph { false };
+
+        graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
+
+        // Undirected
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
         graph.addEdge(4, 6);
         graph.addEdge(5, 6);
         graph.addEdge(6, 7);
@@ -147,8 +206,8 @@ namespace Graph_Theory_DFS
 
     void test_dfs()
     {
-        test_20();
-        // test_22();
+        //test_20();
+        test_21();
     }
 }
 

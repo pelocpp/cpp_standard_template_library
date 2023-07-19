@@ -1262,6 +1262,7 @@ namespace Graph_Theory_Redesign
 
         UnweightedDirectedGraphAdjListRepresentation graph{ 8 };
 
+        // Directed
         graph.addEdge(0, 3);
         graph.addEdge(1, 0);
         graph.addEdge(1, 2);
@@ -1310,10 +1311,12 @@ namespace Graph_Theory_Redesign
 
         UnweightedUndirectedGraphAdjListRepresentation<int> graph{ 8 };
 
-        graph.addEdge(0, 1);
+        // UNBDIRECTED
+        graph.addEdge(0, 1);            
         graph.addEdge(1, 2);
         graph.addEdge(0, 3);
         graph.addEdge(1, 4);
+        graph.addEdge(2, 7);
         graph.addEdge(3, 4);
         graph.addEdge(3, 5);
         graph.addEdge(4, 6);

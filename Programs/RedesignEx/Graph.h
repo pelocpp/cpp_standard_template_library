@@ -53,6 +53,9 @@ namespace Graph_Theory_Redesign
 
     // Fazit : Sollte in die Klasse GraphNode verlagert werden
 
+    enum class Direction { Directed, Undirected };
+    enum class Weight { Weighted, Unweighted };
+
     using EmptyType = std::nullptr_t;  //   hmm, void geht nicht ...
 
     template<typename Weight>
@@ -146,6 +149,8 @@ namespace Graph_Theory_Redesign
 
         bool m_isDirected;
         bool m_isWeighted;
+
+       // Direction m_isDirected;
 
     public:
         Graph() {
