@@ -2,6 +2,8 @@
 // Graph Theory Redesign // Summer 2023
 // =====================================================================================
 
+#pragma once
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -73,16 +75,6 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------------------------------
 
-    //class Empty
-    //{
-    //public:
-    //    Empty() = default;
-
-    //    // bool operator<(const Empty&) const { return true; }
-    //};
-
-    // -------------------------------------------------------------------------------------
-
     template<typename T, typename W = EmptyType>
     class GraphNode
     {
@@ -111,18 +103,20 @@ namespace Graph_Theory_Redesign
         // 
              
         // returns a reference to the adjacency list
-        AdjacencyListType<W>& getAdjacentNodes()
-        {
-            return m_adjacentNodes;
-        }
+
 
         const AdjacencyListType<W>& getAdjacentNodes() const
         {
             return m_adjacentNodes;
         }
 
+        AdjacencyListType<W>& getAdjacentNodes()
+        {
+            return m_adjacentNodes;
+        }
+
         // needed for constructing stl set container with 'GraphNode' objects
-        bool operator < (const GraphNode& other) {
+        bool operator< (const GraphNode& other) {
 
             return m_data < other.m_data;
         }
@@ -138,30 +132,22 @@ namespace Graph_Theory_Redesign
     template<typename T, typename W>
     using NodesContainerType = std::vector<GraphNode<T, W>>;
 
+    // -------------------------------------------------------------------------------------
+
     template<typename T, typename W = EmptyType>
     class Graph
     {
+        // added: PeLo -  wird derzeit noch nicht benötigt
         using GraphNodeValueType = T;
         using GraphNodeWeightType = W;
 
     private:
         NodesContainerType<T, W> m_nodes;
-
-        //bool m_isDirected;
-        //bool m_isWeighted;
-
-       // Direction m_isDirected;
-        //enum class Direction { Directed, Undirected };
-        //enum class Weight { Weighted, Unweighted };
-
         Direction m_isDirected;
         Weight m_isWeighted;
 
     public:
-        Graph() {
-            m_isDirected = Direction::Directed;
-            m_isWeighted = Weight::Unweighted;
-        }
+        Graph() : Graph{ Direction::Directed, Weight::Unweighted } {}
 
         Graph(Direction isDirected, Weight isWeighted = Weight::Unweighted) {
             m_isDirected = isDirected;
@@ -169,29 +155,6 @@ namespace Graph_Theory_Redesign
         }
 
     private:
-        // For an insert to be successful, the value shall not be in the graph yet. 
-        // Returns true if a new node with given value has been added to
-        // the graph, and false if there was already a node with the given value.
-
-        //bool addNode(const T& data) {
-
-        //    T copy{ data };
-        //    return addNode(std::move(copy));
-        //}
-
-        //bool addNode(T&& data) {
-
-        //    auto iter{ findNode(data) };
-
-        //    if (iter != std::end(m_nodes)) {
-        //        // value is already in the graph, return false
-        //        return false;
-        //    }
-
-        //    m_nodes.emplace_back(std::move(data));
-        //    return true;
-        //}
-
         bool addNode(const T& data) {
 
             auto iter{ findNode(data) };
@@ -331,41 +294,7 @@ namespace Graph_Theory_Redesign
             return m_nodes.size();
         }
 
-        // Returns a set with the adjacent nodes of a given node.
-        // If the given node does not exist, an empty set is returned
-
-        // TODO: Das const am Ende wäre hübsch, geht aber nicht !!!
-
-        // Vorsicht / Achtung: DIese Methode gibt es im Original ZWEIMAL: const und non-const
-
-        //std::set<T> get_adjacent_nodes_values(const T& node_value) // const
-        //{
-        //    auto node{ findNode(node_value) };
-
-        //    if (node == std::end(m_nodes)) {
-        //        return std::set<T>{};
-        //    }
-
-        //    return get_adjacent_nodes_values(node->getAdjacentNodesIndices());
-        //}
-
-        //// TODO: Das const am Ende wäre hübsch, geht aber nicht !!!!!!!!!!!!!!!!!!
-
-        //std::set<T> get_adjacent_nodes_values(const AdjacencyListType<W>& indices) // const
-        //{
-        //    std::set<T> values;
-
-        //    // TODO: Muss dieses auto&& da wirklich sein ??? StackOverflow
-        //    for (auto&& index : indices)
-        //    {
-        //        values.insert(m_nodes[index].value());
-        //    }
-
-        //    return values;
-        //}
-
-
-        AdjacencyListType<W>& getAdjacentNodes( /*  const */ T& node_value) // const
+        AdjacencyListType<W>& getAdjacentNodes(   const  T& node_value) // const
         {
             static AdjacencyListType<W> empty {};
 
@@ -377,8 +306,11 @@ namespace Graph_Theory_Redesign
             }
 
             return node->getAdjacentNodes();
+        }
 
-            // return get_adjacent_nodes_values(node->getAdjacentNodesIndices());
+        const AdjacencyListType<W>& getAdjacentNodes(const T& node_value) const
+        {
+            return const_cast<Graph<T, W>*>(this)->getAdjacentNodes(node_value);
         }
 
 
@@ -422,7 +354,7 @@ namespace Graph_Theory_Redesign
         //typename nodes_container_type::const_iterator findNode(const T& node_value) const
         typename NodesContainerType<T, W>::const_iterator findNode(const T& node_value) const
         {
-            return const_cast<Graph<T>*>(this)->findNode(node_value);
+            return const_cast<Graph<T,W>*>(this)->findNode(node_value);
         }
 
         // Given a set of adjacency node indices, returns the corresponding
@@ -447,6 +379,7 @@ namespace Graph_Theory_Redesign
         //}
 
         Direction isDirected() const { return m_isDirected; }
+
         Weight isWeighted() const { return m_isWeighted; }
 
         size_t countEdges() const
@@ -497,67 +430,62 @@ namespace Graph_Theory_Redesign
 
     // TODO: Der graph Parameter ist im Original als const markiert ....
 
-    template <typename T, typename W = EmptyType>
-    std::string toDot(Graph<T, W>& graph, std::string_view graph_name)
-    {
-        std::stringstream ss;
+    //template <typename T, typename W = EmptyType>
+    //std::string toDot(Graph<T, W>& graph, std::string_view graph_name)
+    //{
+    //    std::stringstream ss;
 
-        ss << std::format("Graph {} {{", graph_name.data()) << std::endl;
+    //    ss << std::format("Graph {} {{", graph_name.data()) << std::endl;
 
-        for (size_t index{ }; index < graph.countNodes(); ++index)
-        {
-            GraphNode<T, W>& node{ graph[index] };  // da steht im Original ein const vorne ....
+    //    for (size_t index{ }; index < graph.countNodes(); ++index)
+    //    {
+    //        GraphNode<T, W>& node{ graph[index] };  // da steht im Original ein const vorne ....
 
-            T& value = node.value();
+    //        T& value = node.value();
 
-            // KORREKT
-            //  const auto adjacent_nodes{ graph.get_adjacent_nodes_values(node_value) };
+    //        // KORREKT
+    //        //  const auto adjacent_nodes{ graph.get_adjacent_nodes_values(node_value) };
 
-            // mit oder ohne Referenz !!!
-            AdjacencyListType<W>& adjacent_nodes{ node.getAdjacentNodes() };
+    //        // mit oder ohne Referenz !!!
+    //        const AdjacencyListType<W>& adjacent_nodes{ node.getAdjacentNodes() };
 
-            if (adjacent_nodes.empty())
-            {
-                ss << value << std::endl;  // TODO: Wiederholung
-            }
-            else
-            {
-                ss << value << ": ";   // TODO: Wiederholung
+    //        if (adjacent_nodes.empty())
+    //        {
+    //            ss << value << std::endl;  // TODO: Wiederholung
+    //        }
+    //        else
+    //        {
+    //            ss << value << ": ";   // TODO: Wiederholung
 
-                for (int columns{}; auto & [target, weight] : adjacent_nodes)
-                {
-                    ss << index << " -> " << target;
+    //            for (size_t columns{}; auto & [target, weight] : adjacent_nodes)
+    //            {
+    //                ss << index << " -> " << target;
 
-                    if (weight.has_value()) {
+    //                if (weight.has_value()) {
 
-                        ss << "  { " << weight.value() << " }";
-                    }
+    //                    ss << "  { " << weight.value() << " }";
+    //                }
 
-                    if (columns != adjacent_nodes.size() - 1) {
-                        ss << " | ";
-                    }
+    //                if (columns != adjacent_nodes.size() - 1) {
+    //                    ss << " | ";
+    //                }
 
-                    ++columns;
+    //                ++columns;
 
-                    // ss << std::format("{} -> {}", node_value, node) << std::endl;   // TODO: Vielleicht auf format umsteigen ...
-                }
+    //                // ss << std::format("{} -> {}", node_value, node) << std::endl;   // TODO: Vielleicht auf format umsteigen ...
+    //            }
 
-                ss << std::endl;
-            }
-        }
-        ss << "}" << std::endl;
+    //            ss << std::endl;
+    //        }
+    //    }
+    //    ss << "}" << std::endl;
 
-        return ss.str();
-    }
+    //    return ss.str();
+    //}
 
-
-
-    // second version
-    
-    // TODO: DA ist ein großes Problem:   graph könnte const sein, dann übersetzt es aber nicht ... const Graph<T, W>&
 
     template <typename T, typename W>
-    std::string toString(Graph<T, W>& graph) {
+    std::string toString(const Graph<T, W>& graph) {
 
         std::string separator{ graph.isDirected() == Direction::Directed ? " -> " : " <=> " };
 
@@ -573,11 +501,10 @@ namespace Graph_Theory_Redesign
         for (size_t index{ 0 }; index < graph.countNodes(); ++index)
         {
             // auto& node{ graph[index] };  // da steht im Original ein const vorne ....
-            GraphNode<T, W>& node{ graph[index] };  // da steht im Original ein const vorne ....
+            const GraphNode<T, W>& node{ graph[index] };  // da steht im Original ein const vorne ....
 
-            T& fromValue = node.value();
+            const T& fromValue = node.value();
 
-            // using T = std::remove_cv<NodeDescription>::type;
             using NodeType = std::remove_cv<T>::type;
 
             if constexpr (!std::is_same<NodeType, std::string>::value) {
@@ -588,22 +515,43 @@ namespace Graph_Theory_Redesign
                 oss << "[" << /* std::setw(12) << std::left << */ fromValue << "] ";
             }
 
-            // HIER WEITER ...
-            // const typename GraphNode<T>::adjacency_list_type& list = graph.getAdjacentNodesIndices(index);
-
-            AdjacencyListType<W> list = graph.getAdjacentNodes(fromValue);
+            const AdjacencyListType<W> list = graph.getAdjacentNodes(fromValue);
 
             // const&
             // OFFEN: Wie und wo wird das weight ausgegeben
-            for (size_t n = 0; auto [next, weight] : list) {
+            for (size_t n = 0; const auto& [next, weight] : list) {
 
-                T toValue = graph[next].value();
+                const T& toValue = graph[next].value();
 
                 oss << fromValue << separator << toValue;
+
                 if (n != list.size() - 1) {
                     oss << " | ";
                 }
                 ++n;
+            }
+
+            // WEITER: hier müssen die Knoten ... und nicht die Indices ausgegeben werden
+
+
+            oss << std::endl;
+            
+            for (size_t columns{}; auto& [target, weight] : list)
+            {
+                oss << index << " -> " << target;
+
+                if (weight.has_value()) {
+
+                    oss << "  { " << weight.value() << " }";
+                }
+
+                if (columns != list.size() - 1) {
+                    oss << " | ";
+                }
+
+                ++columns;
+
+                // ss << std::format("{} -> {}", node_value, node) << std::endl;   // TODO: Vielleicht auf format umsteigen ...
             }
 
             oss << std::endl;
@@ -614,202 +562,6 @@ namespace Graph_Theory_Redesign
 }
 
 // =====================================================================================
-
-namespace Graph_Theory_DFS
-{
-    using namespace Graph_Theory_Redesign;
-
-    template <typename T>
-    class DFSSolver
-    {
-    private:
-        Graph<T>& m_graph;
-
-        std::vector<bool>                  m_visited;
-        std::deque<std::vector<size_t>>    m_paths;
-
-        std::vector<size_t>                m_components;
-        size_t                             m_count;
-
-    public:
-        DFSSolver(Graph<T>& graph) : m_graph{ graph }, m_count{} {}
-
-        void computeComponents() {
-
-            m_visited.resize(m_graph.countNodes());
-            std::fill(std::begin(m_visited), std::end(m_visited), false);
-
-            m_components.resize(m_graph.countNodes());
-            std::fill(std::begin(m_components), std::end(m_components), 0);
-
-            m_count = 0;
-
-            for (size_t node{}; node != m_graph.countNodes(); ++node) {
-                if (!m_visited.at(node)) {
-                    ++m_count;
-                    depthFirstSearch(node);
-                }
-            }
-        }
-
-        size_t getNumberOfComponents() const { return m_count; }
-
-        std::vector<size_t> getComponent(size_t mark) const {
-
-            std::vector<size_t> result;
-
-            for (size_t index{}; size_t vertex : m_components) {
-
-                if (vertex == mark) {
-                    result.push_back(index);
-                }
-
-                ++index;
-            }
-
-            return result;
-        }
-
-        size_t countFoundPaths() { return m_paths.size(); }
-
-        // function to perform DFS traversal in a directed graph to find
-        // the complete path between source and destination vertices
-        bool findPathAny(size_t source, size_t target, std::vector<size_t>& path) {
-
-            // setup 'm_visited' vector
-            m_visited.resize(m_graph.countNodes());
-            std::fill(std::begin(m_visited), std::end(m_visited), false);
-
-            return findPathAnyHelper(source, target, path);
-        }
-
-        void findPathAll(size_t source, size_t target) {
-
-            // setup 'm_visited' vector
-            m_visited.resize(m_graph.countNodes());
-            std::fill(std::begin(m_visited), std::end(m_visited), false);
-
-            // setup 'currentPath' vector
-            std::vector<size_t> currentPath;
-            currentPath.push_back(source);
-
-            findPathAllHelper(source, target, currentPath);
-        }
-
-        void printPath(const std::vector<size_t>& path) {
-
-            std::for_each(
-                std::begin(path),
-                std::prev(std::end(path)),
-                [](auto vertex) { std::cout << vertex << " -> "; }
-            );
-
-            auto last = path.back();
-            std::cout << last << std::endl;
-        }
-
-        void printPaths() {
-            for (const auto& path : m_paths) {
-                printPath(path);
-            }
-        }
-
-    private:
-        void depthFirstSearch(size_t index) {
-
-            m_visited.at(index) = true;          // mark current node as discovered
-            m_components.at(index) = m_count;    // set mark
-
-            // do for all adjacent vertices of the current vertex
-            // std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
-            const AdjacencyListType<>& neighbours = m_graph[index].getAdjacentNodes();
-
-            for (const auto& [next, weight] : neighbours) {
-
-                // next is not discovered
-                if (!m_visited.at(next)) {
-
-                    depthFirstSearch(next);
-                }
-            }
-        }
-
-        bool findPathAnyHelper(size_t source, size_t target, std::vector<size_t>& path) {
-
-            // mark current node as discovered
-            m_visited.at(source) = true;
-
-            // include current node in the path
-            path.push_back(source);
-
-            // if destination vertex is found
-            if (source == target) {
-                return true;
-            }
-
-            // do for all adjacent vertices of the dequeued vertex
-
-            // Original
-            // std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(source);
-
-            // Hmmm -- dies kann man so vermeiden:
-            // https://probablydance.com/2014/01/16/alias-templates-with-partial-specialization-sfinae-and-everything/
-
-            GraphNode<T>& sourceNode = m_graph[source];
-
-            AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
-
-            for (const auto& [next, weight] : neighbours) {
-
-                // next is not discovered
-                if (!m_visited.at(next)) {
-
-                    // return true if destination is found
-                    if (findPathAnyHelper(next, target, path))
-                        return true;
-                }
-            }
-
-            // backtrack: remove current node from the path
-            path.pop_back();
-
-            // return false if destination vertex is not reachable from source
-            return false;
-
-        }
-
-        void findPathAllHelper(size_t source, size_t target, std::vector<size_t>& path) {
-
-            // mark current node as discovered
-            m_visited.at(source) = true;
-
-            // if destination vertex is found
-            if (source == target) {
-                m_paths.push_back(path); // store found solution
-                m_visited.at(source) = false;  // unmark current node as discovered
-            }
-            else {
-                // do for every edge
-                GraphNode<T>& sourceNode = m_graph[source];
-
-                AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
-
-                for (const auto& [index, weight] : neighbours) {
-
-                    // next is not discovered
-                    if (!m_visited.at(index)) {
-                        path.push_back(index);  // include current node in the path
-                        findPathAllHelper(index, target, path);
-                        path.pop_back();  // remove current node from the path (backtrack)
-                    }
-                }
-
-                // unmark current node as discovered
-                m_visited.at(source) = false;
-            }
-        }
-    };
-}
 
 // =====================================================================================
 // End-of-File

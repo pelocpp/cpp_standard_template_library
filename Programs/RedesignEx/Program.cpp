@@ -15,6 +15,10 @@
 // AdjacencyListType&neighbours = ....
 // bzw. bin  jetzt bei AdjacencyListType<> angekommen !
 
+// Hmmm -- dies kann man so vermeiden:
+// https://probablydance.com/2014/01/16/alias-templates-with-partial-specialization-sfinae-and-everything/
+
+
 // =====================================================================================
 
 // von der anderen Datei ....
@@ -63,22 +67,14 @@
 // 
 // =====================================================================================
 
+extern void test_graphs();
+extern void test_dfs();
 
-namespace Graph_Theory_Graphs
-{
-    extern void test_graphs();
-}
-
-namespace Graph_Theory_DFS
-{
-    extern void test_dfs();
-}
 
 int main()
 {
-    // Graph_Theory_Graphs::test_graphs();
-    Graph_Theory_DFS::test_dfs();
+    test_graphs();
+    // test_dfs();
 
     return 1;
 }
-
