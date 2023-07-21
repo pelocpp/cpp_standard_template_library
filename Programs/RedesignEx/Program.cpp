@@ -73,8 +73,8 @@ extern void test_dfs();
 
 int main()
 {
-    test_graphs();
-    // test_dfs();
+    // test_graphs();
+    test_dfs();
 
     return 1;
 }

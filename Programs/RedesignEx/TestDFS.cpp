@@ -6,9 +6,6 @@ using namespace Graph_Theory_DFS;
 
 void test_dfs_01()
 {
-   // using namespace Graph_Theory_Redesign;
-    //using namespace Graph_Theory_DFS;
-
     // Siehe Bild im Markdown - das Beispiel funkioniert !!!
 
     std::cout << "Graph Theory - DFS" << std::endl;
@@ -37,22 +34,22 @@ void test_dfs_01()
 
     DFSSolver dfs{ graph };
 
-    constexpr size_t Source{ 1 };
-    constexpr size_t Target{ 6 };
+    const size_t source{ 1 };
+    const size_t target{ 6 };
 
-    if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
+    if (std::vector<size_t> resultPath; dfs.findPathAny(source, target, resultPath))
     {
-        std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
+        std::cout << "Path exists from " << source << " to " << target << ":" << std::endl;
         dfs.printPath(resultPath);
     }
     else {
-        std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        std::cout << "No path exists between " << source << " and " << target << "." << std::endl;
     }
     std::cout << std::endl;
 
     // -------------
 
-    dfs.findPathAll(Source, Target);
+    dfs.findPathAll(source, target);
 
     if (size_t count; (count = dfs.countFoundPaths()) != 0)
     {
@@ -60,16 +57,12 @@ void test_dfs_01()
         dfs.printPaths();
     }
     else {
-        std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        std::cout << "No path exists between " << source << " and " << target << "." << std::endl;
     }
 }
 
 void test_dfs_02()
 {
-    using namespace Graph_Theory_Redesign;
-    using namespace Graph_Theory_DFS;
-
-
     // Siehe Bild im Markdown - das Beispiel funkioniert !!!
 
     std::cout << "Graph Theory - DFS" << std::endl;
@@ -97,22 +90,22 @@ void test_dfs_02()
 
     DFSSolver dfs{ graph };
 
-    constexpr size_t Source{ 2 };
-    constexpr size_t Target{ 7 };
+    const size_t source{ 2 };
+    const size_t target{ 7 };
 
-    if (std::vector<size_t> resultPath; dfs.findPathAny(Source, Target, resultPath))
+    if (std::vector<size_t> resultPath; dfs.findPathAny(source, target, resultPath))
     {
-        std::cout << "Path exists from " << Source << " to " << Target << ":" << std::endl;
+        std::cout << "Path exists from " << source << " to " << target << ":" << std::endl;
         dfs.printPath(resultPath);
     }
     else {
-        std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        std::cout << "No path exists between " << source << " and " << target << "." << std::endl;
     }
     std::cout << std::endl;
 
     // -------------
 
-    dfs.findPathAll(Source, Target);
+    dfs.findPathAll(source, target);
 
     if (size_t count; (count = dfs.countFoundPaths()) != 0)
     {
@@ -120,98 +113,89 @@ void test_dfs_02()
         dfs.printPaths();
     }
     else {
-        std::cout << "No path exists between " << Source << " and " << Target << "." << std::endl;
+        std::cout << "No path exists between " << source << " and " << target << "." << std::endl;
     }
 }
 
-//void test_22()
-//{
-//    std::cout << "Redesign Graph Theory - DFS - Connected Components" << std::endl;
+void test_dfs_03()
+{
+    // Buch Kopec - Finding the shortest path
 
-//    Graph<int> graph;
+    Graph<std::string> graph{ Direction::Undirected, Weight::Unweighted };
 
-//    graph.addNodes({ 0, 3, 6, 7, 11, 4, 8, 13, 14, 1, 5, 17, 16, 9, 15, 2, 10});
+    graph.addNodes({
+        "Seattle", "San Francisco", "Los Angeles",
+        "Riverside", "Phoenix", "Chicago", "Boston", "New York", "Atlanta",
+        "Miami", "Dallas", "Houston", "Detroit", "Philadelphia", "Washington"
+        }
+    );
 
-//    graph.addEdge(0, 3);
+    graph.addEdge("Seattle", "Chicago");
+    graph.addEdge("Seattle", "San Francisco");
+    graph.addEdge("San Francisco", "Riverside");
+    graph.addEdge("San Francisco", "Los Angeles");
+    graph.addEdge("Los Angeles", "Riverside");
+    graph.addEdge("Los Angeles", "Phoenix");
+    graph.addEdge("Riverside", "Phoenix");
+    graph.addEdge("Riverside", "Chicago");
+    graph.addEdge("Phoenix", "Dallas");
+    graph.addEdge("Phoenix", "Houston");
+    graph.addEdge("Dallas", "Chicago");
+    graph.addEdge("Dallas", "Atlanta");
+    graph.addEdge("Dallas", "Houston");
+    graph.addEdge("Houston", "Atlanta");
+    graph.addEdge("Houston", "Miami");
+    graph.addEdge("Atlanta", "Chicago");
+    graph.addEdge("Atlanta", "Washington");
+    graph.addEdge("Atlanta", "Miami");
+    graph.addEdge("Miami", "Washington");
+    graph.addEdge("Chicago", "Detroit");
+    graph.addEdge("Detroit", "Boston");
+    graph.addEdge("Detroit", "Washington");
+    graph.addEdge("Detroit", "New York");
+    graph.addEdge("Boston", "New York");
+    graph.addEdge("New York", "Philadelphia");
+    graph.addEdge("Philadelphia", "Washington");
 
-//    graph.addEdge(6, 7);
-//    graph.addEdge(6, 11);
-//    graph.addEdge(7, 11);
+    std::cout << toString(graph) << std::endl;
 
-//    graph.addEdge(0, 4);
-//    graph.addEdge(0, 8);
-//    graph.addEdge(0, 13);
-//    graph.addEdge(0, 14);
-//    graph.addEdge(4, 8);
-//    graph.addEdge(8, 14);
-//    graph.addEdge(13, 14);
+    DFSSolver<std::string> dfs{ graph };
 
-//    graph.addEdge(1, 5);
-//    graph.addEdge(5, 17);
-//    graph.addEdge(5, 16);
+    const std::string source{ "Boston" };
+    const std::string target{ "Miami" };
 
-//    graph.addEdge(3, 9);
-//    graph.addEdge(9, 15);
-//    graph.addEdge(2, 15);
-//    graph.addEdge(2, 9);
-//    graph.addEdge(10, 15);
+    const size_t sourceIndex{ graph.getIndexOfNode (source) };
+    const size_t targetIndex{ graph.getIndexOfNode(target) };
 
-//    //std::string dot = toDot<int>(graph, "Beispiel");
+    //if (std::vector<size_t> resultPath; dfs.findPathAny(sourceIndex, targetIndex, resultPath))
+    //{
+    //    std::cout << "Path exists from " << source << " to " << target << ":" << std::endl;
+    //    dfs.printPath(resultPath);
+    //}
+    //else {
+    //    std::cout << "No path exists between " << source << " and " << target << "." << std::endl;
+    //}
 
-//    //std::cout << dot << std::endl;
+    dfs.findPathAll(sourceIndex, targetIndex);
 
-//    std::cout << "Graph: " << toString(graph) << std::endl;
+    if (size_t count; (count = dfs.countFoundPaths()) != 0)
+    {
+        std::cout << "Found " << count << " solutions:" << std::endl;
+        // dfs.printPaths();
 
-//    //graph.addEdges({
+        // std::vector<size_t> 
+        auto path = dfs.getShortestPath();
 
-//    //    {6, 7},
-//    //    {6, 11},
-//    //    {7, 11},
-
-//    //    {0, 4},
-//    //    {0, 8},
-//    //    {0, 13},
-//    //    {0, 14},
-//    //    {4, 8},
-//    //    {8, 14},
-//    //    {13, 14},
-
-//    //    {1, 5},
-//    //    {5, 17},
-//    //    {5, 16},
-
-//    //    {3, 9},
-//    //    {9, 15},
-//    //    {2, 15},
-//    //    {2, 9},
-//    //    {10, 15}
-//    //    }
-//    //);
-
-
-//    DFSSolver dfs{ graph };
-
-//    dfs.computeComponents();
-
-//    size_t count{ dfs.getNumberOfComponents() };
-
-//    for (size_t index{}; index != count; ++index) {
-
-//        auto component = dfs.getComponent(index + 1);
-
-//        for (size_t last{}; size_t vertex : component) {
-//            std::cout << "[" << vertex << "]";
-//            if (last < component.size() - 1) {
-//                std::cout << ", ";
-//            }
-//            ++last;
-//        }
-//        std::cout << std::endl;
-//    }
-//}
+        std::cout << "Stopper" << std::endl;
+    }
+    else {
+        std::cout << "No path exists between " << source << " and " << target << "." << std::endl;
+    }
+}
 
 void test_dfs()
 {
-    test_dfs_01();
-    test_dfs_02();
+    //test_dfs_01();
+    //test_dfs_02();
+    test_dfs_03();
 }

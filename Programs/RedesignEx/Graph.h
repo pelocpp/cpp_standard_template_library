@@ -26,27 +26,6 @@
 
 namespace Graph_Theory_Redesign
 {
-    // hmmm, muss das mit der Vorbelegung sein ...
-    //template <typename NodeDescription>
-    //class IGraphRepresentation
-    //{
-    //public:
-    //    virtual bool isDirected() const = 0;
-    //    virtual bool isWeighted() const = 0;
-
-    //    virtual size_t countNodes() const = 0;
-    //    virtual size_t countEdges() const = 0;
-
-    //    virtual void seTNodeData(size_t index, const NodeDescription& description) = 0;
-    //    virtual void seTNodeDatas(const std::initializer_list<NodeDescription> list) = 0;
-    //    virtual std::optional<NodeDescription> geTNodeData(size_t index) = 0;
-
-    //    virtual std::string toString() const = 0;
-    //};
-
-    // -------------------------------------------------------------------------------------
-
-
     // TODO:
     // Hmmm, eigentlich müsste das man in der Klasse GraphNode verstecken ...
     // Obwohl es ein Rückgabeparameter ist
@@ -96,6 +75,12 @@ namespace Graph_Theory_Redesign
         // returns a reference to the stored value
         T& value() noexcept { return m_data; }
         const T& value() const noexcept { return m_data; }
+
+        // Returns the number of nodes in the adjacency list
+        size_t count() const noexcept
+        {
+            return m_adjacentNodes.size();
+        }
 
         // private:
         // 
@@ -271,13 +256,8 @@ namespace Graph_Theory_Redesign
             return succeeded;
         }
 
-        // Returns a reference to the node with given index.
+        // Returns a reference to the node with given index
         // No bounds checking is done.
-
-
-        // ACHTUNG: Da sollte eigentlich nur die CONST Version gehen.
-        // Es wird eine Referenz eines NODES zurückgeliefert !!!!!!!!!!!!!!!!!!!
-
         GraphNode<T, W>& operator[](size_t index)
         {
             return m_nodes[index];
@@ -288,13 +268,13 @@ namespace Graph_Theory_Redesign
             return m_nodes[index];
         }
 
-        // Returns the number of nodes in the graph.
+        // Returns the number of nodes in the graph
         size_t countNodes() const noexcept
         {
             return m_nodes.size();
         }
 
-        AdjacencyListType<W>& getAdjacentNodes(   const  T& node_value) // const
+        AdjacencyListType<W>& getAdjacentNodes(const T& node_value)
         {
             static AdjacencyListType<W> empty {};
 
@@ -313,21 +293,9 @@ namespace Graph_Theory_Redesign
             return const_cast<Graph<T, W>*>(this)->getAdjacentNodes(node_value);
         }
 
-
-
-
-        //private:
-        //    friend GraphNode<T>;
-
-        //    using nodes_container_type = std::vector<GraphNode<T>>;
-
-        //    nodes_container_type m_nodes;
-
-
-
-            // Helper method to return an iterator to the given node, or the end iterator
-            // if the given node is not in the graph.
-            // typename nodes_container_type::iterator findNode(const T& node_value)
+        // Helper method to return an iterator to the given node, or the end iterator
+        // if the given node is not in the graph.
+        // typename nodes_container_type::iterator findNode(const T& node_value)
         typename NodesContainerType<T, W>::iterator findNode(const T& node_value)
         {
             //return std::find_if(
@@ -361,7 +329,7 @@ namespace Graph_Theory_Redesign
         // set of node values.
 
 
-
+    private:
         // Given an iterator to a node, returns the index of that node in the nodes container.
         // size_t getIndexOfNode(const typename nodes_container_type::const_iterator& node) const noexcept
         size_t getIndexOfNode(const typename NodesContainerType<T, W>::const_iterator& node) const noexcept
@@ -371,7 +339,22 @@ namespace Graph_Theory_Redesign
             return static_cast<size_t>(index);
         }
 
+
+    public:
         // added: PeLo - NEU
+
+        // Hmmm .. für den DFS benötige Node 2 Index :)
+        // TODO: Vielleicht mache ich die Methode drüber doch private
+        size_t getIndexOfNode(const T& value) const
+        {
+            const auto position{ findNode(value) };
+
+            const auto index{ std::distance(std::cbegin(m_nodes), position) };
+
+            return static_cast<size_t>(index);
+        }
+
+
 
         // eher nicht benötigt - ich arbeite nicht Index Orientiert ...................
         //T getNodeData(size_t index) {
@@ -385,17 +368,17 @@ namespace Graph_Theory_Redesign
         size_t countEdges() const
         {
             size_t count = 0;
+
             std::for_each(
                 std::begin(m_nodes),
                 std::end(m_nodes),
                 [&](const auto& node) {
 
-                    const AdjacencyListType<W>& list = node.getAdjacentNodes();
-
-                    count += list.size();
+                    const auto countEdges = node.count();
+                    count += countEdges;
                 }
             );
-            // return (isDirected()) ? count : count / 2;
+
             return count;
         }
 
@@ -426,82 +409,23 @@ namespace Graph_Theory_Redesign
 
     // -------------------------------------------------------------------------------------
 
-    // Returns a given graph in DOT format.
-
-    // TODO: Der graph Parameter ist im Original als const markiert ....
-
-    //template <typename T, typename W = EmptyType>
-    //std::string toDot(Graph<T, W>& graph, std::string_view graph_name)
-    //{
-    //    std::stringstream ss;
-
-    //    ss << std::format("Graph {} {{", graph_name.data()) << std::endl;
-
-    //    for (size_t index{ }; index < graph.countNodes(); ++index)
-    //    {
-    //        GraphNode<T, W>& node{ graph[index] };  // da steht im Original ein const vorne ....
-
-    //        T& value = node.value();
-
-    //        // KORREKT
-    //        //  const auto adjacent_nodes{ graph.get_adjacent_nodes_values(node_value) };
-
-    //        // mit oder ohne Referenz !!!
-    //        const AdjacencyListType<W>& adjacent_nodes{ node.getAdjacentNodes() };
-
-    //        if (adjacent_nodes.empty())
-    //        {
-    //            ss << value << std::endl;  // TODO: Wiederholung
-    //        }
-    //        else
-    //        {
-    //            ss << value << ": ";   // TODO: Wiederholung
-
-    //            for (size_t columns{}; auto & [target, weight] : adjacent_nodes)
-    //            {
-    //                ss << index << " -> " << target;
-
-    //                if (weight.has_value()) {
-
-    //                    ss << "  { " << weight.value() << " }";
-    //                }
-
-    //                if (columns != adjacent_nodes.size() - 1) {
-    //                    ss << " | ";
-    //                }
-
-    //                ++columns;
-
-    //                // ss << std::format("{} -> {}", node_value, node) << std::endl;   // TODO: Vielleicht auf format umsteigen ...
-    //            }
-
-    //            ss << std::endl;
-    //        }
-    //    }
-    //    ss << "}" << std::endl;
-
-    //    return ss.str();
-    //}
-
-
     template <typename T, typename W>
     std::string toString(const Graph<T, W>& graph) {
 
-        std::string separator{ graph.isDirected() == Direction::Directed ? " -> " : " <=> " };
+        bool isDirected = graph.isDirected() == Direction::Directed;
+        bool isWeighted = graph.isWeighted() == Weight::Weighted;
+
+        std::string separator{ isDirected ? " -> " : " <=> " };
 
         std::ostringstream oss;
         oss << "Graph: " << std::endl;
         oss << "  Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl;
-        oss << "  " << (graph.isDirected() == Direction::Directed ? "Directed" : "Undirected");
-        oss << "  " << (graph.isWeighted() == Weight::Weighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
-
-        // Original:
-        // for (size_t source = 0; const std::vector<size_t>&list : graph.m_adjacencyList) {
+        oss << "  " << (isDirected ? "Directed" : "Undirected");
+        oss << "  " << (isWeighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
 
         for (size_t index{ 0 }; index < graph.countNodes(); ++index)
         {
-            // auto& node{ graph[index] };  // da steht im Original ein const vorne ....
-            const GraphNode<T, W>& node{ graph[index] };  // da steht im Original ein const vorne ....
+            const GraphNode<T, W>& node{ graph[index] };
 
             const T& fromValue = node.value();
 
@@ -516,40 +440,21 @@ namespace Graph_Theory_Redesign
             }
 
             const AdjacencyListType<W> list = graph.getAdjacentNodes(fromValue);
-
-            // const&
-            // OFFEN: Wie und wo wird das weight ausgegeben
-            for (size_t n = 0; const auto& [next, weight] : list) {
-
-                const T& toValue = graph[next].value();
-
+  
+            for (size_t n{}; const auto& [to, weight] : list)
+            {
+                const T& toValue = graph[to].value();
                 oss << fromValue << separator << toValue;
+
+                if (weight.has_value()) {
+                    oss << "  { " << weight.value() << " }";
+                }
 
                 if (n != list.size() - 1) {
                     oss << " | ";
                 }
+
                 ++n;
-            }
-
-            // WEITER: hier müssen die Knoten ... und nicht die Indices ausgegeben werden
-
-
-            oss << std::endl;
-            
-            for (size_t columns{}; auto& [target, weight] : list)
-            {
-                oss << index << " -> " << target;
-
-                if (weight.has_value()) {
-
-                    oss << "  { " << weight.value() << " }";
-                }
-
-                if (columns != list.size() - 1) {
-                    oss << " | ";
-                }
-
-                ++columns;
 
                 // ss << std::format("{} -> {}", node_value, node) << std::endl;   // TODO: Vielleicht auf format umsteigen ...
             }
@@ -562,8 +467,5 @@ namespace Graph_Theory_Redesign
 }
 
 // =====================================================================================
-
-// =====================================================================================
 // End-of-File
 // =====================================================================================
-

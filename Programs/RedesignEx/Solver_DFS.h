@@ -101,6 +101,31 @@ namespace Graph_Theory_DFS
             }
         }
 
+
+        // added: PeLo
+        auto getShortestPath() {
+
+            //std::vector<size_t>::iterator result = std::min_element(
+            //    m_paths.begin(),
+            //    m_paths.end(), 
+            //    [] (const auto& x1, const auto& x2) {
+            //    
+            //        return true;
+            //    }
+            //);
+
+            auto result = std::min_element(
+                m_paths.begin(),
+                m_paths.end(),
+                [](const auto& x1, const auto& x2) {
+
+                    return x1.size()  < x2.size();
+                }
+            );
+
+            return *result;
+        }
+
     private:
         void depthFirstSearch(size_t index) {
 
