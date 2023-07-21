@@ -101,29 +101,44 @@ namespace Graph_Theory_DFS
             }
         }
 
-
-        // added: PeLo
-        auto getShortestPath() {
-
-            //std::vector<size_t>::iterator result = std::min_element(
-            //    m_paths.begin(),
-            //    m_paths.end(), 
-            //    [] (const auto& x1, const auto& x2) {
-            //    
-            //        return true;
-            //    }
-            //);
+        std::vector<size_t> getShortestPath() {
 
             auto result = std::min_element(
                 m_paths.begin(),
                 m_paths.end(),
-                [](const auto& x1, const auto& x2) {
+                [](const auto& path1, const auto& path2) {
 
-                    return x1.size()  < x2.size();
+                    return path1.size()  < path2.size();
                 }
             );
 
             return *result;
+        }
+
+        std::vector<std::vector<size_t>> getShortestPaths() {
+
+            // calculate length of a shortest path
+            auto shortestPath = std::min_element(
+                m_paths.begin(),
+                m_paths.end(),
+                [](const auto& path1, const auto& path2) {
+
+                    return path1.size() < path2.size();
+                }
+            );
+
+            size_t length = (*shortestPath).size();
+
+            std::vector<std::vector<size_t>> result;
+
+            for (const auto& path : m_paths) {
+
+                if (path.size() == length) {
+                    result.push_back(path);
+                }
+            }
+
+            return result;
         }
 
     private:

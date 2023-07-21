@@ -19,6 +19,12 @@
 // https://probablydance.com/2014/01/16/alias-templates-with-partial-specialization-sfinae-and-everything/
 
 
+// Allgemein; Wir haben nun eine Mehtode format
+// 
+// 
+// ss << std::format("{} -> {}", node_value, node) << std::endl;   // TODO: Vielleicht auf format umsteigen ...
+// 
+
 // =====================================================================================
 
 // von der anderen Datei ....

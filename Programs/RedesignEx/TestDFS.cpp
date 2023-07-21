@@ -164,29 +164,29 @@ void test_dfs_03()
     const std::string source{ "Boston" };
     const std::string target{ "Miami" };
 
+    //const std::string source{ "Los Angeles" };
+    //const std::string target{ "Washington" };
+
     const size_t sourceIndex{ graph.getIndexOfNode (source) };
     const size_t targetIndex{ graph.getIndexOfNode(target) };
-
-    //if (std::vector<size_t> resultPath; dfs.findPathAny(sourceIndex, targetIndex, resultPath))
-    //{
-    //    std::cout << "Path exists from " << source << " to " << target << ":" << std::endl;
-    //    dfs.printPath(resultPath);
-    //}
-    //else {
-    //    std::cout << "No path exists between " << source << " and " << target << "." << std::endl;
-    //}
 
     dfs.findPathAll(sourceIndex, targetIndex);
 
     if (size_t count; (count = dfs.countFoundPaths()) != 0)
     {
         std::cout << "Found " << count << " solutions:" << std::endl;
-        // dfs.printPaths();
 
-        // std::vector<size_t> 
-        auto path = dfs.getShortestPath();
+        std::vector<size_t> shortestPath = dfs.getShortestPath();
 
-        std::cout << "Stopper" << std::endl;
+        std::cout << "Path with the fewest edges: " << std::endl;
+        pathToString(graph, shortestPath);
+        std::cout << pathToString(graph, shortestPath) << std::endl;
+
+        std::cout << "All paths with fewest edges: " << std::endl;
+        std::vector<std::vector<size_t>> shortestPaths = dfs.getShortestPaths();
+        for (const auto& path : shortestPaths) {
+            std::cout << pathToString(graph, path) << std::endl;
+        }
     }
     else {
         std::cout << "No path exists between " << source << " and " << target << "." << std::endl;

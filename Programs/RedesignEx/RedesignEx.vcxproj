@@ -129,7 +129,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
-    <ClCompile Include="Redesign01.cpp" />
     <ClCompile Include="TestDFS.cpp" />
     <ClCompile Include="TestGraph.cpp" />
   </ItemGroup>

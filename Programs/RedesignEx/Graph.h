@@ -354,8 +354,6 @@ namespace Graph_Theory_Redesign
             return static_cast<size_t>(index);
         }
 
-
-
         // eher nicht benötigt - ich arbeite nicht Index Orientiert ...................
         //T getNodeData(size_t index) {
         //    return m_nodes[index].value();
@@ -419,11 +417,11 @@ namespace Graph_Theory_Redesign
 
         std::ostringstream oss;
         oss << "Graph: " << std::endl;
-        oss << "  Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl;
         oss << "  " << (isDirected ? "Directed" : "Undirected");
-        oss << "  " << (isWeighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
+        oss << "  " << (isWeighted ? "Weighted" : "Unweighted") << std::endl;
+        oss << "  Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl << std::endl;
 
-        for (size_t index{ 0 }; index < graph.countNodes(); ++index)
+        for (size_t index{}; index != graph.countNodes(); ++index)
         {
             const GraphNode<T, W>& node{ graph[index] };
 
@@ -433,33 +431,57 @@ namespace Graph_Theory_Redesign
 
             if constexpr (!std::is_same<NodeType, std::string>::value) {
                 std::string s{ std::to_string(fromValue) };
-                oss << "[" << /* std::setw(12) << std::left << */ s << "] ";
+                oss << "[" <<  std::setw(14) << std::right <<  s << "] ";
             }
             else {
-                oss << "[" << /* std::setw(12) << std::left << */ fromValue << "] ";
+                oss << "[" <<  std::setw(14) << std::right <<  fromValue << "]";
             }
 
             const AdjacencyListType<W> list = graph.getAdjacentNodes(fromValue);
-  
-            for (size_t n{}; const auto& [to, weight] : list)
-            {
-                const T& toValue = graph[to].value();
-                oss << fromValue << separator << toValue;
 
-                if (weight.has_value()) {
-                    oss << "  { " << weight.value() << " }";
+            if (list.size() != 0) {
+
+                oss << " " << separator << " [";
+
+                for (size_t n{}; const auto & [to, weight] : list)
+                {
+                    const T& toValue = graph[to].value();
+                    oss << toValue;
+
+                    if (weight.has_value()) {
+                        oss << " {" << weight.value() << "}";
+                    }
+
+                    if (n != list.size() - 1) {
+                        oss << ", ";
+                    }
+
+                    ++n;
                 }
 
-                if (n != list.size() - 1) {
-                    oss << " | ";
-                }
-
-                ++n;
-
-                // ss << std::format("{} -> {}", node_value, node) << std::endl;   // TODO: Vielleicht auf format umsteigen ...
+                oss << "]";
             }
 
             oss << std::endl;
+        }
+
+        return oss.str();
+    }
+
+    template <typename T, typename W>
+    std::string pathToString(const Graph<T, W>& graph, const std::vector<size_t>& path) {
+
+        std::ostringstream oss;
+
+        for (int n{}; size_t const vertex : path) {
+
+            const std::string& city = graph[vertex].value();
+
+            if (n != 0) {
+                oss << " -> ";
+            }
+            oss << city;
+            ++n;
         }
 
         return oss.str();
