@@ -1529,13 +1529,13 @@ int main()
 
     // BFS
     // test_10();
-    // test_11();
+    test_11();
     // test_12();
     // test_13();
 
     // DFS
     //test_20();
-    test_21();
+    //test_21();
    // test_22();
 
     //test_89();

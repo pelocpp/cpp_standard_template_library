@@ -127,7 +127,26 @@ namespace Graph_Theory_BFS
                 size_t vertex = path.back();
                 // TODO: Hmmm, da muss man jetzt dieselbe std::optional Umwandlung machen wir kurz zuvor... das ist lästing
                 // Da könnte man eine Methode konzipieren, die ein std::pair zurückliefert ... und structured binding verwendet....
-                std::cout << "[" << vertex << "].";
+                
+                // std::cout << "[" << vertex << "].";
+
+                const GraphNode<T>& node{ m_graph[vertex] };
+
+                const T& description = node.value();
+
+                // std::optional<T> description{ m_graph.getNodeDescription(vertex) };  
+
+                // if (description.has_value()) {
+
+                using TNodeType = std::remove_cv<T>::type;
+
+                if constexpr (!std::is_same<TNodeType, std::string>::value) {
+                    std::string s{ std::to_string(description) };
+                    std::cout << "[" << s << "]";
+                }
+                else {
+                    std::cout << "[" << description << "]";
+                }
             }
         }
     };

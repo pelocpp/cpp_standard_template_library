@@ -77,6 +77,8 @@ namespace Graph_Theory_DFS
             return findPathAnyHelper(source, target, path);
         }
 
+        // TODO: Da kommen Indices daher ... auf T umstellen ...
+
         void findPathAll(size_t source, size_t target) {
 
             // setup 'm_visited' vector
