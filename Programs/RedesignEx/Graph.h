@@ -1,5 +1,5 @@
 // =====================================================================================
-// Graph Theory Redesign // Summer 2023
+// Graph Theory Redesign // Summer 2023 // Graph.h
 // =====================================================================================
 
 #pragma once
@@ -22,114 +22,30 @@
 #include <stdexcept>
 #include <cstddef>
 
+#include "GraphNode.h"
+
 // =====================================================================================
 
-namespace Graph_Theory_Redesign
+namespace Graph_Theory
 {
-    // TODO:
-    // Hmmm, eigentlich müsste das man in der Klasse GraphNode verstecken ...
-    // Obwohl es ein Rückgabeparameter ist
-    // Aber:
-    // Mit den Iterator-Datentypen wird es in C++ genau so gemacht !!!
-
-    // Fazit : Sollte in die Klasse GraphNode verlagert werden
-
-    using EmptyType = std::nullptr_t;  //   hmm, void geht nicht ...
-
-    template<typename Weight>
-    using Edge = std::pair<size_t, std::optional<Weight>>;
-
-    // needed as key compare function for std::set
-    template<typename Weight = EmptyType>
-    auto cmp = [](Edge<Weight> edge1, Edge<Weight> edge2) {
-        
-        auto [key1, weight1] = edge1;
-        auto [key2, weight2] = edge2;
-
-        return key1 < key2;
-    };
-
-    template<typename Weight = EmptyType>
-    using AdjacencyListType = std::set<Edge<Weight>, decltype(cmp<Weight>)>;
-
-    // -------------------------------------------------------------------------------------
-
-    template<typename T, typename W = EmptyType>
-    class GraphNode
-    {
-    public:
-        // added: PeLo -  wird derzeit noch nicht benötigt
-        using GraphNodeValueType = T;
-        using GraphNodeWeightType = W;
-
-    private:
-        T m_data;
-        AdjacencyListType<W> m_adjacentNodes;
-
-    public:
-        // constructing a graph_node for a given value
-        GraphNode(const T& data) : m_data{ data } { }
-
-        GraphNode(T&& data) : m_data{ std::move(data) } { }
-
-        // returns a reference to the stored value
-        T& value() noexcept { return m_data; }
-        const T& value() const noexcept { return m_data; }
-
-        // Returns the number of nodes in the adjacency list
-        size_t count() const noexcept
-        {
-            return m_adjacentNodes.size();
-        }
-
-        // private:
-        // 
-        // TODO: Das sollte möglicherweise nur die const Version ausreichen
-        // 
-             
-        // returns a reference to the adjacency list
-        const AdjacencyListType<W>& getAdjacentNodes() const
-        {
-            return m_adjacentNodes;
-        }
-
-        AdjacencyListType<W>& getAdjacentNodes()
-        {
-            return m_adjacentNodes;
-        }
-
-        // needed for constructing stl set container with 'GraphNode' objects
-        bool operator< (const GraphNode& other) {
-
-            return m_data < other.m_data;
-        }
-    };
-
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-    // -------------------------------------------------------------------------------------
-
     enum class Direction { Directed, Undirected };
     enum class Weight { Weighted, Unweighted };
 
     template<typename T, typename W>
     using NodesContainerType = std::vector<GraphNode<T, W>>;
 
-    // -------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
     template<typename T, typename W = EmptyType>
     class Graph
     {
-        // added: PeLo -  wird derzeit noch nicht benötigt
-        using GraphNodeValueType = T;
-        using GraphNodeWeightType = W;
-
     private:
         NodesContainerType<T, W> m_nodes;
         Direction m_isDirected;
         Weight m_isWeighted;
 
     public:
+        // c'tors
         Graph() : Graph{ Direction::Directed, Weight::Unweighted } {}
 
         Graph(Direction isDirected, Weight isWeighted = Weight::Unweighted) {
@@ -137,30 +53,50 @@ namespace Graph_Theory_Redesign
             m_isWeighted = isWeighted;
         }
 
-    private:
-        bool addNode(const T& data) {
-
-            auto iter{ findNode(data) };
-
-            if (iter != std::end(m_nodes)) {
-                // value is already in the graph, return false
-                return false;
-            }
-
-            T copy{ data };
-            m_nodes.emplace_back(std::move(copy));
-            return true;
-        }
-
-        void sort() {
-
-            std::sort(
-                std::begin(m_nodes),
-                std::end(m_nodes)
-            );
-        }
-
     public:
+        // getter / setter
+        Direction isDirected() const noexcept {
+            return m_isDirected;
+        }
+
+        Weight isWeighted() const noexcept {
+            return m_isWeighted; 
+        }
+
+        size_t countNodes() const noexcept
+        {
+            return m_nodes.size();
+        }
+
+        size_t countEdges() const
+        {
+            size_t count{};
+
+            std::for_each(
+                std::begin(m_nodes),
+                std::end(m_nodes),
+                [&](const auto& node) {
+
+                    const auto countEdges = node.count();
+                    count += countEdges;
+                }
+            );
+
+            return count;
+        }
+
+        // operators
+        GraphNode<T, W>& operator[](size_t index)
+        {
+            return m_nodes[index];  // no bounds checking
+        }
+
+        const GraphNode<T, W>& operator[](size_t index) const
+        {
+            return m_nodes[index];
+        }
+
+        // public interface
         void addNodes(const std::initializer_list<T> list) {
 
             std::for_each(
@@ -174,12 +110,10 @@ namespace Graph_Theory_Redesign
             sort();
         }
 
-
         // TODO: Allgemein: Es müssen / sollten 2 Varianten an Methoden vorhanden sein:
         // addEdge mit Indices
         // addEdge mit Werten von Knoten
         // Oder auch nicht ...
-
 
         // Returns true if the edge was successfully created, false otherwise.
         bool addEdge(const T& fromNode, const T& toNode)
@@ -252,24 +186,6 @@ namespace Graph_Theory_Redesign
             auto [pos, succeeded] = list.insert(edge);
 
             return succeeded;
-        }
-
-        // Returns a reference to the node with given index
-        // No bounds checking is done.
-        GraphNode<T, W>& operator[](size_t index)
-        {
-            return m_nodes[index];
-        }
-
-        const GraphNode<T, W>& operator[](size_t index) const
-        {
-            return m_nodes[index];
-        }
-
-        // Returns the number of nodes in the graph
-        size_t countNodes() const noexcept
-        {
-            return m_nodes.size();
         }
 
         AdjacencyListType<W>& getAdjacentNodes(const T& node_value)
@@ -351,27 +267,6 @@ namespace Graph_Theory_Redesign
         //    return m_nodes[index].value();
         //}
 
-        Direction isDirected() const { return m_isDirected; }
-
-        Weight isWeighted() const { return m_isWeighted; }
-
-        size_t countEdges() const
-        {
-            size_t count = 0;
-
-            std::for_each(
-                std::begin(m_nodes),
-                std::end(m_nodes),
-                [&](const auto& node) {
-
-                    const auto countEdges = node.count();
-                    count += countEdges;
-                }
-            );
-
-            return count;
-        }
-
         std::string toString() {
 
             bool isDirected = this->isDirected() == Direction::Directed;
@@ -391,9 +286,9 @@ namespace Graph_Theory_Redesign
 
                 const T& fromValue = node.value();
 
-                using NodeType = std::remove_cv<T>::type;
+                using TNodeType = std::remove_cv<T>::type;
 
-                if constexpr (!std::is_same<NodeType, std::string>::value) {
+                if constexpr (!std::is_same<TNodeType, std::string>::value) {
                     std::string s{ std::to_string(fromValue) };
                     oss << "[" << std::setw(14) << std::right << s << "] ";
                 }
@@ -431,31 +326,48 @@ namespace Graph_Theory_Redesign
 
             return oss.str();
         }
-    };
 
-    // -------------------------------------------------------------------------------------
+        std::string toString(const std::vector<size_t>& path) {
 
-    template <typename T, typename W>
-    std::string pathToString(const Graph<T, W>& graph, const std::vector<size_t>& path) {
+            std::ostringstream oss;
 
-        std::ostringstream oss;
+            for (int n{}; const size_t vertex : path) {
 
-        for (int n{};  const size_t vertex : path) {
+                const std::string& city {m_nodes[vertex].value()};
 
-            const std::string& city {graph[vertex].value()};
-
-            if (n != 0) {
-                oss << " -> ";
+                if (n != 0) {
+                    oss << " -> ";
+                }
+                oss << city;
+                ++n;
             }
-            oss << city;
-            ++n;
+
+            return oss.str();
         }
 
-        return oss.str();
-    }
+    private:
+        bool addNode(const T& data) {
 
-    // -------------------------------------------------------------------------------------
+            auto iter{ findNode(data) };
 
+            if (iter != std::end(m_nodes)) {
+                // value is already in the graph, return false
+                return false;
+            }
+
+            T copy{ data };
+            m_nodes.emplace_back(std::move(copy));
+            return true;
+        }
+
+        void sort() {
+
+            std::sort(
+                std::begin(m_nodes),
+                std::end(m_nodes)
+            );
+        }
+    };
 }
 
 // =====================================================================================

@@ -1,7 +1,11 @@
+// =====================================================================================
+// Graph Theory Redesign // TestDFS.cpp
+// =====================================================================================
+
 #include "Graph.h"
 #include "Solver_DFS.h"
 
-using namespace Graph_Theory_Redesign;
+using namespace Graph_Theory;
 using namespace Graph_Theory_DFS;
 
 void test_dfs_01()
@@ -70,7 +74,7 @@ void test_dfs_02()
     // Funktioniert für gerichtete und ungerichtete Graphen !!!
     // Aber die Ergebnisse sind unterschiedlich !!!!!!!!!!!!!!!!!!
 
-    Graph<int> graph {  Direction::Undirected };
+    Graph<int> graph { Direction::Undirected };
 
     graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -179,13 +183,12 @@ void test_dfs_03()
         std::vector<size_t> shortestPath = dfs.getShortestPath();
 
         std::cout << "Path with the fewest edges: " << std::endl;
-        pathToString(graph, shortestPath);
-        std::cout << pathToString(graph, shortestPath) << std::endl;
+        std::cout << graph.toString(shortestPath) << std::endl;
 
         std::cout << "All paths with fewest edges: " << std::endl;
         std::vector<std::vector<size_t>> shortestPaths = dfs.getShortestPaths();
         for (const auto& path : shortestPaths) {
-            std::cout << pathToString(graph, path) << std::endl;
+            std::cout << graph.toString(path) << std::endl;
         }
     }
     else {
@@ -199,3 +202,7 @@ void test_dfs()
     //test_dfs_02();
     test_dfs_03();
 }
+
+// =====================================================================================
+// End-of-File
+// =====================================================================================

@@ -1,12 +1,17 @@
+// =====================================================================================
+// Graph Theory Redesign // Summer 2023 // Solver_DFS.h
+// =====================================================================================
+
 #pragma once
 
 #include "Graph.h"
 
-using namespace Graph_Theory_Redesign;
+using namespace Graph_Theory;
 
 namespace Graph_Theory_DFS
 {
-    using Path = std::vector<size_t>;
+    // TODO: Hmmm, wird derzeit nicht benutzt ....
+   // using Path = std::vector<size_t>;
 
     template <typename T>
     class DFSSolver
@@ -230,3 +235,7 @@ namespace Graph_Theory_DFS
         }
     };
 }
+
+// =====================================================================================
+// End-of-File
+// =====================================================================================

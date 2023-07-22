@@ -1,6 +1,10 @@
+// =====================================================================================
+// Graph Theory Redesign
+// =====================================================================================
+
 #include "Graph.h"
 
-using namespace Graph_Theory_Redesign;
+using namespace Graph_Theory;
 
 // Testing only graphs
 // a) Directed,    Unweighted
@@ -12,7 +16,7 @@ void test_graphs_01()
 {
     // a) Directed, Unweighted
 
-    Graph<int> graph;
+    Graph<int> graph{};
 
     graph.addNodes({ 22, 11, 33, 44 });
 
@@ -30,7 +34,7 @@ void test_graphs_01_a()
 {
     // a) Directed, Unweighted
 
-    Graph<std::string> graph;
+    Graph<std::string> graph{};
 
     graph.addNodes({ "A", "B", "C", "D" });
 
@@ -224,3 +228,7 @@ void test_graphs()
     //test_graphs_10();
     //test_graphs_11();
 }
+
+// =====================================================================================
+// End-of-File
+// =====================================================================================

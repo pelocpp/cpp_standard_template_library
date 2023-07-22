@@ -129,11 +129,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="TestBFS.cpp" />
     <ClCompile Include="TestDFS.cpp" />
     <ClCompile Include="TestGraph.cpp" />
+    <ClCompile Include="TestGraphNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="GraphNode.h" />
+    <ClInclude Include="Solver_BFS.h" />
     <ClInclude Include="Solver_DFS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
