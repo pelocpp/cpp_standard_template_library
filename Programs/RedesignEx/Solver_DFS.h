@@ -6,6 +6,8 @@ using namespace Graph_Theory_Redesign;
 
 namespace Graph_Theory_DFS
 {
+    using Path = std::vector<size_t>;
+
     template <typename T>
     class DFSSolver
     {
@@ -45,9 +47,9 @@ namespace Graph_Theory_DFS
 
             std::vector<size_t> result;
 
-            for (size_t index{}; size_t vertex : m_components) {
+            for (size_t index{}; size_t node : m_components) {
 
-                if (vertex == mark) {
+                if (node == mark) {
                     result.push_back(index);
                 }
 
@@ -127,10 +129,9 @@ namespace Graph_Theory_DFS
                 }
             );
 
-            size_t length = (*shortestPath).size();
+            size_t length{ (*shortestPath).size() };
 
             std::vector<std::vector<size_t>> result;
-
             for (const auto& path : m_paths) {
 
                 if (path.size() == length) {
@@ -148,7 +149,6 @@ namespace Graph_Theory_DFS
             m_components.at(index) = m_count;    // set mark
 
             // do for all adjacent vertices of the current vertex
-            // std::vector<size_t> neighbours = m_graph.getNeighbouringNodes(node);
             const AdjacencyListType<>& neighbours = m_graph[index].getAdjacentNodes();
 
             for (const auto& [next, weight] : neighbours) {

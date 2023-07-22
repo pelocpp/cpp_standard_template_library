@@ -178,7 +178,7 @@ Die Lösung in der Berechnung des kürzesten Pfads zwischen den beiden Knoten 0 un
 No Solution found !
 ```
 
-Der zweite Pfad ist berechnenbar:
+Der zweite Pfad ist berechenbar:
 
 ```
 [6] => [10] => [9] => [8] => [15] => [14] => [13] => [18].

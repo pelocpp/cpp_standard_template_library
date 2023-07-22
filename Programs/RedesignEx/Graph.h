@@ -88,8 +88,6 @@ namespace Graph_Theory_Redesign
         // 
              
         // returns a reference to the adjacency list
-
-
         const AdjacencyListType<W>& getAdjacentNodes() const
         {
             return m_adjacentNodes;
@@ -330,8 +328,7 @@ namespace Graph_Theory_Redesign
 
 
     private:
-        // Given an iterator to a node, returns the index of that node in the nodes container.
-        // size_t getIndexOfNode(const typename nodes_container_type::const_iterator& node) const noexcept
+        // Given an iterator to a node, returns the index of that node in the nodes container
         size_t getIndexOfNode(const typename NodesContainerType<T, W>::const_iterator& node) const noexcept
         {
             const auto index{ std::distance(std::cbegin(m_nodes), node) };
@@ -339,12 +336,7 @@ namespace Graph_Theory_Redesign
             return static_cast<size_t>(index);
         }
 
-
     public:
-        // added: PeLo - NEU
-
-        // Hmmm .. für den DFS benötige Node 2 Index :)
-        // TODO: Vielleicht mache ich die Methode drüber doch private
         size_t getIndexOfNode(const T& value) const
         {
             const auto position{ findNode(value) };
@@ -380,102 +372,77 @@ namespace Graph_Theory_Redesign
             return count;
         }
 
-        //typename GraphNode<T>::adjacency_list_type& getAdjacentNodesIndices(size_t index)
-        //{
-        //    return m_nodes[index].getAdjacentNodesIndices();
-        //}
+        std::string toString() {
 
-        //const typename GraphNode<T>::adjacency_list_type& getAdjacentNodesIndices(size_t index) const
-        //{
-        //    return m_nodes[index].getAdjacentNodesIndices();
-        //}
+            bool isDirected = this->isDirected() == Direction::Directed;
+            bool isWeighted = this->isWeighted() == Weight::Weighted;
 
-        // TODO: Diese Methoden liefern ALLES zurück : Index und Gewicht (std::optional)
-        // TODO: Wird da eine zweite MEthode benötigt, die nur die Indices zurück liefert ?????
+            std::string separator{ isDirected ? " -> " : " <=> " };
 
-        //AdjacencyListType<W>& getAdjacentNodesIndices(size_t index)
-        //{
-        //    return m_nodes[index].getAdjacentNodesIndices();
-        //}
+            std::ostringstream oss;
+            oss << "Graph: " << std::endl;
+            oss << "  " << (isDirected ? "Directed" : "Undirected");
+            oss << "  " << (isWeighted ? "Weighted" : "Unweighted") << std::endl;
+            oss << "  Nodes: " << countNodes() << ", Edges: " << countEdges() << std::endl << std::endl;
 
-        //AdjacencyListType<W>& getAdjacentNodesIndices(size_t index) const
-        //{
-        //    return m_nodes[index].getAdjacentNodesIndices();
-        //}
+            for (size_t index{}; index != countNodes(); ++index)
+            {
+                const GraphNode<T, W>& node{ m_nodes[index] };
 
+                const T& fromValue = node.value();
+
+                using NodeType = std::remove_cv<T>::type;
+
+                if constexpr (!std::is_same<NodeType, std::string>::value) {
+                    std::string s{ std::to_string(fromValue) };
+                    oss << "[" << std::setw(14) << std::right << s << "] ";
+                }
+                else {
+                    oss << "[" << std::setw(14) << std::right << fromValue << "]";
+                }
+
+                const AdjacencyListType<W> list = getAdjacentNodes(fromValue);
+
+                if (list.size() != 0) {
+
+                    oss << " " << separator << " [";
+
+                    for (size_t n{}; const auto & [to, weight] : list)
+                    {
+                        const T& toValue = m_nodes[to].value();
+                        oss << toValue;
+
+                        if (weight.has_value()) {
+                            oss << " {" << weight.value() << "}";
+                        }
+
+                        if (n != list.size() - 1) {
+                            oss << ", ";
+                        }
+
+                        ++n;
+                    }
+
+                    oss << "]";
+                }
+
+                oss << std::endl;
+            }
+
+            return oss.str();
+        }
     };
 
     // -------------------------------------------------------------------------------------
-
-    template <typename T, typename W>
-    std::string toString(const Graph<T, W>& graph) {
-
-        bool isDirected = graph.isDirected() == Direction::Directed;
-        bool isWeighted = graph.isWeighted() == Weight::Weighted;
-
-        std::string separator{ isDirected ? " -> " : " <=> " };
-
-        std::ostringstream oss;
-        oss << "Graph: " << std::endl;
-        oss << "  " << (isDirected ? "Directed" : "Undirected");
-        oss << "  " << (isWeighted ? "Weighted" : "Unweighted") << std::endl;
-        oss << "  Nodes: " << graph.countNodes() << ", Edges: " << graph.countEdges() << std::endl << std::endl;
-
-        for (size_t index{}; index != graph.countNodes(); ++index)
-        {
-            const GraphNode<T, W>& node{ graph[index] };
-
-            const T& fromValue = node.value();
-
-            using NodeType = std::remove_cv<T>::type;
-
-            if constexpr (!std::is_same<NodeType, std::string>::value) {
-                std::string s{ std::to_string(fromValue) };
-                oss << "[" <<  std::setw(14) << std::right <<  s << "] ";
-            }
-            else {
-                oss << "[" <<  std::setw(14) << std::right <<  fromValue << "]";
-            }
-
-            const AdjacencyListType<W> list = graph.getAdjacentNodes(fromValue);
-
-            if (list.size() != 0) {
-
-                oss << " " << separator << " [";
-
-                for (size_t n{}; const auto & [to, weight] : list)
-                {
-                    const T& toValue = graph[to].value();
-                    oss << toValue;
-
-                    if (weight.has_value()) {
-                        oss << " {" << weight.value() << "}";
-                    }
-
-                    if (n != list.size() - 1) {
-                        oss << ", ";
-                    }
-
-                    ++n;
-                }
-
-                oss << "]";
-            }
-
-            oss << std::endl;
-        }
-
-        return oss.str();
-    }
 
     template <typename T, typename W>
     std::string pathToString(const Graph<T, W>& graph, const std::vector<size_t>& path) {
 
         std::ostringstream oss;
 
-        for (int n{}; size_t const vertex : path) {
+        for (int n{};  const size_t vertex : path) {
 
-            const std::string& city = graph[vertex].value();
+            const std::string& city {graph[vertex].value()};
 
             if (n != 0) {
                 oss << " -> ";
@@ -486,6 +453,9 @@ namespace Graph_Theory_Redesign
 
         return oss.str();
     }
+
+    // -------------------------------------------------------------------------------------
+
 }
 
 // =====================================================================================

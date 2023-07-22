@@ -23,7 +23,7 @@ void test_graphs_01()
     graph.addEdge(33, 44);
     graph.addEdge(44, 55);
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 void test_graphs_01_a()
@@ -39,7 +39,7 @@ void test_graphs_01_a()
     graph.addEdge(std::string {"C"}, std::string {"C"});
     graph.addEdge(std::string {"C"}, std::string {"A"});
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 // ------------------------------------------------------------------------
@@ -62,7 +62,7 @@ void test_graphs_02()
     graph.addEdge(3, 5, 2  );
     graph.addEdge(4, 5, 1  );
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 void test_graphs_02_a()
@@ -78,7 +78,7 @@ void test_graphs_02_a()
     graph.addEdge(std::string {"C"}, std::string {"C"}, 10);
     graph.addEdge(std::string {"C"}, std::string {"A"}, 50);
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 // ------------------------------------------------------------------------
@@ -96,7 +96,7 @@ void test_graphs_03()
     graph.addEdge(2, 3);
     graph.addEdge(3, 0);
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 void test_graphs_03_a()
@@ -112,7 +112,7 @@ void test_graphs_03_a()
     graph.addEdge(std::string {"C"}, std::string {"C"});
     graph.addEdge(std::string {"C"}, std::string {"A"});
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 
@@ -136,7 +136,7 @@ void test_graphs_04()
     graph.addEdge(3, 5, 2);
     graph.addEdge(4, 5, 1);
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 void test_graphs_04_a()
@@ -153,7 +153,7 @@ void test_graphs_04_a()
     graph.addEdge("C", "D", 6000);
     graph.addEdge("D", "A", 7000);
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 
@@ -182,7 +182,7 @@ void test_graphs_10()
     graph.addEdge(5, 6);
     graph.addEdge(6, 7);
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 void test_graphs_11()
@@ -207,7 +207,7 @@ void test_graphs_11()
     graph.addEdge(5, 6);
     graph.addEdge(6, 7);
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 }
 
 void test_graphs()

@@ -30,7 +30,7 @@ void test_dfs_01()
     graph.addEdge(5, 6);
     graph.addEdge(6, 7);
 
-     std::cout << "Graph " << toString(graph) << std::endl;
+     std::cout << "Graph " << graph.toString() << std::endl;
 
     DFSSolver dfs{ graph };
 
@@ -86,7 +86,7 @@ void test_dfs_02()
     graph.addEdge(5, 6);
     graph.addEdge(6, 7);
 
-    std::cout << "Graph " << toString(graph) << std::endl;
+    std::cout << "Graph " << graph.toString() << std::endl;
 
     DFSSolver dfs{ graph };
 
@@ -157,15 +157,15 @@ void test_dfs_03()
     graph.addEdge("New York", "Philadelphia");
     graph.addEdge("Philadelphia", "Washington");
 
-    std::cout << toString(graph) << std::endl;
+    std::cout << graph.toString() << std::endl;
 
     DFSSolver<std::string> dfs{ graph };
 
-    const std::string source{ "Boston" };
-    const std::string target{ "Miami" };
+    //const std::string source{ "Boston" };
+    //const std::string target{ "Miami" };
 
-    //const std::string source{ "Los Angeles" };
-    //const std::string target{ "Washington" };
+    const std::string source{ "Los Angeles" };
+    const std::string target{ "Washington" };
 
     const size_t sourceIndex{ graph.getIndexOfNode (source) };
     const size_t targetIndex{ graph.getIndexOfNode(target) };
