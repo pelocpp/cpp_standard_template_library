@@ -18,7 +18,6 @@ namespace Graph_Theory_DFS
 
         std::vector<bool> m_visited;
         std::deque<Path> m_paths;
-
         Path m_components;
         size_t m_count;
 
@@ -61,7 +60,7 @@ namespace Graph_Theory_DFS
             return result;
         }
 
-        size_t countFoundPaths() { return m_paths.size(); }
+        size_t countFoundPaths() const { return m_paths.size(); }
 
         // function to perform DFS traversal in a directed graph to find
         // the complete path between source and destination vertices
@@ -89,7 +88,7 @@ namespace Graph_Theory_DFS
             findPathAllHelper(source, target, currentPath);
         }
 
-        void printPath(const Path& path) {
+        void printPath(const Path& path) const {
 
             std::for_each(
                 std::begin(path),
@@ -101,13 +100,13 @@ namespace Graph_Theory_DFS
             std::cout << last << std::endl;
         }
 
-        void printPaths() {
+        void printPaths() const {
             for (const auto& path : m_paths) {
                 printPath(path);
             }
         }
 
-        Path getShortestPath() {
+        Path getShortestPath() const {
 
             auto result = std::min_element(
                 m_paths.begin(),
@@ -121,7 +120,7 @@ namespace Graph_Theory_DFS
             return *result;
         }
 
-        std::vector<Path> getShortestPaths() {
+        std::vector<Path> getShortestPaths() const {
 
             // calculate length of a shortest path
             auto shortestPath = std::min_element(

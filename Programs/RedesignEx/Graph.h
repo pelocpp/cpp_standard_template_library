@@ -267,7 +267,7 @@ namespace Graph_Theory
         //    return m_nodes[index].value();
         //}
 
-        std::string toString(int width = 0) {
+        std::string toString(int width = 0) const {
 
             bool isDirected = this->isDirected() == Direction::Directed;
             bool isWeighted = this->isWeighted() == Weight::Weighted;
@@ -317,7 +317,7 @@ namespace Graph_Theory
             return oss.str();
         }
 
-        std::string toString(const Path& path) {
+        std::string toString(const Path& path) const {
 
             std::ostringstream oss;
 

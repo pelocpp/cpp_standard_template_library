@@ -56,7 +56,7 @@ namespace Graph_Theory_BFS
             return previous;
         }
 
-        Path reconstructPath(size_t source, size_t target, std::vector<std::optional<size_t>> prev) {
+        Path reconstructPath(size_t source, size_t target, std::vector<std::optional<size_t>> prev) const {
 
             Path path;
             bool done{ false };
