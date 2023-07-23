@@ -29,26 +29,13 @@ void test_graph_nodes_01()
     list.insert(edge2);
     list.insert(edge3);
 
-
     std::cout << "Stopper" << std::endl;
-
 }
 
-
-//using EmptyType = std::nullptr_t;  //   hmm, void geht nicht ...
-//
-//template<typename Weight>
-//using Edge = std::pair<size_t, std::optional<Weight>>;
-//
-
-
-
-//AdjacencyListType<W>& fromList = from->getAdjacentNodes();
-//
-//Edge<W> edge{toIndex, std::nullopt};
-//
-//auto [pos, succeeded] = fromList.insert(edge);
-//
+void test_graph_nodes()
+{
+    test_graph_nodes_01();
+}
 
 // =====================================================================================
 // End-of-File

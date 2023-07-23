@@ -225,8 +225,8 @@ void test_graphs()
     test_graphs_04();
     test_graphs_04_a();
 
-    //test_graphs_10();
-    //test_graphs_11();
+    test_graphs_10();
+    test_graphs_11();
 }
 
 // =====================================================================================

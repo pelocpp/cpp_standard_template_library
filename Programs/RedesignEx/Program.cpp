@@ -5,8 +5,6 @@
 
 // =====================================================================================
 
-        // TODO: Klären, ob ein Konstruktor mit der Knotenanzahl Sinn ergibt
-        //  Graph<std::string> graph{ 4 };
 
 // TODO:
 // [[ nodiscard ]]
@@ -78,16 +76,16 @@
 // 
 // =====================================================================================
 
-extern void test_graph_nodes_01();
+extern void test_graph_nodes();
 extern void test_graphs();
 extern void test_dfs();
 extern void test_bfs();
 
 int main()
 {
-    // test_graph_nodes_01();
-    // test_graphs();
-    // test_dfs();
+    // test_graph_nodes();
+    //test_graphs();
+    //test_dfs();
     test_bfs();
 
     return 1;

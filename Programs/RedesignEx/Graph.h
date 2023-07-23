@@ -34,6 +34,8 @@ namespace Graph_Theory
     template<typename T, typename W>
     using NodesContainerType = std::vector<GraphNode<T, W>>;
 
+    using Path = std::vector<size_t>;
+
     // --------------------------------------------------------------------------------
 
     template<typename T, typename W = EmptyType>
@@ -72,15 +74,10 @@ namespace Graph_Theory
         {
             size_t count{};
 
-            std::for_each(
-                std::begin(m_nodes),
-                std::end(m_nodes),
-                [&](const auto& node) {
-
-                    const auto countEdges = node.count();
-                    count += countEdges;
-                }
-            );
+            for (const auto& node : m_nodes) {
+                const auto countEdges = node.count();
+                count += countEdges;
+            }
 
             return count;
         }
@@ -99,13 +96,19 @@ namespace Graph_Theory
         // public interface
         void addNodes(const std::initializer_list<T> list) {
 
-            std::for_each(
-                list.begin(),
-                list.end(),
-                [&](const auto& data) {
-                    addNode(data);
-                }
-            );
+            for (const auto& node : list) {
+                addNode(node);
+            }
+
+            sort();
+        }
+
+        template<class InputIt>
+        void addNodes(InputIt first, InputIt last) {
+
+            for (; first != last; ++first) {
+                addNode(*first);
+            }
 
             sort();
         }
@@ -115,6 +118,21 @@ namespace Graph_Theory
         // addEdge mit Werten von Knoten
         // Oder auch nicht ...
 
+
+        bool addEdges(const std::initializer_list<std::pair<T, T>> list) {
+
+            bool totalResult{ true };
+
+            for (const auto& [from, to] : list) {
+
+                bool result = addEdge(from, to);
+                totalResult = totalResult && result;
+            }
+
+            return totalResult;
+        }
+
+
         // Returns true if the edge was successfully created, false otherwise.
         bool addEdge(const T& fromNode, const T& toNode)
         {
@@ -123,7 +141,6 @@ namespace Graph_Theory
             }
 
             const auto from{ findNode(fromNode) };
-
             const auto to{ findNode(toNode) };
 
             if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
@@ -170,7 +187,6 @@ namespace Graph_Theory
             }
 
             const auto from{ findNode(fromNode) };
-
             const auto to{ findNode(toNode) };
 
             if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
@@ -207,21 +223,11 @@ namespace Graph_Theory
             return const_cast<Graph<T, W>*>(this)->getAdjacentNodes(node_value);
         }
 
-        // Helper method to return an iterator to the given node, or the end iterator
-        // if the given node is not in the graph.
-        // typename nodes_container_type::iterator findNode(const T& node_value)
+    private:
+        // Helper method to return an iterator to the given node,
+        // or the end iterator if the given node is not in the graph.
         typename NodesContainerType<T, W>::iterator findNode(const T& node_value)
         {
-            //return std::find_if(
-            //    std::begin(m_nodes), 
-            //    std::end(m_nodes),
-            //    [&node_value](const auto& node) {
-            //        return node.value() == node_value;
-            //    }
-            //);
-
-            // for testing separated in several statements
-
             auto pos = std::find_if(
                 std::begin(m_nodes),
                 std::end(m_nodes),
@@ -233,18 +239,12 @@ namespace Graph_Theory
             return pos;
         }
 
-        //typename nodes_container_type::const_iterator findNode(const T& node_value) const
         typename NodesContainerType<T, W>::const_iterator findNode(const T& node_value) const
         {
             return const_cast<Graph<T,W>*>(this)->findNode(node_value);
         }
 
-        // Given a set of adjacency node indices, returns the corresponding
-        // set of node values.
-
-
-    private:
-        // Given an iterator to a node, returns the index of that node in the nodes container
+        // given an iterator to a node, returns the index of that node in the nodes container
         size_t getIndexOfNode(const typename NodesContainerType<T, W>::const_iterator& node) const noexcept
         {
             const auto index{ std::distance(std::cbegin(m_nodes), node) };
@@ -267,34 +267,24 @@ namespace Graph_Theory
         //    return m_nodes[index].value();
         //}
 
-        std::string toString() {
+        std::string toString(int width = 0) {
 
             bool isDirected = this->isDirected() == Direction::Directed;
             bool isWeighted = this->isWeighted() == Weight::Weighted;
 
-            std::string separator{ isDirected ? " -> " : " <=> " };
+            std::string separator{ isDirected ? "->" : "<=>" };
 
             std::ostringstream oss;
-            oss << "Graph: " << std::endl;
-            oss << "  " << (isDirected ? "Directed" : "Undirected");
-            oss << "  " << (isWeighted ? "Weighted" : "Unweighted") << std::endl;
-            oss << "  Nodes: " << countNodes() << ", Edges: " << countEdges() << std::endl << std::endl;
+            oss << "Graph: ";
+            oss << "Nodes: " << countNodes() << ", Edges: " << countEdges();
+            oss << " // " << (isDirected ? "Directed" : "Undirected");
+            oss << " - " << (isWeighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
 
-            for (size_t index{}; index != countNodes(); ++index)
+            for (size_t index{}; const GraphNode<T, W>& node : m_nodes)
             {
-                const GraphNode<T, W>& node{ m_nodes[index] };
-
                 const T& fromValue = node.value();
 
-                using TNodeType = std::remove_cv<T>::type;
-
-                if constexpr (!std::is_same<TNodeType, std::string>::value) {
-                    std::string s{ std::to_string(fromValue) };
-                    oss << "[" << std::setw(14) << std::right << s << "] ";
-                }
-                else {
-                    oss << "[" << std::setw(14) << std::right << fromValue << "]";
-                }
+                oss << "[" << std::setw(width) << std::right << fromValue << "]";
 
                 const AdjacencyListType<W> list = getAdjacentNodes(fromValue);
 
@@ -302,7 +292,7 @@ namespace Graph_Theory
 
                     oss << " " << separator << " [";
 
-                    for (size_t n{}; const auto & [to, weight] : list)
+                    for (size_t n{}; const auto& [to, weight] : list)
                     {
                         const T& toValue = m_nodes[to].value();
                         oss << toValue;
@@ -327,19 +317,26 @@ namespace Graph_Theory
             return oss.str();
         }
 
-        std::string toString(const std::vector<size_t>& path) {
+        std::string toString(const Path& path) {
 
             std::ostringstream oss;
 
-            for (int n{}; const size_t vertex : path) {
+            if (path.size() == 0) {
 
-                const std::string& city {m_nodes[vertex].value()};
+                oss << "Empty Path!";
+            }
+            else {
+                for (int n{}; const size_t vertex : path) {
 
-                if (n != 0) {
-                    oss << " -> ";
+                    const T& value{ m_nodes[vertex].value() };
+
+                    if (n != 0) {
+                        oss << " -> ";
+                    }
+
+                    oss << '[' << value << ']';
+                    ++n;
                 }
-                oss << city;
-                ++n;
             }
 
             return oss.str();

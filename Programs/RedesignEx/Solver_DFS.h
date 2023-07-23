@@ -10,23 +10,20 @@ using namespace Graph_Theory;
 
 namespace Graph_Theory_DFS
 {
-    // TODO: Hmmm, wird derzeit nicht benutzt ....
-   // using Path = std::vector<size_t>;
-
     template <typename T>
     class DFSSolver
     {
     private:
-        Graph<T>& m_graph;
+        const Graph<T>& m_graph;
 
         std::vector<bool> m_visited;
-        std::deque<std::vector<size_t>> m_paths;
+        std::deque<Path> m_paths;
 
-        std::vector<size_t> m_components;
+        Path m_components;
         size_t m_count;
 
     public:
-        DFSSolver(Graph<T>& graph) : m_graph{ graph }, m_count{} {}
+        DFSSolver(const Graph<T>& graph) : m_graph{ graph }, m_count{} {}
 
         void computeComponents() {
 
@@ -48,9 +45,9 @@ namespace Graph_Theory_DFS
 
         size_t getNumberOfComponents() const { return m_count; }
 
-        std::vector<size_t> getComponent(size_t mark) const {
+        Path getComponent(size_t mark) const {
 
-            std::vector<size_t> result;
+            Path result;
 
             for (size_t index{}; size_t node : m_components) {
 
@@ -68,7 +65,7 @@ namespace Graph_Theory_DFS
 
         // function to perform DFS traversal in a directed graph to find
         // the complete path between source and destination vertices
-        bool findPathAny(size_t source, size_t target, std::vector<size_t>& path) {
+        bool findPathAny(size_t source, size_t target, Path& path) {
 
             // setup 'm_visited' vector
             m_visited.resize(m_graph.countNodes());
@@ -86,13 +83,13 @@ namespace Graph_Theory_DFS
             std::fill(std::begin(m_visited), std::end(m_visited), false);
 
             // setup 'currentPath' vector
-            std::vector<size_t> currentPath;
+            Path currentPath;
             currentPath.push_back(source);
 
             findPathAllHelper(source, target, currentPath);
         }
 
-        void printPath(const std::vector<size_t>& path) {
+        void printPath(const Path& path) {
 
             std::for_each(
                 std::begin(path),
@@ -110,7 +107,7 @@ namespace Graph_Theory_DFS
             }
         }
 
-        std::vector<size_t> getShortestPath() {
+        Path getShortestPath() {
 
             auto result = std::min_element(
                 m_paths.begin(),
@@ -124,7 +121,7 @@ namespace Graph_Theory_DFS
             return *result;
         }
 
-        std::vector<std::vector<size_t>> getShortestPaths() {
+        std::vector<Path> getShortestPaths() {
 
             // calculate length of a shortest path
             auto shortestPath = std::min_element(
@@ -138,7 +135,7 @@ namespace Graph_Theory_DFS
 
             size_t length{ (*shortestPath).size() };
 
-            std::vector<std::vector<size_t>> result;
+            std::vector<Path> result;
             for (const auto& path : m_paths) {
 
                 if (path.size() == length) {
@@ -168,7 +165,7 @@ namespace Graph_Theory_DFS
             }
         }
 
-        bool findPathAnyHelper(size_t source, size_t target, std::vector<size_t>& path) {
+        bool findPathAnyHelper(size_t source, size_t target, Path& path) {
 
             // mark current node as discovered
             m_visited.at(source) = true;
@@ -182,9 +179,9 @@ namespace Graph_Theory_DFS
             }
 
             // do for all adjacent vertices of the dequeued vertex
-            GraphNode<T>& sourceNode = m_graph[source];
+            const GraphNode<T>& sourceNode = m_graph[source];
 
-            AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
+            const AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
 
             for (const auto& [next, weight] : neighbours) {
 
@@ -205,7 +202,7 @@ namespace Graph_Theory_DFS
 
         }
 
-        void findPathAllHelper(size_t source, size_t target, std::vector<size_t>& path) {
+        void findPathAllHelper(size_t source, size_t target, Path& path) {
 
             // mark current node as discovered
             m_visited.at(source) = true;
@@ -217,9 +214,9 @@ namespace Graph_Theory_DFS
             }
             else {
                 // do for every edge
-                GraphNode<T>& sourceNode = m_graph[source];
+                const GraphNode<T>& sourceNode = m_graph[source];
 
-                AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
+                const AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
 
                 for (const auto& [index, weight] : neighbours) {
 
