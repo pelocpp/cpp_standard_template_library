@@ -41,12 +41,12 @@ namespace Graph_Theory
 
     // needed as key compare function for std::set
     template<typename Weight = EmptyType>
-    auto cmp = [](Edge<Weight> edge1, Edge<Weight> edge2) {
+    auto cmp = [] (Edge<Weight> edge1, Edge<Weight> edge2) {
 
-        auto [key1, weight1] = edge1;
-        auto [key2, weight2] = edge2;
+        auto [vertex1, weight1] = edge1;
+        auto [vertex2, weight2] = edge2;
 
-        return key1 < key2;
+        return vertex1 < vertex2;
     };
 
     template<typename Weight = EmptyType>
@@ -66,6 +66,9 @@ namespace Graph_Theory
         GraphNode(const T& data) : m_data{ data } { }
 
         GraphNode(T&& data) : m_data{ std::move(data) } { }
+
+        // prohibit nodes with no data value
+        GraphNode() = delete;
 
         // returns a reference to the stored value
         T& value() noexcept { return m_data; }

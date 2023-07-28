@@ -114,7 +114,7 @@ void test_bfs_03()
 
     Graph<int> graph{ Direction::Directed, Weight::Unweighted };
 
-    // create a list of nodes from 0 uo to 22
+    // create a list of nodes from 0 up to 22
     std::list<int> l(23);
     std::iota(l.begin(), l.end(), 0);
     graph.addNodes(l.begin(), l.end());

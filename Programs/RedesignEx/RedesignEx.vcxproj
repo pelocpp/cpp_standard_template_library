@@ -133,12 +133,14 @@
     <ClCompile Include="TestDFS.cpp" />
     <ClCompile Include="TestGraph.cpp" />
     <ClCompile Include="TestGraphNode.cpp" />
+    <ClCompile Include="TestDijkstra.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphNode.h" />
     <ClInclude Include="Solver_BFS.h" />
     <ClInclude Include="Solver_DFS.h" />
+    <ClInclude Include="Solver_Dijkstra.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

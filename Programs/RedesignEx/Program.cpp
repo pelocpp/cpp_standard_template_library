@@ -80,13 +80,15 @@ extern void test_graph_nodes();
 extern void test_graphs();
 extern void test_dfs();
 extern void test_bfs();
+extern void test_dijkstra();
 
 int main()
 {
     // test_graph_nodes();
-    //test_graphs();
-    //test_dfs();
-    test_bfs();
+    // test_graphs();
+    // test_dfs();
+    // test_bfs();
+    test_dijkstra();
 
     return 1;
 }

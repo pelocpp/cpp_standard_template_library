@@ -19,7 +19,7 @@ namespace Graph_Theory_BFS
         std::vector<bool> m_visited;
 
     public:
-        BFSSolver(Graph<T>& graph) : m_graph{ graph } {}
+        BFSSolver(const Graph<T>& graph) : m_graph{ graph } {}
 
         std::vector<std::optional<size_t>> solve(size_t start) {
 
