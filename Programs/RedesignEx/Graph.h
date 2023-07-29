@@ -29,6 +29,7 @@
 namespace Graph_Theory
 {
     enum class Direction { Directed, Undirected };
+
     enum class Weight { Weighted, Unweighted };
 
     template<typename T, typename W>
@@ -133,7 +134,7 @@ namespace Graph_Theory
         }
 
 
-        // Returns true if the edge was successfully created, false otherwise.
+        // returns true if the edge was successfully created
         bool addEdge(const T& fromNode, const T& toNode)
         {
             if (m_isWeighted == Weight::Weighted) {
@@ -141,6 +142,7 @@ namespace Graph_Theory
             }
 
             const auto from{ findNode(fromNode) };
+
             const auto to{ findNode(toNode) };
 
             if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
@@ -180,6 +182,10 @@ namespace Graph_Theory
             }
         }
 
+        // TODO: Klären, ob das geht: das mit std::nullopt
+        // bool addEdge(const T& fromNode, const T& toNode, const W& weight = std::nullopt) {
+        // Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
+
         bool addEdge(const T& fromNode, const T& toNode, const W& weight) {
 
             if (m_isWeighted == Weight::Unweighted) {
@@ -187,6 +193,7 @@ namespace Graph_Theory
             }
 
             const auto from{ findNode(fromNode) };
+
             const auto to{ findNode(toNode) };
 
             if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
@@ -195,13 +202,35 @@ namespace Graph_Theory
 
             const size_t toIndex{ getIndexOfNode(to) };
 
-            AdjacencyListType<W>& list = from->getAdjacentNodes();
+            AdjacencyListType<W>& fromList = from->getAdjacentNodes();
 
             Edge<W> edge{toIndex, weight};
 
-            auto [pos, succeeded] = list.insert(edge);
+            auto [pos, succeeded] = fromList.insert(edge);
 
-            return succeeded;
+            if (succeeded) {
+
+                if (m_isDirected == Direction::Undirected) {
+
+                    GraphNode<T, W>& target = m_nodes[toIndex];
+
+                    AdjacencyListType<W>& toList = target.getAdjacentNodes();
+
+                    const size_t fromIndex{ getIndexOfNode(from) };
+
+                    Edge<W> edge{fromIndex, weight};
+
+                    auto [pos, succeeded] = toList.insert(edge);
+
+                    return succeeded;
+                }
+                else {
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
         }
 
         AdjacencyListType<W>& getAdjacentNodes(const T& node_value)
@@ -228,20 +257,18 @@ namespace Graph_Theory
         // or the end iterator if the given node is not in the graph.
         typename NodesContainerType<T, W>::iterator findNode(const T& node_value)
         {
-            auto pos = std::find_if(
+            return std::find_if(
                 std::begin(m_nodes),
                 std::end(m_nodes),
                 [&node_value](const auto& node) {
                     return node.value() == node_value;
                 }
             );
-
-            return pos;
         }
 
         typename NodesContainerType<T, W>::const_iterator findNode(const T& node_value) const
         {
-            return const_cast<Graph<T,W>*>(this)->findNode(node_value);
+            return const_cast<Graph<T, W>*>(this)->findNode(node_value);
         }
 
         // given an iterator to a node, returns the index of that node in the nodes container
@@ -256,6 +283,10 @@ namespace Graph_Theory
         size_t getIndexOfNode(const T& value) const
         {
             const auto position{ findNode(value) };
+
+            if (position == m_nodes.end()) {
+                throw std::invalid_argument("Node with specified value not found!");
+            }
 
             const auto index{ std::distance(std::cbegin(m_nodes), position) };
 

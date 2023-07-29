@@ -152,7 +152,7 @@ namespace Graph_Theory_DFS
             m_components.at(index) = m_count;    // set mark
 
             // do for all adjacent vertices of the current vertex
-            const AdjacencyListType<>& neighbours = m_graph[index].getAdjacentNodes();
+            const AdjacencyListType<>& neighbours { m_graph[index].getAdjacentNodes() };
 
             for (const auto& [next, weight] : neighbours) {
 
@@ -178,9 +178,11 @@ namespace Graph_Theory_DFS
             }
 
             // do for all adjacent vertices of the dequeued vertex
-            const GraphNode<T>& sourceNode = m_graph[source];
+            const GraphNode<T>& sourceNode { m_graph[source] };
 
-            const AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
+            const AdjacencyListType<>& neighbours {
+                m_graph.getAdjacentNodes(sourceNode.value())
+            };
 
             for (const auto& [next, weight] : neighbours) {
 
@@ -208,14 +210,18 @@ namespace Graph_Theory_DFS
 
             // if destination vertex is found
             if (source == target) {
+
                 m_paths.push_back(path); // store found solution
                 m_visited.at(source) = false;  // unmark current node as discovered
             }
             else {
-                // do for every edge
-                const GraphNode<T>& sourceNode = m_graph[source];
 
-                const AdjacencyListType<>& neighbours = m_graph.getAdjacentNodes(sourceNode.value());
+                // do for every edge
+                const GraphNode<T>& sourceNode{ m_graph[source] };
+
+                const AdjacencyListType<>& neighbours {
+                    m_graph.getAdjacentNodes(sourceNode.value())
+                };
 
                 for (const auto& [index, weight] : neighbours) {
 

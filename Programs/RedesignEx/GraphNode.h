@@ -34,6 +34,11 @@ namespace Graph_Theory
 
     // Fazit : Sollte in die Klasse GraphNode verlagert werden
 
+
+    // TODO: Hmmm, Namensgebung
+    // Entweder:  W oder Weight oder TWeight ...
+
+
     using EmptyType = std::nullptr_t;
 
     template<typename Weight>

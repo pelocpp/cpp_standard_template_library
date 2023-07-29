@@ -6,13 +6,17 @@
 
 #include "Graph.h"
 
+#include  <unordered_map>
+
 using namespace Graph_Theory;
 
-// TODO
-// Lesen:
-// https://stackoverflow.com/questions/1667963/how-portable-is-casting-1-to-an-unsigned-type
+template<typename Weight>
+using ExtendedEdge = std::pair<size_t, Edge<Weight>>;
 
-constexpr size_t MaxSize = static_cast<size_t>(-1);
+template<typename Weight>
+size_t getFrom(const ExtendedEdge<Weight>& edge) {
+    return std::get<0>(edge);
+}
 
 namespace Graph_Theory_Dijkstra
 {
@@ -21,23 +25,26 @@ namespace Graph_Theory_Dijkstra
     {
     private:
         const Graph<T, W>& m_graph;
-        size_t m_start;
+        std::vector<W> m_distances;
+
+        std::unordered_map<size_t, ExtendedEdge<W>> m_shortestPathMap;
 
     public:
-        DijkstraSolver(const Graph<T, W>& graph) : m_graph{ graph }, m_start{} {}
+        DijkstraSolver(const Graph<T, W>& graph) : m_graph{ graph } {}
 
-        std::vector<size_t> computeShortestPaths(size_t startVertex) {
+        bool computeShortestPaths(const T& root) {
 
-            std::vector<size_t> distances;
+            // compute start index
+            const size_t first{ m_graph.getIndexOfNode(root) };
 
-            m_start = startVertex;
-            distances.resize(m_graph.countNodes());
+            m_distances.resize(m_graph.countNodes());
+            m_distances[first] = size_t{};
 
-            // initialize all possible distances as infinite (-1)
-            std::fill(std::begin(distances), std::end(distances), MaxSize);
+            std::vector<bool> visited(m_graph.countNodes());
+            visited[first] = true;
 
-            // need a lambda to compare Edge elements according to their weight
-            auto compareTracks = [](const Edge<size_t>& lhs, const Edge<size_t>& rhs) {
+            // need a lambda to compare weighted edges according to their weight
+            auto compareEdges = [](const Edge<W>& lhs, const Edge<W>& rhs) {
                 const auto& [vertexLeft, weightLeft] = lhs;
                 const auto& [vertexRight, weightRight] = rhs;
                 return weightLeft.value() > weightRight.value();
@@ -49,56 +56,92 @@ namespace Graph_Theory_Dijkstra
             std::priority_queue <
                 Edge<W>,
                 std::vector<Edge<W>>,
-                decltype(compareTracks)>
-                pq(compareTracks);
+                decltype(compareEdges)>
+                pq(compareEdges);
 
-            // add source track to priority queue, distance is 0
-            Edge<W> startTrack{ m_start, W{} };
-            pq.push(startTrack);
-
-            distances[m_start] = size_t{};
+            // add source edge to priority queue, distance is 0
+            Edge<W> startEdge{ first, W{} };
+            pq.push(startEdge);
 
             // while priority queue isn't empty...
             while (!pq.empty()) {
 
-                // get minimum distance vertex from priority queue - we call it 'vertex'
+                // get vertex with minimum weight (distance) from priority queue
                 const auto [vertex, weight] = pq.top();
                 pq.pop();
 
                 // get all adjacent edges of the dequeued vertex
                 const AdjacencyListType<W>& neighbours = m_graph[vertex].getAdjacentNodes();
+                
+                // examine next edges
+                for (const auto& [nextVertex, nextWeight] : neighbours) {
 
-                for (const auto& [target, weight] : neighbours) {
+                    // calculate new weight (distance) of current vertex
+                    const W pathWeight = nextWeight.value() + m_distances[vertex];
 
-                    // if the distance to 'target' is shorter by going through 'index' ...
-                    if (distances[target] == MaxSize || distances[target] > distances[vertex] + weight.value()) {
+                    // found new node (vertex) or shorter path ...
+                    if (! visited[nextVertex] || (m_distances[nextVertex] > pathWeight)) {
 
-                        // update the distance of 'target'
-                        distances[target] = distances[vertex] + weight.value();
+                        visited[nextVertex] = true;
 
-                        // insert 'target' into the priority queue
-                        Edge<W> edge{target, distances[target]};
-                        pq.push(edge);
+                        // update the distance of current vertex
+                        m_distances[nextVertex] = pathWeight;
+
+                        // update edge on shortest path
+                        Edge<W> nextEdge {nextVertex, pathWeight};
+                        ExtendedEdge<W> extendedEdge{vertex, nextEdge};
+                        m_shortestPathMap[nextVertex] = extendedEdge;
+
+                        // insert current edge into priority queue
+                        pq.push(nextEdge);
                     }
                 }
             }
 
-            return distances;
+            return true;
         }
 
-        void printDistances(const std::vector<size_t>& distances) {
+        std::vector<size_t> getDistances() {
+            return m_distances;
+        }
 
-            std::cout << "Printing the shortest paths for Node " << m_start << ':' << std::endl;
+        Path computeShortestPath(const T& startValue, const T& endValue) {
+
+            const size_t start{ m_graph.getIndexOfNode(startValue) };
+            const size_t end{ m_graph.getIndexOfNode(endValue) };
+
+            ExtendedEdge<W> edge{ m_shortestPathMap[end] };
+            size_t from{ getFrom(edge) };
+
+            Path path{};
+            path.insert(path.begin(), from);
+
+            while (getFrom(edge) != start) {
+
+                edge = m_shortestPathMap[getFrom(edge)];
+                size_t from{ getFrom(edge) };
+                path.insert(path.begin(), from);
+            }
+
+            path.push_back(end);
+
+            return path;
+        }
+
+        std::string toString(const Path& distances, int width = 0) const {
+
+            std::ostringstream oss;
 
             for (size_t index = 0; auto distance : distances) {
 
-                std::cout
-                << "Distance from " << m_start
-                << " to " << index << " is: "
-                << distance << std::endl;
+                const T& value = m_graph[index].value();
+                oss << "Distance to " << std::setw(width) << std::left << value << ": ";
+                oss << distance << std::endl;
 
                 ++index;
             }
+
+            return oss.str();
         }
     };
 }

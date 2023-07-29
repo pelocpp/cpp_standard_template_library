@@ -31,8 +31,11 @@ void test_dijkstra_01()
 
     // create solver
     DijkstraSolver<int, size_t> dijkstra{ graph };
-    std::vector<size_t> distances = dijkstra.computeShortestPaths(0);
-    dijkstra.printDistances(distances);
+    dijkstra.computeShortestPaths(0);
+    std::vector<size_t> distances = dijkstra.getDistances();
+
+    std::cout << "Distances from " << 0 << ':' << std::endl;  // TODO: Besser: Name des Knoten
+    std::cout << dijkstra.toString(distances, 20) << std::endl;
 }
 
 void test_dijkstra_02()
@@ -88,14 +91,122 @@ void test_dijkstra_02()
     graph.addEdge(e, j, 766);
 
     DijkstraSolver<int, size_t> dijkstra{ graph };
-    std::vector<size_t> distances = dijkstra.computeShortestPaths(2);
-    dijkstra.printDistances(distances);
+    dijkstra.computeShortestPaths(2);
+    std::vector<size_t> distances = dijkstra.getDistances();
+}
+
+void test_dijkstra_03()
+{
+    Graph<std::string, size_t> graph{ Direction::Undirected, Weight::Weighted };
+
+    graph.addNodes({
+        "Seattle", "San Francisco", "Los Angeles",
+        "Riverside", "Phoenix", "Chicago", "Boston", "New York", "Atlanta",
+        "Miami", "Dallas", "Houston", "Detroit", "Philadelphia", "Washington"
+        }
+    );
+
+    graph.addEdge("Seattle", "Chicago", 1737);
+    graph.addEdge("Seattle", "San Francisco", 678);
+    graph.addEdge("San Francisco", "Riverside", 386);
+    graph.addEdge("San Francisco", "Los Angeles", 348);
+    graph.addEdge("Los Angeles", "Riverside", 50);
+    graph.addEdge("Los Angeles", "Phoenix", 357);
+    graph.addEdge("Riverside", "Phoenix", 307);
+    graph.addEdge("Riverside", "Chicago", 1704);
+    graph.addEdge("Phoenix", "Dallas", 887);
+    graph.addEdge("Phoenix", "Houston", 1015);
+    graph.addEdge("Dallas", "Chicago", 805);
+    graph.addEdge("Dallas", "Atlanta", 721);
+    graph.addEdge("Dallas", "Houston", 225);
+    graph.addEdge("Houston", "Atlanta", 702);
+    graph.addEdge("Houston", "Miami", 968);
+    graph.addEdge("Atlanta", "Chicago", 588);
+    graph.addEdge("Atlanta", "Washington", 543);
+    graph.addEdge("Atlanta", "Miami", 604);
+    graph.addEdge("Miami", "Washington", 923);
+    graph.addEdge("Chicago", "Detroit", 238);
+    graph.addEdge("Detroit", "Boston", 613);
+    graph.addEdge("Detroit", "Washington", 396);
+    graph.addEdge("Detroit", "New York", 482);
+    graph.addEdge("Boston", "New York", 190);
+    graph.addEdge("New York", "Philadelphia", 81);
+    graph.addEdge("Philadelphia", "Washington", 123);
+
+    std::cout << graph.toString(13) << std::endl;
+
+    DijkstraSolver<std::string, size_t> dijkstra{ graph };
+
+    dijkstra.computeShortestPaths(std::string {"Los Angeles"});
+    std::vector<size_t> distances = dijkstra.getDistances();
+
+    std::cout << "Distances from Los Angeles:" << std::endl << std::endl;
+    std::cout << dijkstra.toString(distances, 14) << std::endl;
+
+    std::vector<size_t> shortestPath = dijkstra.computeShortestPath(
+        std::string {"Los Angeles"}, std::string {"Boston"}
+    );
+    std::cout << graph.toString(shortestPath) << std::endl;
+
+}
+
+void test_dijkstra_04()
+{
+    // Beispiel "TU München Europakarte"
+
+    Graph<std::string, size_t> graph{ Direction::Undirected, Weight::Weighted };
+
+    // Beispiel TUM München Europakarte
+    const std::string a = std::string("London");
+    const std::string b = std::string("Berlin");
+    const std::string c = std::string("Madrid");
+    const std::string d = std::string("Kiew");
+    const std::string e = std::string("Rom");
+    const std::string f = std::string("Paris");
+    const std::string g = std::string("Minsk");
+    const std::string h = std::string("Stockholm");
+    const std::string i = std::string("Dublin");
+    const std::string j = std::string("Wien");
+
+    graph.addNodes({ a, b, c, d, e, f, g, h, i, j});
+
+    graph.addEdge(i, a, 464);
+    graph.addEdge(c, f, 1054);
+    graph.addEdge(a, f, 343);
+    graph.addEdge(c, e, 1364);
+    graph.addEdge(a, h, 1435);
+    graph.addEdge(f, b, 879);
+    graph.addEdge(f, e, 1106);
+    graph.addEdge(h, g, 837);
+    graph.addEdge(b, g, 954);
+    graph.addEdge(j, d, 1053);
+    graph.addEdge(g, d, 433);
+    graph.addEdge(b, h, 811);
+    graph.addEdge(b, j, 524);
+    graph.addEdge(j, e, 766);
+
+    std::cout << graph.toString(9) << std::endl;
+
+    DijkstraSolver<std::string, size_t> dijkstra{ graph };
+
+    dijkstra.computeShortestPaths(std::string {"Dublin"});
+    std::vector<size_t> distances = dijkstra.getDistances();
+
+    std::cout << "Distances from Dublin:" << std::endl << std::endl;
+    std::cout << dijkstra.toString(distances, 12) << std::endl;
+
+    std::vector<size_t> shortestPath = dijkstra.computeShortestPath(
+        std::string {"Dublin"}, std::string {"Minsk"}
+    );
+    std::cout << graph.toString(shortestPath) << std::endl;
 }
 
 void test_dijkstra()
 {
-    // test_dijkstra_01();
-    test_dijkstra_02();
+    //test_dijkstra_01();
+    //test_dijkstra_02();
+    test_dijkstra_03();
+    test_dijkstra_04();
 }
 
 // =====================================================================================
