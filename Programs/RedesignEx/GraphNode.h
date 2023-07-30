@@ -44,6 +44,13 @@ namespace Graph_Theory
     template<typename Weight>
     using Edge = std::pair<size_t, std::optional<Weight>>;
 
+
+    // TODO: ÜBERALL, wo .first im QUellcode steht:  getTarget einsetzen !!!!!!!!!!!!!!!!
+    template<typename TEdge>
+    size_t getTarget(const TEdge& edge) {
+        return std::get<0>(edge);
+    }
+
     // needed as key compare function for std::set
     template<typename Weight = EmptyType>
     auto cmp = [] (Edge<Weight> edge1, Edge<Weight> edge2) {
@@ -64,6 +71,10 @@ namespace Graph_Theory
     {
     private:
         T m_data;
+
+
+        // NUR KURZ: 
+    public:
         AdjacencyListType<W> m_adjacentNodes;
 
     public:
@@ -100,6 +111,27 @@ namespace Graph_Theory
         {
             return m_adjacentNodes;
         }
+
+
+        // NEU
+        const Edge<W>& getEdge(size_t vertex) const {
+
+            // Hmmmm, was, wenn verte nicht passt ?????????????????????????????
+
+            const auto x = std::find_if(
+                m_adjacentNodes.begin(), 
+                m_adjacentNodes.end(),
+                [=](const auto& edge) {
+                    size_t target = edge.first;
+                    return target == vertex;
+                }
+            );
+
+          //  std::cout << "Stopper" << std::endl;
+
+            return *x;
+        }
+
 
         // needed for constructing stl set container with 'GraphNode' objects
         bool operator< (const GraphNode& other) {

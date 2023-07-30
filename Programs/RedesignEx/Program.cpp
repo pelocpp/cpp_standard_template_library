@@ -5,12 +5,44 @@
 
 // =====================================================================================
 
+//Direction isDirected() const noexcept {
+//    return m_isDirected;
+//}
+//
+//Weight isWeighted() const noexcept {
+//    return m_isWeighted;
+//}
+//
+
+// da passen die Namen nicht !! isXXX muss bool sein, ist es aber nicht ..
+// das muss geändert werden
+
+// -----------------------------------------------------------------------
 
 // TODO:
 // [[ nodiscard ]]
 
 
 // Hmmm, die könnte man massenhaft einbauen .. sieht halt dann nicht mehr so gut aus ...
+
+// -----------------------------------------------------------------------
+
+// Die Methode findNode ist die einzige, die mit einem Iterator Objekt hantiert:
+
+// Vielleicht kann man, da diese Methode private ist, sie irgendwo verstecken ...
+// sie wird doch nicht so häufig aufgerufen, oder ?????????????
+
+
+// -----------------------------------------------------------------------
+
+
+// Klasse Graph mit begin und end ausstatten ===> dann kann man mit for_each iterieren ...
+
+// andere Algorithmen wie std::find_if,  std::accumulate etc. ausprobieren und anwenden ...
+
+
+
+// -----------------------------------------------------------------------
 
 
 // AdjacencyListType<EmptyType>&neighbours = ....
@@ -21,6 +53,8 @@
 // Hmmm -- dies kann man so vermeiden:
 // https://probablydance.com/2014/01/16/alias-templates-with-partial-specialization-sfinae-and-everything/
 
+
+// -----------------------------------------------------------------------
 
 // Allgemein; Wir haben nun eine Mehtode format
 // 
@@ -87,7 +121,7 @@ int main()
     // test_graph_nodes();
     // test_graphs();
     // test_dfs();
-    // test_bfs();
+    //test_bfs();
     test_dijkstra();
 
     return 1;

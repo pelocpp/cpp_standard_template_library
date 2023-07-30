@@ -312,13 +312,13 @@ namespace Graph_Theory
             oss << " // " << (isDirected ? "Directed" : "Undirected");
             oss << " - " << (isWeighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
 
-            for (const GraphNode<T, W>& node : m_nodes)
-            {
+            for (const GraphNode<T, W>& node : m_nodes) {
+
                 const T& fromValue = node.value();
 
                 oss << "[" << std::setw(width) << std::right << fromValue << "]";
 
-                const AdjacencyListType<W> list = getAdjacentNodes(fromValue);
+                const AdjacencyListType<W>& list = getAdjacentNodes(fromValue);
 
                 if (list.size() != 0) {
 
@@ -351,6 +351,8 @@ namespace Graph_Theory
 
         std::string toString(const Path& path) const {
 
+            W totalWeight{};
+
             std::ostringstream oss;
 
             if (path.size() == 0) {
@@ -359,35 +361,36 @@ namespace Graph_Theory
             }
             else {
 
-                //for (size_t n{}; const auto & [to, weight] : list)
-                //{
-                //    const T& toValue = m_nodes[to].value();
-                //    oss << toValue;
+                std::string arrow = isDirected() == Direction::Directed ? " -> " : " => ";
 
-                //    if (weight.has_value()) {
-                //        oss << " {" << weight.value() << "}";
-                //    }
+                for (size_t index{}; index != path.size(); ++index) {
 
-                //    if (n != list.size() - 1) {
-                //        oss << ", ";
-                //    }
-
-                //    ++n;
-                //}
-
-
-                for (int n{}; const size_t vertex : path) {
-
-                    const T& value{ m_nodes[vertex].value() };
-
-                    if (n != 0) {
-                        oss << " -> ";
-                    }
+                    const T& value{ m_nodes[path[index]].value() };
 
                     oss << '[' << value << ']';
-                    ++n;
+
+                    if (index < path.size() - 1) {
+
+                        oss << arrow;
+
+                        const GraphNode<T, W>& node = m_nodes[path[index]];
+                        
+                        const auto& [to, weight] = node.getEdge(path[index + 1]);
+
+                        if constexpr (! std::is_same<W, EmptyType>::value)
+                        {
+                            if (weight.has_value()) {
+                                oss << "{" << weight.value() << "} ";
+
+                                // HIER: Concept definieren: Auf Weight muss +  gehen ... oder +=
+                                totalWeight = totalWeight + weight.value();
+                            }
+                        }
+                    }
                 }
             }
+
+            oss << "\nTotal Distance: " << totalWeight << '.';
 
             return oss.str();
         }

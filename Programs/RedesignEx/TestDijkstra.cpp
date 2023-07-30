@@ -194,7 +194,7 @@ void test_dijkstra_04()
     std::vector<size_t> distances = dijkstra.getDistances();
 
     std::cout << "Distances from Dublin:" << std::endl << std::endl;
-    std::cout << dijkstra.toString(distances, 12) << std::endl;
+    std::cout << dijkstra.toString(distances, 10) << std::endl;
 
     std::vector<size_t> shortestPath = dijkstra.computeShortestPath(
         std::string {"Dublin"}, std::string {"Minsk"}
@@ -206,8 +206,8 @@ void test_dijkstra()
 {
     //test_dijkstra_01();
     //test_dijkstra_02();
-    //test_dijkstra_03();
-    test_dijkstra_04();
+    test_dijkstra_03();
+    //test_dijkstra_04();
 }
 
 // =====================================================================================
