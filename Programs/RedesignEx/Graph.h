@@ -101,7 +101,8 @@ namespace Graph_Theory
                 addNode(node);
             }
 
-            sort();
+            // TODO: Entfernen !!!
+    //        sort();
         }
 
         template<class InputIt>
@@ -311,7 +312,7 @@ namespace Graph_Theory
             oss << " // " << (isDirected ? "Directed" : "Undirected");
             oss << " - " << (isWeighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
 
-            for (size_t index{}; const GraphNode<T, W>& node : m_nodes)
+            for (const GraphNode<T, W>& node : m_nodes)
             {
                 const T& fromValue = node.value();
 
@@ -357,6 +358,24 @@ namespace Graph_Theory
                 oss << "Empty Path!";
             }
             else {
+
+                //for (size_t n{}; const auto & [to, weight] : list)
+                //{
+                //    const T& toValue = m_nodes[to].value();
+                //    oss << toValue;
+
+                //    if (weight.has_value()) {
+                //        oss << " {" << weight.value() << "}";
+                //    }
+
+                //    if (n != list.size() - 1) {
+                //        oss << ", ";
+                //    }
+
+                //    ++n;
+                //}
+
+
                 for (int n{}; const size_t vertex : path) {
 
                     const T& value{ m_nodes[vertex].value() };

@@ -6,58 +6,49 @@
 
 #include "Graph.h"
 
-#include  <unordered_map>
-
 using namespace Graph_Theory;
-
-template<typename Weight>
-using ExtendedEdge = std::pair<size_t, Edge<Weight>>;
-
-template<typename Weight>
-size_t getFrom(const ExtendedEdge<Weight>& edge) {
-    return std::get<0>(edge);
-}
 
 namespace Graph_Theory_Dijkstra
 {
+    // custom function object (functor) to compare weighted edges
+    template <typename W>
+    struct EdgesComparer
+    {
+        bool operator() (const Edge<W>& l, const Edge<W>& r) const { 
+
+            const auto& [vertexLeft, weightLeft] = l;
+            const auto& [vertexRight, weightRight] = r;
+            return weightLeft.value() > weightRight.value();
+        }
+    };
+    
     template <typename T, typename W>
     class DijkstraSolver
     {
     private:
         const Graph<T, W>& m_graph;
         std::vector<W> m_distances;
-
-        std::unordered_map<size_t, ExtendedEdge<W>> m_shortestPathMap;
+        std::vector<W> m_previousVertex;
 
     public:
         DijkstraSolver(const Graph<T, W>& graph) : m_graph{ graph } {}
 
         bool computeShortestPaths(const T& root) {
 
+            // adjust sizes of vector containers
+            m_distances.resize(m_graph.countNodes());
+            m_previousVertex.resize(m_graph.countNodes());
+
             // compute start index
             const size_t first{ m_graph.getIndexOfNode(root) };
-
-            m_distances.resize(m_graph.countNodes());
             m_distances[first] = size_t{};
 
+            // helper container to manage already visited nodes
             std::vector<bool> visited(m_graph.countNodes());
             visited[first] = true;
 
-            // need a lambda to compare weighted edges according to their weight
-            auto compareEdges = [](const Edge<W>& lhs, const Edge<W>& rhs) {
-                const auto& [vertexLeft, weightLeft] = lhs;
-                const auto& [vertexRight, weightRight] = rhs;
-                return weightLeft.value() > weightRight.value();
-            };
-
-            // need a priority queue
-            // note: the third template parameter should be the *type* of the comparison function;
-            // the function itself is then passed as a parameter in the constructor of priority_queue!
-            std::priority_queue <
-                Edge<W>,
-                std::vector<Edge<W>>,
-                decltype(compareEdges)>
-                pq(compareEdges);
+            // need a priority queue for weighted edges
+            std::priority_queue <Edge<W>, std::vector<Edge<W>>, EdgesComparer<W>> pq;
 
             // add source edge to priority queue, distance is 0
             Edge<W> startEdge{ first, W{} };
@@ -89,10 +80,11 @@ namespace Graph_Theory_Dijkstra
 
                         // update edge on shortest path
                         Edge<W> nextEdge {nextVertex, pathWeight};
-                        ExtendedEdge<W> extendedEdge{vertex, nextEdge};
-                        m_shortestPathMap[nextVertex] = extendedEdge;
 
-                        // insert current edge into priority queue
+                        // update current 'from' vertex
+                        m_previousVertex[nextVertex] = vertex;
+
+                        // insert current edge into priority queue to be examined later
                         pq.push(nextEdge);
                     }
                 }
@@ -110,17 +102,15 @@ namespace Graph_Theory_Dijkstra
             const size_t start{ m_graph.getIndexOfNode(startValue) };
             const size_t end{ m_graph.getIndexOfNode(endValue) };
 
-            ExtendedEdge<W> edge{ m_shortestPathMap[end] };
-            size_t from{ getFrom(edge) };
-
             Path path{};
-            path.insert(path.begin(), from);
 
-            while (getFrom(edge) != start) {
+            size_t vertex{ m_previousVertex[end] };
+            path.insert(path.begin(), vertex);
 
-                edge = m_shortestPathMap[getFrom(edge)];
-                size_t from{ getFrom(edge) };
-                path.insert(path.begin(), from);
+            while (vertex != start) {
+
+                vertex = m_previousVertex[vertex];
+                path.insert(path.begin(), vertex);
             }
 
             path.push_back(end);

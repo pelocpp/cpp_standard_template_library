@@ -97,6 +97,8 @@ void test_dijkstra_02()
 
 void test_dijkstra_03()
 {
+    // Buch "David Kopec", Seite 145 ff.
+
     Graph<std::string, size_t> graph{ Direction::Undirected, Weight::Weighted };
 
     graph.addNodes({
@@ -147,7 +149,6 @@ void test_dijkstra_03()
         std::string {"Los Angeles"}, std::string {"Boston"}
     );
     std::cout << graph.toString(shortestPath) << std::endl;
-
 }
 
 void test_dijkstra_04()
@@ -157,16 +158,16 @@ void test_dijkstra_04()
     Graph<std::string, size_t> graph{ Direction::Undirected, Weight::Weighted };
 
     // Beispiel TUM München Europakarte
-    const std::string a = std::string("London");
-    const std::string b = std::string("Berlin");
-    const std::string c = std::string("Madrid");
-    const std::string d = std::string("Kiew");
-    const std::string e = std::string("Rom");
-    const std::string f = std::string("Paris");
-    const std::string g = std::string("Minsk");
-    const std::string h = std::string("Stockholm");
-    const std::string i = std::string("Dublin");
-    const std::string j = std::string("Wien");
+    const std::string a { std::string("London") };
+    const std::string b { std::string("Berlin") };
+    const std::string c { std::string("Madrid") };
+    const std::string d { std::string("Kiew") };
+    const std::string e { std::string("Rom") };
+    const std::string f { std::string("Paris") };
+    const std::string g { std::string("Minsk") };
+    const std::string h { std::string("Stockholm") };
+    const std::string i { std::string("Dublin") };
+    const std::string j { std::string("Wien") };
 
     graph.addNodes({ a, b, c, d, e, f, g, h, i, j});
 
@@ -205,7 +206,7 @@ void test_dijkstra()
 {
     //test_dijkstra_01();
     //test_dijkstra_02();
-    test_dijkstra_03();
+    //test_dijkstra_03();
     test_dijkstra_04();
 }
 
