@@ -44,53 +44,47 @@ namespace Graph_Theory
     {
     private:
         NodesContainerType<T, W> m_nodes;
-        Direction m_isDirected;
-        Weight m_isWeighted;
+        Direction m_direction;
+        Weight m_weight;
 
     public:
         // c'tors
         Graph() : Graph{ Direction::Directed, Weight::Unweighted } {}
 
-        Graph(Direction isDirected, Weight isWeighted = Weight::Unweighted) {
-            m_isDirected = isDirected;
-            m_isWeighted = isWeighted;
+        Graph(Direction direction, Weight weight = Weight::Unweighted) {
+            m_direction = direction;
+            m_weight = weight;
         }
 
     public:
         // getter / setter
-        Direction isDirected() const noexcept {
-            return m_isDirected;
+        bool isDirected() const noexcept {
+            return m_direction == Direction::Directed;
         }
 
-        Weight isWeighted() const noexcept {
-            return m_isWeighted; 
+        bool isWeighted() const noexcept {
+            return m_weight == Weight::Weighted;
         }
 
-        size_t countNodes() const noexcept
-        {
+        size_t countNodes() const noexcept {
             return m_nodes.size();
         }
 
-        size_t countEdges() const
-        {
+        size_t countEdges() const {
             size_t count{};
-
             for (const auto& node : m_nodes) {
                 const auto countEdges = node.count();
                 count += countEdges;
             }
-
             return count;
         }
 
         // operators
-        GraphNode<T, W>& operator[](size_t index)
-        {
+        GraphNode<T, W>& operator[](size_t index) {
             return m_nodes[index];  // no bounds checking
         }
 
-        const GraphNode<T, W>& operator[](size_t index) const
-        {
+        const GraphNode<T, W>& operator[](size_t index) const {
             return m_nodes[index];
         }
 
@@ -120,7 +114,6 @@ namespace Graph_Theory
         // addEdge mit Werten von Knoten
         // Oder auch nicht ...
 
-
         bool addEdges(const std::initializer_list<std::pair<T, T>> list) {
 
             bool totalResult{ true };
@@ -136,9 +129,9 @@ namespace Graph_Theory
 
 
         // returns true if the edge was successfully created
-        bool addEdge(const T& fromNode, const T& toNode)
-        {
-            if (m_isWeighted == Weight::Weighted) {
+        bool addEdge(const T& fromNode, const T& toNode) {
+
+            if (m_weight == Weight::Weighted) {
                 throw std::logic_error("Graph should be unweighted!");
             }
 
@@ -160,7 +153,7 @@ namespace Graph_Theory
 
             if (succeeded) {
 
-                if (m_isDirected == Direction::Undirected) {
+                if (m_direction == Direction::Undirected) {
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
@@ -189,7 +182,7 @@ namespace Graph_Theory
 
         bool addEdge(const T& fromNode, const T& toNode, const W& weight) {
 
-            if (m_isWeighted == Weight::Unweighted) {
+            if (m_weight == Weight::Unweighted) {
                 throw std::logic_error("Graph should be weighted!");
             }
 
@@ -211,7 +204,7 @@ namespace Graph_Theory
 
             if (succeeded) {
 
-                if (m_isDirected == Direction::Undirected) {
+                if (m_direction == Direction::Undirected) {
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
@@ -301,16 +294,13 @@ namespace Graph_Theory
 
         std::string toString(int width = 0) const {
 
-            bool isDirected = this->isDirected() == Direction::Directed;
-            bool isWeighted = this->isWeighted() == Weight::Weighted;
-
-            std::string separator{ isDirected ? "->" : "<=>" };
+            std::string separator{ isDirected() ? "->" : "<=>" };
 
             std::ostringstream oss;
             oss << "Graph: ";
             oss << "Nodes: " << countNodes() << ", Edges: " << countEdges();
-            oss << " // " << (isDirected ? "Directed" : "Undirected");
-            oss << " - " << (isWeighted ? "Weighted" : "Unweighted") << std::endl << std::endl;
+            oss << " // " << (isDirected() ? "Directed" : "Undirected");
+            oss << " - " << (isWeighted() ? "Weighted" : "Unweighted") << std::endl << std::endl;
 
             for (const GraphNode<T, W>& node : m_nodes) {
 
@@ -361,7 +351,7 @@ namespace Graph_Theory
             }
             else {
 
-                std::string arrow = isDirected() == Direction::Directed ? " -> " : " => ";
+                std::string arrow = isDirected() ? " -> " : " => ";
 
                 for (size_t index{}; index != path.size(); ++index) {
 
@@ -390,7 +380,10 @@ namespace Graph_Theory
                 }
             }
 
-            oss << "\nTotal Distance: " << totalWeight << '.';
+            if constexpr (!std::is_same<W, EmptyType>::value)
+            {
+                oss << "\nTotal Distance: " << totalWeight << '.';
+            }
 
             return oss.str();
         }

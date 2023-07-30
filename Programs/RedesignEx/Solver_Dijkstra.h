@@ -37,7 +37,10 @@ namespace Graph_Theory_Dijkstra
 
             // adjust sizes of vector containers
             m_distances.resize(m_graph.countNodes());
+            std::fill(std::begin(m_distances), std::end(m_distances), W{});
+
             m_previousVertex.resize(m_graph.countNodes());
+            std::fill(std::begin(m_previousVertex), std::end(m_previousVertex), W{});
 
             // compute start index
             const size_t first{ m_graph.getIndexOfNode(root) };

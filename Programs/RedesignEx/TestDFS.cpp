@@ -17,7 +17,7 @@ void test_dfs_01()
     // Funktioniert für gerichtete und ungerichtete Graphen !!!
     // Aber die Ergebnisse sind unterschiedlich !!!!!!!!!!!!!!!!!!
 
-    Graph<int> graph { Direction::Directed };
+    Graph<size_t> graph { Direction::Directed };
 
     graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -74,7 +74,7 @@ void test_dfs_02()
     // Funktioniert für gerichtete und ungerichtete Graphen !!!
     // Aber die Ergebnisse sind unterschiedlich !!!!!!!!!!!!!!!!!!
 
-    Graph<int> graph { Direction::Undirected };
+    Graph<size_t> graph { Direction::Undirected };
 
     graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -171,10 +171,7 @@ void test_dfs_03()
     //const std::string source{ "Los Angeles" };
     //const std::string target{ "Washington" };
 
-    const size_t sourceIndex{ graph.getIndexOfNode (source) };
-    const size_t targetIndex{ graph.getIndexOfNode(target) };
-
-    dfs.findPathAll(sourceIndex, targetIndex);
+    dfs.findPathAll(source, target);
 
     if (size_t count{}; (count = dfs.countFoundPaths()) != 0)
     {

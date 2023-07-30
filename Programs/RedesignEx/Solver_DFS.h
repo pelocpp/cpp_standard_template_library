@@ -15,7 +15,6 @@ namespace Graph_Theory_DFS
     {
     private:
         const Graph<T>& m_graph;
-
         std::vector<bool> m_visited;
         std::deque<Path> m_paths;
         Path m_components;
@@ -46,7 +45,7 @@ namespace Graph_Theory_DFS
 
         Path getComponent(size_t mark) const {
 
-            Path result;
+            Path result{};
 
             for (size_t index{}; size_t node : m_components) {
 
@@ -62,8 +61,8 @@ namespace Graph_Theory_DFS
 
         size_t countFoundPaths() const { return m_paths.size(); }
 
-        // function to perform DFS traversal in a directed graph to find
-        // the complete path between source and destination vertices
+        // function to perform DFS traversal in a graph to find
+        // the complete path between source and target vertices
         bool findPathAny(size_t source, size_t target, Path& path) {
 
             // setup 'm_visited' vector
@@ -73,16 +72,20 @@ namespace Graph_Theory_DFS
             return findPathAnyHelper(source, target, path);
         }
 
-        // TODO: Da kommen Indices daher ... auf T umstellen ...
+        void findPathAll(const T& sourceData, const T& targetData) {
 
-        void findPathAll(size_t source, size_t target) {
+            // compute source index
+            const size_t source{ m_graph.getIndexOfNode (sourceData) };
+
+            // compute target index
+            const size_t target{ m_graph.getIndexOfNode(targetData) };
 
             // setup 'm_visited' vector
             m_visited.resize(m_graph.countNodes());
             std::fill(std::begin(m_visited), std::end(m_visited), false);
 
             // setup 'currentPath' vector
-            Path currentPath;
+            Path currentPath{};
             currentPath.push_back(source);
 
             findPathAllHelper(source, target, currentPath);
@@ -112,7 +115,6 @@ namespace Graph_Theory_DFS
                 m_paths.begin(),
                 m_paths.end(),
                 [](const auto& path1, const auto& path2) {
-
                     return path1.size()  < path2.size();
                 }
             );
@@ -127,7 +129,6 @@ namespace Graph_Theory_DFS
                 m_paths.begin(),
                 m_paths.end(),
                 [](const auto& path1, const auto& path2) {
-
                     return path1.size() < path2.size();
                 }
             );

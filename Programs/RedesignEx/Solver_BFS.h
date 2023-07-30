@@ -14,7 +14,7 @@ namespace Graph_Theory_BFS
     class BFSSolver
     {
     private:
-        const Graph<T>& m_graph;  
+        const Graph<T>& m_graph;
         std::deque<size_t> m_queue;
         std::vector<bool> m_visited;
 

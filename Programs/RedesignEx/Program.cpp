@@ -5,17 +5,9 @@
 
 // =====================================================================================
 
-//Direction isDirected() const noexcept {
-//    return m_isDirected;
-//}
-//
-//Weight isWeighted() const noexcept {
-//    return m_isWeighted;
-//}
-//
+// Generell alle NAmen der kanten:  from, to   // source, Target // EINHEITLICH !!!!!!!
 
-// da passen die Namen nicht !! isXXX muss bool sein, ist es aber nicht ..
-// das muss geändert werden
+// size_t source, size_t target
 
 // -----------------------------------------------------------------------
 
@@ -40,9 +32,16 @@
 
 // andere Algorithmen wie std::find_if,  std::accumulate etc. ausprobieren und anwenden ...
 
+// -----------------------------------------------------------------------
+
+
+        // TODO: Klären, ob das geht: das mit std::nullopt
+        // bool addEdge(const T& fromNode, const T& toNode, const W& weight = std::nullopt) {
+        // Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
 
 
 // -----------------------------------------------------------------------
+
 
 
 // AdjacencyListType<EmptyType>&neighbours = ....
@@ -119,10 +118,10 @@ extern void test_dijkstra();
 int main()
 {
     // test_graph_nodes();
-    // test_graphs();
-    // test_dfs();
+    //test_graphs();
+    test_dfs();
     //test_bfs();
-    test_dijkstra();
+    //test_dijkstra();
 
     return 1;
 }
