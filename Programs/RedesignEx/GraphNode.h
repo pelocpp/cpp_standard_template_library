@@ -70,11 +70,8 @@ namespace Graph_Theory
     class GraphNode
     {
     private:
+        size_t m_index;
         T m_data;
-
-
-        // NUR KURZ: 
-    public:
         AdjacencyListType<W> m_adjacentNodes;
 
     public:
@@ -90,11 +87,14 @@ namespace Graph_Theory
         T& value() noexcept { return m_data; }
         const T& value() const noexcept { return m_data; }
 
-        // Returns the number of nodes in the adjacency list
+        // returns the number of nodes in the adjacency list
         size_t count() const noexcept
         {
             return m_adjacentNodes.size();
         }
+
+        size_t getIndex()  const noexcept { return m_index; }
+        void setIndex(size_t index) noexcept { m_index = index; }
 
         // private:
         // 

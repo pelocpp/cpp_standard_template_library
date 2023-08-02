@@ -400,6 +400,10 @@ namespace Graph_Theory
 
             T copy{ data };
             m_nodes.emplace_back(std::move(copy));
+
+            size_t size = m_nodes.size();
+            m_nodes[size - 1].setIndex(size - 1);
+
             return true;
         }
 

@@ -117,9 +117,9 @@ extern void test_dijkstra();
 
 int main()
 {
-    // test_graph_nodes();
-    //test_graphs();
-    test_dfs();
+    //test_graph_nodes();
+    test_graphs();
+    //test_dfs();
     //test_bfs();
     //test_dijkstra();
 
