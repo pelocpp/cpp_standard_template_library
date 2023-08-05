@@ -22,24 +22,16 @@
 #include <stdexcept>
 #include <cstddef>
 
-#include "GraphNode.h"
+#include "Graph_Common.h"
+#include "Graph_Node.h"
 
 // =====================================================================================
 
 namespace Graph_Theory
 {
-    using NodeIndex = size_t;
-
-    enum class Direction { Directed, Undirected };
-
-    enum class Weight { Weighted, Unweighted };
-
+    // Hmmm, hätte diese Typen alle gerne zentral gehabt ... das geht auf Grund von GraphNode eher hier nicht ....
     template<typename T, typename W>
     using NodesContainerType = std::vector<GraphNode<T, W>>;
-
-    using Path = std::vector<size_t>;
-
-    // --------------------------------------------------------------------------------
 
     template<typename T, typename W = EmptyType>
     class Graph
@@ -108,7 +100,7 @@ namespace Graph_Theory
                 addNode(*first);
             }
 
-            sort();
+     //       sort();
         }
 
         // TODO: Allgemein: Es müssen / sollten 2 Varianten an Methoden vorhanden sein:
@@ -147,11 +139,11 @@ namespace Graph_Theory
 
             const size_t toIndex{ getIndexOfNode(to) };
 
-            AdjacencyListType<W>& fromList = from->getAdjacentNodes();
+            AdjacencyNodesList<W>& fromList = from->getAdjacentNodes();
 
-            Edge<W> edge{toIndex, std::nullopt};
+            Track<W> track{toIndex, std::nullopt};
 
-            auto [pos, succeeded] = fromList.insert(edge);
+            auto [pos, succeeded] = fromList.insert(track);
 
             if (succeeded) {
 
@@ -159,13 +151,13 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    AdjacencyListType<W>& toList = target.getAdjacentNodes();
+                    AdjacencyNodesList<W>& toList = target.getAdjacentNodes();
 
                     const size_t fromIndex{ getIndexOfNode(from) };
 
-                    Edge<W> edge{fromIndex, std::nullopt};
+                    Track<W> track{fromIndex, std::nullopt};
 
-                    auto [pos, succeeded] = toList.insert(edge);
+                    auto [pos, succeeded] = toList.insert(track);
 
                     return succeeded;
                 }
@@ -198,11 +190,11 @@ namespace Graph_Theory
 
             const size_t toIndex{ getIndexOfNode(to) };
 
-            AdjacencyListType<W>& fromList = from->getAdjacentNodes();
+            AdjacencyNodesList<W>& fromList = from->getAdjacentNodes();
 
-            Edge<W> edge{toIndex, weight};
+            Track<W> track{toIndex, weight};
 
-            auto [pos, succeeded] = fromList.insert(edge);
+            auto [pos, succeeded] = fromList.insert(track);
 
             if (succeeded) {
 
@@ -210,13 +202,13 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    AdjacencyListType<W>& toList = target.getAdjacentNodes();
+                    AdjacencyNodesList<W>& toList = target.getAdjacentNodes();
 
                     const size_t fromIndex{ getIndexOfNode(from) };
 
-                    Edge<W> edge{fromIndex, weight};
+                    Track<W> track{fromIndex, weight};
 
-                    auto [pos, succeeded] = toList.insert(edge);
+                    auto [pos, succeeded] = toList.insert(track);
 
                     return succeeded;
                 }
@@ -229,9 +221,9 @@ namespace Graph_Theory
             }
         }
 
-        AdjacencyListType<W>& getAdjacentNodes(const T& node_value)
+        AdjacencyNodesList<W>& getAdjacentNodes(const T& node_value)
         {
-            static AdjacencyListType<W> empty {};
+            static AdjacencyNodesList<W> empty {};
 
             auto node{ findNode(node_value) };
 
@@ -243,9 +235,53 @@ namespace Graph_Theory
             return node->getAdjacentNodes();
         }
 
-        const AdjacencyListType<W>& getAdjacentNodes(const T& node_value) const
+        const AdjacencyNodesList<W>& getAdjacentNodes(const T& node_value) const
         {
             return const_cast<Graph<T, W>*>(this)->getAdjacentNodes(node_value);
+        }
+
+
+        // Neu - for Kruskal needed
+        //std::vector<Edge<Weight>> getAllEdges() const {
+
+        //    std::vector<WeightedEdge<Weight>> edges;
+
+        //    for (size_t row = 0; const auto & vertices : m_adjacencyList) {
+        //        for (size_t column = 0; auto entry : vertices) {
+        //            if (entry.has_value()) {
+        //                edges.push_back({ row, column, entry.value() });
+        //            }
+        //            ++column;
+        //        }
+        //        ++row;
+        //    }
+        //    return edges;
+        //}
+
+        std::vector<Edge<Weight>> getAllEdges() const {
+
+            std::vector<WeightedEdge<Weight>> edges;
+
+            for (size_t source{}; const GraphNode<T, W>&node : m_adjacencyList) {
+
+                AdjacencyNodesList<W>& list = node->getAdjacentNodes();
+
+                for (size_t target = 0; const auto& entry : list) {
+
+                    //if (entry.has_value()) {
+                    //    edges.push_back({ row, column, entry.value() });
+                    //}
+
+                    Edge<T, W> edge {};
+
+                    edges.push_back(source, getTrackTarget(entry), getTrackWeight(entry));
+
+                    ++target;
+                }
+                ++source;
+            }
+
+            return edges;
         }
 
     private:
@@ -310,7 +346,7 @@ namespace Graph_Theory
 
                 oss << "[" << std::setw(width) << std::right << fromValue << "]";
 
-                const AdjacencyListType<W>& list = getAdjacentNodes(fromValue);
+                const AdjacencyNodesList<W>& list = getAdjacentNodes(fromValue);
 
                 if (list.size() != 0) {
 
@@ -367,7 +403,7 @@ namespace Graph_Theory
 
                         const GraphNode<T, W>& node = m_nodes[path[index]];
                         
-                        const auto& [to, weight] = node.getEdge(path[index + 1]);
+                        const auto& [to, weight] = node.getTrack(path[index + 1]);
 
                         if constexpr (! std::is_same<W, EmptyType>::value)
                         {

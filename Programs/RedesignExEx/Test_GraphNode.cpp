@@ -2,7 +2,7 @@
 // Graph Theory Redesign
 // =====================================================================================
 
-#include "GraphNode.h"
+#include "Graph_Node.h"
 
 using namespace Graph_Theory;
 
@@ -19,9 +19,9 @@ void test_graph_nodes_01()
     //template<typename Weight>
     //using Edge = std::pair<size_t, std::optional<Weight>>;
 
-    Edge<EmptyType> edge1{ 0, std::nullopt };
-    Edge<EmptyType> edge2{ 1, std::nullopt };
-    Edge<EmptyType> edge3{ 2, std::nullopt };
+    Track<EmptyType> edge1{ 0, std::nullopt };
+    Track<EmptyType> edge2{ 1, std::nullopt };
+    Track<EmptyType> edge3{ 2, std::nullopt };
 
     auto& list = node.getAdjacentNodes();
 

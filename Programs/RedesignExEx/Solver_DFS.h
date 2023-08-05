@@ -153,7 +153,7 @@ namespace Graph_Theory_DFS
             m_components.at(index) = m_count;    // set mark
 
             // do for all adjacent vertices of the current vertex
-            const AdjacencyListType<>& neighbours { m_graph[index].getAdjacentNodes() };
+            const AdjacencyNodesList<>& neighbours { m_graph[index].getAdjacentNodes() };
 
             for (const auto& [next, weight] : neighbours) {
 
@@ -181,7 +181,7 @@ namespace Graph_Theory_DFS
             // do for all adjacent vertices of the dequeued vertex
             const GraphNode<T>& sourceNode { m_graph[source] };
 
-            const AdjacencyListType<>& neighbours {
+            const AdjacencyNodesList<>& neighbours {
                 m_graph.getAdjacentNodes(sourceNode.value())
             };
 
@@ -220,7 +220,7 @@ namespace Graph_Theory_DFS
                 // do for every edge
                 const GraphNode<T>& sourceNode{ m_graph[source] };
 
-                const AdjacencyListType<>& neighbours {
+                const AdjacencyNodesList<>& neighbours {
                     m_graph.getAdjacentNodes(sourceNode.value())
                 };
 

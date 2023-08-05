@@ -12,9 +12,9 @@ namespace Graph_Theory_Dijkstra
 {
     // custom function object (functor) to compare weighted edges
     template <typename W>
-    struct EdgesComparer
+    struct WeightedTrackComparer
     {
-        bool operator() (const Edge<W>& l, const Edge<W>& r) const { 
+        bool operator() (const Track<W>& l, const Track<W>& r) const {
 
             const auto& [vertexLeft, weightLeft] = l;
             const auto& [vertexRight, weightRight] = r;
@@ -51,10 +51,10 @@ namespace Graph_Theory_Dijkstra
             visited[first] = true;
 
             // need a priority queue for weighted edges
-            std::priority_queue <Edge<W>, std::vector<Edge<W>>, EdgesComparer<W>> pq;
+            std::priority_queue <Track<W>, std::vector<Track<W>>, WeightedTrackComparer<W>> pq;
 
             // add source edge to priority queue, distance is 0
-            Edge<W> startEdge{ first, W{} };
+            Track<W> startEdge{ first, W{} };
             pq.push(startEdge);
 
             // while priority queue isn't empty...
@@ -65,7 +65,7 @@ namespace Graph_Theory_Dijkstra
                 pq.pop();
 
                 // get all adjacent edges of the dequeued vertex
-                const AdjacencyListType<W>& neighbours = m_graph[vertex].getAdjacentNodes();
+                const AdjacencyNodesList<W>& neighbours = m_graph[vertex].getAdjacentNodes();
                 
                 // examine next edges
                 for (const auto& [nextVertex, nextWeight] : neighbours) {
@@ -82,7 +82,7 @@ namespace Graph_Theory_Dijkstra
                         m_distances[nextVertex] = pathWeight;
 
                         // update edge on shortest path
-                        Edge<W> nextEdge {nextVertex, pathWeight};
+                        Track<W> nextEdge {nextVertex, pathWeight};
 
                         // update current 'from' vertex
                         m_previousVertex[nextVertex] = vertex;
