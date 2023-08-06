@@ -28,6 +28,10 @@ void test_graphs_01()
     graph.addEdge(44, 55);
 
     std::cout << graph.toString() << std::endl;
+
+    auto x = graph.getAllEdges();
+
+
 }
 
 void test_graphs_01_a()

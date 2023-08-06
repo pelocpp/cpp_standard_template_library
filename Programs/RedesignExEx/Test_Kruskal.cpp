@@ -12,8 +12,6 @@ void test_kruskal_01()
 {
     // https://www.programiz.com/dsa/kruskal-algorithm
 
-    constexpr int NumNodes = 6;
-
     Graph<std::string, size_t> graph{ Direction::Undirected, Weight::Weighted };
 
     graph.addNodes({ "0", "1", "2", "3", "4", "5" });

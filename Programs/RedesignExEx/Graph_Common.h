@@ -10,6 +10,7 @@
 #include <sstream>
 #include <vector>
 #include <set>
+#include <tuple>
 #include <deque>
 #include <utility>
 #include <algorithm>
@@ -87,9 +88,6 @@ using AdjacencyTrackList = std::set<Track<Weight>, TrackComparer<Weight>>;
 // ------------------------------------------------------------------
 
 using Path = std::vector<size_t>;
-
-// ------------------------------------------------------------------
-
 
 // =====================================================================================
 // End-of-File

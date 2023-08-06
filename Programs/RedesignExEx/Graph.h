@@ -223,7 +223,6 @@ namespace Graph_Theory
             return totalResult;
         }
 
-
         AdjacencyTrackList<W>& getAdjacentTracks(const T& node_value)
         {
             static AdjacencyTrackList<W> empty {};
@@ -454,15 +453,9 @@ namespace Graph_Theory
 
             return true;
         }
-
-        //void sort() {
-
-        //    std::sort(
-        //        std::begin(m_nodes),
-        //        std::end(m_nodes)
-        //    );
-        //}
     };
+
+
 }
 
 // =====================================================================================
