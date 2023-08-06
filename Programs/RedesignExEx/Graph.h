@@ -258,13 +258,16 @@ namespace Graph_Theory
         //    return edges;
         //}
 
-        std::vector<Edge<Weight>> getAllEdges() const {
 
-            std::vector<WeightedEdge<Weight>> edges;
+        // TO BE DONE: Das muss DRINGEND mit einem Iterator == Lazy gemacht werden !!!!
 
-            for (size_t source{}; const GraphNode<T, W>&node : m_adjacencyList) {
+        std::vector<Edge<W>> getAllEdges() const {
 
-                AdjacencyNodesList<W>& list = node->getAdjacentNodes();
+            std::vector<Edge<W>> edges;
+
+            for (size_t source{}; const GraphNode<T, W>&node : m_nodes) {
+
+                const AdjacencyNodesList<W>& list = node.getAdjacentNodes();
 
                 for (size_t target = 0; const auto& entry : list) {
 
@@ -272,9 +275,9 @@ namespace Graph_Theory
                     //    edges.push_back({ row, column, entry.value() });
                     //}
 
-                    Edge<T, W> edge {};
+                    Edge<W> edge { source, getTrackTarget(entry), getTrackWeight(entry) };
 
-                    edges.push_back(source, getTrackTarget(entry), getTrackWeight(entry));
+                    edges.push_back(edge);
 
                     ++target;
                 }

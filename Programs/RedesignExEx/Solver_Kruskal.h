@@ -17,7 +17,7 @@ namespace Graph_Theory_Kruskal
     private:
         const Graph<T, W>& m_graph;
         std::vector<size_t> m_root;       // root nodes ('Union Find' algorithm)
-        std::vector<Edge<Weight>> m_mst;  // minimum spanning tree (described with edges)
+        std::vector<Edge<W>> m_mst;  // minimum spanning tree (described with edges)
 
     public:
         KruskalSolver(const Graph<T, W>& graph) : m_graph{ graph } {}
@@ -40,15 +40,15 @@ namespace Graph_Theory_Kruskal
             initRootNodes();
 
             // retrieve and sort all edges
-            std::vector<Edge<Weight>> edges = m_graph.getAllEdges();
+            std::vector<Edge<W>> edges = m_graph.getAllEdges();
 
             std::sort(
                 std::begin(edges),
                 std::end(edges),
-                [](const Edge<Weight>& edge1, const Edge<Weight>& edge2) -> bool {
+                [](const Edge<W>& edge1, const Edge<W>& edge2) -> bool {
 
-                    Weight x1 = getEdgeWeight(edge1);
-                    Weight x2 = getEdgeWeight(edge2);
+                    W x1 = getEdgeWeight(edge1);
+                    W x2 = getEdgeWeight(edge2);
 
                     return x1 < x2;
 
@@ -56,7 +56,7 @@ namespace Graph_Theory_Kruskal
                 }
             );
 
-            for (const Edge<Weight>& edge : edges) {
+            for (const Edge<W>& edge : edges) {
 
                 size_t source = getEdgeSource(edge);
                 size_t target = getEdgeTarget(edge);
@@ -90,11 +90,11 @@ namespace Graph_Theory_Kruskal
 
         void printMST() {
             std::cout << "Edge :" << " Weight" << std::endl;
-            for (const Edge<Weight>& edge : m_mst) {
-                //std::cout
-                //    << getEdgeSource(edge) << " - "
-                //    << getEdgeTarget(edge) << " : "
-                //    << getEdgeWeight<Weight>(edge);
+            for (const Edge<W>& edge : m_mst) {
+                std::cout
+                    << getEdgeSource(edge) << " - "
+                    << getEdgeTarget(edge) << " : "
+                    << getEdgeWeight<W>(edge);
                 std::cout << std::endl;
             }
         }

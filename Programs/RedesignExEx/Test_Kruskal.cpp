@@ -8,18 +8,6 @@
 using namespace Graph_Theory;
 using namespace Graph_Theory_Kruskal;
 
-//// d) Undirected, Weighted
-//
-//Graph<std::string, int> graph{ Direction::Undirected, Weight::Weighted };
-//
-//graph.addNodes({ "A", "B", "C", "D" });
-//
-//graph.addEdge("A", "B", 3000);
-//graph.addEdge("B", "C", 4000);
-//graph.addEdge("B", "A", 5000);
-//graph.addEdge("C", "D", 6000);
-//graph.addEdge("D", "A", 7000);
-
 void test_kruskal_01()
 {
     // https://www.programiz.com/dsa/kruskal-algorithm
@@ -51,6 +39,11 @@ void test_kruskal_01()
     KruskalSolver<int, int> kruskal{ graph };
     kruskal.solve();
     kruskal.printMST();
+}
+
+void test_kruskal()
+{
+    test_kruskal_01();
 }
 
 // =====================================================================================

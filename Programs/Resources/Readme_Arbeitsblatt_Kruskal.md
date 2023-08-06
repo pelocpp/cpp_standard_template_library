@@ -45,6 +45,19 @@ https://www.youtube.com/watch?v=0jNmHPfA_yE&t=476s    (11 Minuten)
 
 ### Test der Implementierung:
 
+
+Es folgen einige Beispiele aus dem Netz:
+
+Erstes Beispiel siehe
+
+https://www.programiz.com/dsa/kruskal-algorithm
+
+<img src="graphs_21_kruskal_01.svg" width="300">
+
+*Abbildung* 1: Ein ungerichteter, gewichteter Graph zum Testen des *Kruskal* Algorithmus.
+
+
+
 Auf der Homepage der Technischen Universität München kann man den Algorithmus
 interaktiv testen:
 

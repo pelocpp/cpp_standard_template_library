@@ -73,6 +73,11 @@ namespace Graph_Theory
         }
 
 
+        // TO BE DONE:
+        // a) AdjacencyTrackList
+        // b) AdjacencyEdgesList
+
+
         // NEU
         const Track<W>& getTrack(size_t vertex) const {
 
