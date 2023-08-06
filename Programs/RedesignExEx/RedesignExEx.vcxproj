@@ -24,6 +24,7 @@
     <ProjectGuid>{0a2f6d9d-ab65-4099-9c7f-8ea9561ebd69}</ProjectGuid>
     <RootNamespace>RedesignExEx</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>RedesignEx</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
