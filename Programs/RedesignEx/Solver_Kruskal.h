@@ -39,26 +39,26 @@ namespace Graph_Theory_Kruskal
             initRootNodes();
 
             // retrieve and sort all edges
-            std::vector<Edge<W>> edges = m_graph.getAllEdges();
+            std::vector<Edge<W>> edges { m_graph.getAllEdges() };
 
             std::sort(
                 std::begin(edges),
                 std::end(edges),
                 [](const Edge<W>& edge1, const Edge<W>& edge2) -> bool {
 
-                    const W x1 = getEdgeWeight(edge1).value();
-                    const W x2 = getEdgeWeight(edge2).value();
-                    return x1 < x2;
+                    const W w1{ getEdgeWeight(edge1).value() };
+                    const W w2{ getEdgeWeight(edge2).value() };
+                    return w1 < w2;
                 }
             );
 
             for (const Edge<W>& edge : edges) {
 
-                size_t source = getEdgeSource(edge);
-                size_t target = getEdgeTarget(edge);
+                size_t source{ getEdgeSource(edge) };
+                size_t target{ getEdgeTarget(edge) };
 
-                size_t sourceRepresentative = findSet(source);
-                size_t targetRepresentative = findSet(target);
+                size_t sourceRepresentative{ findSet(source) };
+                size_t targetRepresentative{ findSet(target) };
 
                 if (sourceRepresentative != targetRepresentative) {
                     m_mst.push_back(edge); // add to minimum spanning tree

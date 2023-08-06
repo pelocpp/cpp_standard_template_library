@@ -271,18 +271,13 @@ namespace Graph_Theory
 
                 const AdjacencyTrackList<W>& list = node.getAdjacentTracks();
 
-                for (size_t target = 0; const auto& entry : list) {
-
-                    //if (entry.has_value()) {
-                    //    edges.push_back({ row, column, entry.value() });
-                    //}
+                for (const auto & entry : list) {
 
                     Edge<W> edge { source, getTrackTarget(entry), getTrackWeight(entry) };
 
                     edges.push_back(edge);
-
-                    ++target;
                 }
+
                 ++source;
             }
 

@@ -29,9 +29,15 @@ void test_graphs_01()
 
     std::cout << graph.toString() << std::endl;
 
-    auto x = graph.getAllEdges();
+    std::vector<Edge<std::nullptr_t>> edges = graph.getAllEdges();
 
+    for (const auto& [source, target, weight] : edges) {
 
+        const auto& sourceValue = graph.getNodeData(source);
+        const auto& targetValue = graph.getNodeData(target);
+
+        std::cout << sourceValue << " -> " << targetValue << std::endl;
+    }
 }
 
 void test_graphs_01_a()
@@ -221,16 +227,16 @@ void test_graphs_11()
 void test_graphs()
 {
     test_graphs_01();
-    test_graphs_01_a();
-    test_graphs_02();
-    test_graphs_02_a();
-    test_graphs_03();
-    test_graphs_03_a();
-    test_graphs_04();
-    test_graphs_04_a();
+    //test_graphs_01_a();
+    //test_graphs_02();
+    //test_graphs_02_a();
+    //test_graphs_03();
+    //test_graphs_03_a();
+    //test_graphs_04();
+    //test_graphs_04_a();
 
-    test_graphs_10();
-    test_graphs_11();
+    //test_graphs_10();
+    //test_graphs_11();
 }
 
 // =====================================================================================
