@@ -89,13 +89,13 @@ namespace Graph_Theory_Kruskal
             std::cout << "Edge :" << " Weight" << std::endl;
             for (const Edge<W>& edge : m_mst) {
 
-                size_t source = getEdgeSource(edge);
-                size_t target = getEdgeTarget(edge);
+                size_t source{ getEdgeSource(edge) };
+                size_t target{ getEdgeTarget(edge) };
 
-                W weight = getEdgeWeight<W>(edge).value();
+                W weight{ getEdgeWeight<W>(edge).value() };
 
-                const T& sourceValue = m_graph.getNodeData(source);
-                const T& targetValue = m_graph.getNodeData(target);
+                const T& sourceValue{ m_graph.getNodeData(source) };
+                const T& targetValue{ m_graph.getNodeData(target) };
 
                 std::cout
                     << sourceValue << " - "
