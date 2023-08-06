@@ -151,6 +151,66 @@ void test_dijkstra_03()
     std::cout << graph.toString(shortestPath) << std::endl;
 }
 
+void test_dijkstra_03_testing_add_edges()
+{
+    // Buch "David Kopec", Seite 145 ff.
+
+    Graph<std::string, size_t> graph{ Direction::Undirected, Weight::Weighted };
+
+    graph.addNodes({
+        "Seattle", "San Francisco", "Los Angeles",
+        "Riverside", "Phoenix", "Chicago", "Boston", "New York", "Atlanta",
+        "Miami", "Dallas", "Houston", "Detroit", "Philadelphia", "Washington"
+        }
+    );
+
+    graph.addEdges(
+        {
+            { "Seattle", "Chicago", 1737 },
+            { "Seattle", "San Francisco", 678 },
+            { "San Francisco", "Riverside", 386 },
+            { "San Francisco", "Los Angeles", 348 },
+            { "Los Angeles", "Riverside", 50 },
+            { "Los Angeles", "Phoenix", 357 },
+            { "Riverside", "Phoenix", 307 },
+            { "Riverside", "Chicago", 1704 },
+            { "Phoenix", "Dallas", 887 },
+            { "Phoenix", "Houston", 1015 },
+            { "Dallas", "Chicago", 805 },
+            { "Dallas", "Atlanta", 721 },
+            { "Dallas", "Houston", 225 },
+            { "Houston", "Atlanta", 702 },
+            { "Houston", "Miami", 968 },
+            { "Atlanta", "Chicago", 588 },
+            { "Atlanta", "Washington", 543 },
+            { "Atlanta", "Miami", 604 },
+            { "Miami", "Washington", 923 },
+            { "Chicago", "Detroit", 238 },
+            { "Detroit", "Boston", 613 },
+            { "Detroit", "Washington", 396 },
+            { "Detroit", "New York", 482 },
+            { "Boston", "New York", 190 },
+            { "New York", "Philadelphia", 81 },
+            { "Philadelphia", "Washington", 123 }
+        }
+    );
+
+    std::cout << graph.toString(13) << std::endl;
+
+    DijkstraSolver<std::string, size_t> dijkstra{ graph };
+
+    dijkstra.computeShortestPaths(std::string {"Los Angeles"});
+    std::vector<size_t> distances = dijkstra.getDistances();
+
+    std::cout << "Distances from Los Angeles:" << std::endl << std::endl;
+    std::cout << dijkstra.toString(distances, 14) << std::endl;
+
+    std::vector<size_t> shortestPath = dijkstra.computeShortestPath(
+        std::string {"Los Angeles"}, std::string {"Boston"}
+    );
+    std::cout << graph.toString(shortestPath) << std::endl;
+}
+
 void test_dijkstra_04()
 {
     // Beispiel "TU München Europakarte"
@@ -206,7 +266,8 @@ void test_dijkstra()
 {
     //test_dijkstra_01();
     //test_dijkstra_02();
-    test_dijkstra_03();
+    //test_dijkstra_03();
+    test_dijkstra_03_testing_add_edges();
     //test_dijkstra_04();
 }
 

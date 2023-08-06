@@ -88,9 +88,6 @@ namespace Graph_Theory
             for (const auto& node : list) {
                 addNode(node);
             }
-
-            // TODO: Entfernen !!!
-    //        sort();
         }
 
         template<class InputIt>
@@ -99,28 +96,7 @@ namespace Graph_Theory
             for (; first != last; ++first) {
                 addNode(*first);
             }
-
-     //       sort();
         }
-
-        // TODO: Allgemein: Es müssen / sollten 2 Varianten an Methoden vorhanden sein:
-        // addEdge mit Indices
-        // addEdge mit Werten von Knoten
-        // Oder auch nicht ...
-
-        bool addEdges(const std::initializer_list<std::pair<T, T>> list) {
-
-            bool totalResult{ true };
-
-            for (const auto& [from, to] : list) {
-
-                bool result = addEdge(from, to);
-                totalResult = totalResult && result;
-            }
-
-            return totalResult;
-        }
-
 
         // returns true if the edge was successfully created
         bool addEdge(const T& fromNode, const T& toNode) {
@@ -137,11 +113,11 @@ namespace Graph_Theory
                 return false;
             }
 
-            const size_t toIndex{ getIndexOfNode(to) };
-
-            AdjacencyNodesList<W>& fromList = from->getAdjacentNodes();
+            const size_t toIndex{ getIndexFromNode(to) };
 
             Track<W> track{toIndex, std::nullopt};
+
+            AdjacencyTrackList<W>& fromList = from->getAdjacentTracks();
 
             auto [pos, succeeded] = fromList.insert(track);
 
@@ -151,9 +127,9 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    AdjacencyNodesList<W>& toList = target.getAdjacentNodes();
+                    const size_t fromIndex{ getIndexFromNode(from) };
 
-                    const size_t fromIndex{ getIndexOfNode(from) };
+                    AdjacencyTrackList<W>& toList = target.getAdjacentTracks();
 
                     Track<W> track{fromIndex, std::nullopt};
 
@@ -188,11 +164,11 @@ namespace Graph_Theory
                 return false;
             }
 
-            const size_t toIndex{ getIndexOfNode(to) };
-
-            AdjacencyNodesList<W>& fromList = from->getAdjacentNodes();
+            const size_t toIndex{ getIndexFromNode(to) };
 
             Track<W> track{toIndex, weight};
+
+            AdjacencyTrackList<W>& fromList = from->getAdjacentTracks();
 
             auto [pos, succeeded] = fromList.insert(track);
 
@@ -202,11 +178,11 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    AdjacencyNodesList<W>& toList = target.getAdjacentNodes();
-
-                    const size_t fromIndex{ getIndexOfNode(from) };
+                    const size_t fromIndex{ getIndexFromNode(from) };
 
                     Track<W> track{fromIndex, weight};
+
+                    AdjacencyTrackList<W>& toList = target.getAdjacentTracks();
 
                     auto [pos, succeeded] = toList.insert(track);
 
@@ -221,9 +197,36 @@ namespace Graph_Theory
             }
         }
 
-        AdjacencyNodesList<W>& getAdjacentNodes(const T& node_value)
+        bool addEdges(const std::initializer_list<std::pair<T, T>> list) {
+
+            bool totalResult{ true };
+
+            for (const auto& [from, to] : list) {
+
+                bool result = addEdge(from, to);
+                totalResult = totalResult && result;
+            }
+
+            return totalResult;
+        }
+
+        bool addEdges(const std::initializer_list<std::tuple<T, T, W>> list) {
+
+            bool totalResult{ true };
+
+            for (const auto& [from, to, weight] : list) {
+
+                bool result = addEdge(from, to, weight);
+                totalResult = totalResult && result;
+            }
+
+            return totalResult;
+        }
+
+
+        AdjacencyTrackList<W>& getAdjacentTracks(const T& node_value)
         {
-            static AdjacencyNodesList<W> empty {};
+            static AdjacencyTrackList<W> empty {};
 
             auto node{ findNode(node_value) };
 
@@ -232,12 +235,12 @@ namespace Graph_Theory
                 return empty;
             }
 
-            return node->getAdjacentNodes();
+            return node->getAdjacentTracks();
         }
 
-        const AdjacencyNodesList<W>& getAdjacentNodes(const T& node_value) const
+        const AdjacencyTrackList<W>& getAdjacentTracks(const T& node_value) const
         {
-            return const_cast<Graph<T, W>*>(this)->getAdjacentNodes(node_value);
+            return const_cast<Graph<T, W>*>(this)->getAdjacentTracks(node_value);
         }
 
 
@@ -267,7 +270,7 @@ namespace Graph_Theory
 
             for (size_t source{}; const GraphNode<T, W>&node : m_nodes) {
 
-                const AdjacencyNodesList<W>& list = node.getAdjacentNodes();
+                const AdjacencyTrackList<W>& list = node.getAdjacentTracks();
 
                 for (size_t target = 0; const auto& entry : list) {
 
@@ -307,15 +310,15 @@ namespace Graph_Theory
         }
 
         // given an iterator to a node, returns the index of that node in the nodes container
-        size_t getIndexOfNode(const typename NodesContainerType<T, W>::const_iterator& node) const noexcept
+        size_t getIndexFromNode(const typename NodesContainerType<T, W>::const_iterator& position) const noexcept
         {
-            const auto index{ std::distance(std::cbegin(m_nodes), node) };
+            const GraphNode<T, W>& node = *position;
 
-            return static_cast<size_t>(index);
+            return node.getIndex();
         }
 
     public:
-        size_t getIndexOfNode(const T& value) const
+        size_t getIndexFromNode(const T& value) const
         {
             const auto position{ findNode(value) };
 
@@ -323,15 +326,19 @@ namespace Graph_Theory
                 throw std::invalid_argument("Node with specified value not found!");
             }
 
-            const auto index{ std::distance(std::cbegin(m_nodes), position) };
+            const GraphNode<T, W>& node = *position;
 
-            return static_cast<size_t>(index);
+            return node.getIndex();
         }
 
-        // eher nicht benötigt - ich arbeite nicht Index Orientiert ...................
-        //T getNodeData(size_t index) {
-        //    return m_nodes[index].value();
-        //}
+        // brauche ich da beide Versionen
+        T getNodeData(size_t index) {
+            return m_nodes[index].value();
+        }
+
+        const T& getNodeData(size_t index) const {
+            return m_nodes[index].value();
+        }
 
         std::string toString(int width = 0) const {
 
@@ -349,7 +356,7 @@ namespace Graph_Theory
 
                 oss << "[" << std::setw(width) << std::right << fromValue << "]";
 
-                const AdjacencyNodesList<W>& list = getAdjacentNodes(fromValue);
+                const AdjacencyTrackList<W>& list = getAdjacentTracks(fromValue);
 
                 if (list.size() != 0) {
 
@@ -448,13 +455,13 @@ namespace Graph_Theory
             return true;
         }
 
-        void sort() {
+        //void sort() {
 
-            std::sort(
-                std::begin(m_nodes),
-                std::end(m_nodes)
-            );
-        }
+        //    std::sort(
+        //        std::begin(m_nodes),
+        //        std::end(m_nodes)
+        //    );
+        //}
     };
 }
 

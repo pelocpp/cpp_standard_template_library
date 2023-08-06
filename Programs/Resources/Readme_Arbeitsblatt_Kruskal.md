@@ -56,6 +56,23 @@ https://www.programiz.com/dsa/kruskal-algorithm
 
 *Abbildung* 1: Ein ungerichteter, gewichteter Graph zum Testen des *Kruskal* Algorithmus.
 
+Eine Lösung, die der implementierte Algorithmus berechntet, finden Sie in der nächsten
+Abbildung vor:
+
+<img src="graphs_21_kruskal_01_mst.svg" width="300">
+
+*Abbildung* 2: Ein minimaler Spannbaum zu dem Graphen aus *Abbildung* 1.
+
+Grundsätzlich gilt, dass ein Graph natürlich mehrere minimale Spannbäume haben kann.
+Die Nichteindeutigkeit des Algorithmus erkennen wir in *Abbildung* 3:
+Der hier gezeigte Spannbaum ist ebenfalls minimal &ndash; seine Summe der Gewichte beträgt
+ebenfalls 14 &ndash;, er wird aber nicht berechnet.
+
+<img src="graphs_21_kruskal_02_mst.svg" width="300">
+
+*Abbildung* 3: Ein zweiter minimaler Spannbaum zu dem Graphen aus *Abbildung* 1.
+
+
 
 
 Auf der Homepage der Technischen Universität München kann man den Algorithmus

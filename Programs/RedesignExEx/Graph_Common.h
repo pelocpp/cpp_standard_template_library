@@ -34,12 +34,9 @@ using EmptyType = std::nullptr_t;
 
 // ------------------------------------------------------------------
 
-
 template<typename Weight>
 using Track = std::pair<size_t, std::optional<Weight>>;
 
-// TODO: ÜBERALL, wo .first im QUellcode steht:  getTarget einsetzen !!!!!!!!!!!!!!!!
-// TODO: HINWEIS: Dieses getTarget wird derzeit nicht verwendet
 template<typename Weight>
 auto getTrackTarget(const Track<Weight>& edge) {
     return std::get<0>(edge);
@@ -49,7 +46,6 @@ template<typename Weight>
 auto getTrackWeight(const Track<Weight>& edge) {
     return std::get<1>(edge);
 }
-
 
 // ------------------------------------------------------------------
 
@@ -68,34 +64,10 @@ size_t getEdgeTarget(const Edge<Weight>& edge) {
 
 template<typename Weight>
 auto getEdgeWeight(const Edge<Weight>& edge) {
-    return std::get<2>(edge).value();   // TODO: Hmmm, vielleicht geht das schöner ....
+    return std::get<2>(edge);
 }
 
-
-// custom function object (functor) to compare weighted edges
-//template <typename W>
-//struct EdgesComparer
-//{
-//    bool operator() (const ExtendedEdge<W>& l, const ExtendedEdge<W>& r) const {
-//
-//        const auto& [vertexLeft, weightLeft] = l;
-//        const auto& [vertexRight, weightRight] = r;
-//        return weightLeft.value() > weightRight.value();
-//    }
-//};
-
-// update edge on shortest path
-//Edge<W> nextEdge {nextVertex, pathWeight};
-//ExtendedEdge<W> extendedEdge{vertex, nextEdge};
-//m_shortestPathMap[nextVertex] = extendedEdge;
-//
-//ExtendedEdge<W> edge{ m_shortestPathMap[end] };
-//size_t from{ getFrom(edge) };
-
-
-
 // ------------------------------------------------------------------
-
 
 // custom function object (functor) to compare tracks
 template <typename W>
@@ -110,7 +82,7 @@ struct TrackComparer
 };
 
 template<typename Weight = EmptyType>
-using AdjacencyNodesList = std::set<Track<Weight>, TrackComparer<Weight>>;
+using AdjacencyTrackList = std::set<Track<Weight>, TrackComparer<Weight>>;
 
 // ------------------------------------------------------------------
 

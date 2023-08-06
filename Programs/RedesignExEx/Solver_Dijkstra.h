@@ -43,7 +43,7 @@ namespace Graph_Theory_Dijkstra
             std::fill(std::begin(m_previousVertex), std::end(m_previousVertex), W{});
 
             // compute start index
-            const size_t first{ m_graph.getIndexOfNode(root) };
+            const size_t first{ m_graph.getIndexFromNode(root) };
             m_distances[first] = size_t{};
 
             // helper container to manage already visited nodes
@@ -65,7 +65,7 @@ namespace Graph_Theory_Dijkstra
                 pq.pop();
 
                 // get all adjacent edges of the dequeued vertex
-                const AdjacencyNodesList<W>& neighbours = m_graph[vertex].getAdjacentNodes();
+                const AdjacencyTrackList<W>& neighbours = m_graph[vertex].getAdjacentTracks();
                 
                 // examine next edges
                 for (const auto& [nextVertex, nextWeight] : neighbours) {
@@ -102,8 +102,9 @@ namespace Graph_Theory_Dijkstra
 
         Path computeShortestPath(const T& startValue, const T& endValue) {
 
-            const size_t start{ m_graph.getIndexOfNode(startValue) };
-            const size_t end{ m_graph.getIndexOfNode(endValue) };
+            const size_t start{ m_graph.getIndexFromNode(startValue) };
+
+            const size_t end{ m_graph.getIndexFromNode(endValue) };
 
             Path path{};
 

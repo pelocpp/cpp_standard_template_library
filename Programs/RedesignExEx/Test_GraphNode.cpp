@@ -23,7 +23,7 @@ void test_graph_nodes_01()
     Track<EmptyType> edge2{ 1, std::nullopt };
     Track<EmptyType> edge3{ 2, std::nullopt };
 
-    auto& list = node.getAdjacentNodes();
+    auto& list = node.getAdjacentTracks();
 
     list.insert(edge1);
     list.insert(edge2);

@@ -24,32 +24,36 @@ void test_bfs_01()
         }
     );
 
-    graph.addEdge("Seattle", "Chicago");
-    graph.addEdge("Seattle", "San Francisco");
-    graph.addEdge("San Francisco", "Riverside");
-    graph.addEdge("San Francisco", "Los Angeles");
-    graph.addEdge("Los Angeles", "Riverside");
-    graph.addEdge("Los Angeles", "Phoenix");
-    graph.addEdge("Riverside", "Phoenix");
-    graph.addEdge("Riverside", "Chicago");
-    graph.addEdge("Phoenix", "Dallas");
-    graph.addEdge("Phoenix", "Houston");
-    graph.addEdge("Dallas", "Chicago");
-    graph.addEdge("Dallas", "Atlanta");
-    graph.addEdge("Dallas", "Houston");
-    graph.addEdge("Houston", "Atlanta");
-    graph.addEdge("Houston", "Miami");
-    graph.addEdge("Atlanta", "Chicago");
-    graph.addEdge("Atlanta", "Washington");
-    graph.addEdge("Atlanta", "Miami");
-    graph.addEdge("Miami", "Washington");
-    graph.addEdge("Chicago", "Detroit");
-    graph.addEdge("Detroit", "Boston");
-    graph.addEdge("Detroit", "Washington");
-    graph.addEdge("Detroit", "New York");
-    graph.addEdge("Boston", "New York");
-    graph.addEdge("New York", "Philadelphia");
-    graph.addEdge("Philadelphia", "Washington");
+    graph.addEdges(
+        {
+            { "Seattle", "Chicago" },
+            { "Seattle", "San Francisco" },
+            { "San Francisco", "Riverside" },
+            { "San Francisco", "Los Angeles" },
+            { "Los Angeles", "Riverside" },
+            { "Los Angeles", "Phoenix" },
+            { "Riverside", "Phoenix" },
+            { "Riverside", "Chicago" },
+            { "Phoenix", "Dallas" },
+            { "Phoenix", "Houston" },
+            { "Dallas", "Chicago" },
+            { "Dallas", "Atlanta" },
+            { "Dallas", "Houston" },
+            { "Houston", "Atlanta" },
+            { "Houston", "Miami" },
+            { "Atlanta", "Chicago" },
+            { "Atlanta", "Washington" },
+            { "Atlanta", "Miami" },
+            { "Miami", "Washington" },
+            { "Chicago", "Detroit" },
+            { "Detroit", "Boston" },
+            { "Detroit", "Washington" },
+            { "Detroit", "New York" },
+            { "Boston", "New York" },
+            { "New York", "Philadelphia" },
+            { "Philadelphia", "Washington" }
+        }
+    );
 
     std::cout << graph.toString(13) << std::endl;
 
@@ -61,8 +65,8 @@ void test_bfs_01()
     //const std::string source{ "Los Angeles" };
     //const std::string target{ "Washington" };
 
-    const size_t sourceIndex{ graph.getIndexOfNode(source) };
-    const size_t targetIndex{ graph.getIndexOfNode(target) };
+    const size_t sourceIndex{ graph.getIndexFromNode(source) };
+    const size_t targetIndex{ graph.getIndexFromNode(target) };
 
     std::vector<std::optional<size_t>> paths = bfs.solve(sourceIndex);
 
@@ -77,7 +81,7 @@ void test_bfs_02()
 
     Graph<int> graph{ Direction::Undirected, Weight::Unweighted };
 
-    // create a list of nodes from 0 uo to 22
+    // create a list of nodes from 0 up to 22
     std::list<int> l(23);
     std::iota(l.begin(), l.end(), 0);
     graph.addNodes(l.begin(), l.end());
@@ -90,14 +94,13 @@ void test_bfs_02()
 
     std::cout << graph.toString(2) << std::endl;
 
-
     BFSSolver<int> bfs{ graph };
 
     const int source{ 0 };
     const int target{22 };
 
-    const size_t sourceIndex{ graph.getIndexOfNode(source) };
-    const size_t targetIndex{ graph.getIndexOfNode(target) };
+    const size_t sourceIndex{ graph.getIndexFromNode(source) };
+    const size_t targetIndex{ graph.getIndexFromNode(target) };
 
     std::vector<std::optional<size_t>> paths = bfs.solve(sourceIndex);
 
@@ -135,8 +138,8 @@ void test_bfs_03()
     //const int source{ 6 };
     //const int target{ 18 };
 
-    const size_t sourceIndex{ graph.getIndexOfNode(source) };
-    const size_t targetIndex{ graph.getIndexOfNode(target) };
+    const size_t sourceIndex{ graph.getIndexFromNode(source) };
+    const size_t targetIndex{ graph.getIndexFromNode(target) };
 
     std::vector<std::optional<size_t>> paths = bfs.solve(sourceIndex);
 

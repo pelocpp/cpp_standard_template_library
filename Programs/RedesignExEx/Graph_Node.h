@@ -32,7 +32,7 @@ namespace Graph_Theory
     private:
         size_t m_index;
         T m_data;
-        AdjacencyNodesList<W> m_adjacentNodes;
+        AdjacencyTrackList<W> m_adjacentTracks;
 
     public:
         // constructing a graph_node for a given value
@@ -50,7 +50,7 @@ namespace Graph_Theory
         // returns the number of nodes in the adjacency list
         size_t count() const noexcept
         {
-            return m_adjacentNodes.size();
+            return m_adjacentTracks.size();
         }
 
         size_t getIndex()  const noexcept { return m_index; }
@@ -62,14 +62,14 @@ namespace Graph_Theory
         // 
 
         // returns a reference to the adjacency list
-        const AdjacencyNodesList<W>& getAdjacentNodes() const
+        const AdjacencyTrackList<W>& getAdjacentTracks() const
         {
-            return m_adjacentNodes;
+            return m_adjacentTracks;
         }
 
-        AdjacencyNodesList<W>& getAdjacentNodes()
+        AdjacencyTrackList<W>& getAdjacentTracks()
         {
-            return m_adjacentNodes;
+            return m_adjacentTracks;
         }
 
 
@@ -84,8 +84,8 @@ namespace Graph_Theory
             // Hmmmm, was, wenn verte nicht passt ?????????????????????????????
 
             const auto pos = std::find_if(
-                m_adjacentNodes.begin(), 
-                m_adjacentNodes.end(),
+                m_adjacentTracks.begin(),
+                m_adjacentTracks.end(),
                 [=](const auto& track) {
                     size_t target = track.first;   // TODO: da geht entweder structured binding oder getTarget ..
                     return target == vertex;

@@ -75,10 +75,10 @@ namespace Graph_Theory_DFS
         void findPathAll(const T& sourceData, const T& targetData) {
 
             // compute source index
-            const size_t source{ m_graph.getIndexOfNode (sourceData) };
+            const size_t source{ m_graph.getIndexFromNode(sourceData) };
 
             // compute target index
-            const size_t target{ m_graph.getIndexOfNode(targetData) };
+            const size_t target{ m_graph.getIndexFromNode(targetData) };
 
             // setup 'm_visited' vector
             m_visited.resize(m_graph.countNodes());
@@ -153,7 +153,7 @@ namespace Graph_Theory_DFS
             m_components.at(index) = m_count;    // set mark
 
             // do for all adjacent vertices of the current vertex
-            const AdjacencyNodesList<>& neighbours { m_graph[index].getAdjacentNodes() };
+            const AdjacencyTrackList<>& neighbours { m_graph[index].getAdjacentTracks() };
 
             for (const auto& [next, weight] : neighbours) {
 
@@ -181,8 +181,8 @@ namespace Graph_Theory_DFS
             // do for all adjacent vertices of the dequeued vertex
             const GraphNode<T>& sourceNode { m_graph[source] };
 
-            const AdjacencyNodesList<>& neighbours {
-                m_graph.getAdjacentNodes(sourceNode.value())
+            const AdjacencyTrackList<>& neighbours {
+                m_graph.getAdjacentTracks(sourceNode.value())
             };
 
             for (const auto& [next, weight] : neighbours) {
@@ -220,8 +220,8 @@ namespace Graph_Theory_DFS
                 // do for every edge
                 const GraphNode<T>& sourceNode{ m_graph[source] };
 
-                const AdjacencyNodesList<>& neighbours {
-                    m_graph.getAdjacentNodes(sourceNode.value())
+                const AdjacencyTrackList<>& neighbours {
+                    m_graph.getAdjacentTracks(sourceNode.value())
                 };
 
                 for (const auto& [index, weight] : neighbours) {

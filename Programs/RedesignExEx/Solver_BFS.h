@@ -40,7 +40,7 @@ namespace Graph_Theory_BFS
                 m_queue.pop_front();
 
                 // do for all adjacent vertices of the current vertex
-                const AdjacencyNodesList<>& neighbours{ m_graph[vertex].getAdjacentNodes() };
+                const AdjacencyTrackList<>& neighbours{ m_graph[vertex].getAdjacentTracks() };
 
                 for (const auto& [next, weight] : neighbours) {
 
