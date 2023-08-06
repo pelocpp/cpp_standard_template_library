@@ -100,7 +100,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Experimental", "Programs\Ex
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Redesign", "Programs\Redesign\Redesign.vcxproj", "{3DDB9CAE-62F3-43DA-8702-9A821D8CE578}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RedesignExEx", "Programs\RedesignExEx\RedesignExEx.vcxproj", "{0A2F6D9D-AB65-4099-9C7F-8EA9561EBD69}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RedesignEx", "Programs\RedesignEx\RedesignEx.vcxproj", "{0A2F6D9D-AB65-4099-9C7F-8EA9561EBD69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
