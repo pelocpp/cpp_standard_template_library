@@ -128,7 +128,8 @@ namespace Graph_Theory_Dijkstra
 
             for (size_t index = 0; auto distance : distances) {
 
-                const T& value = m_graph[index].value();
+                // const T& value = m_graph[index].value();
+                const T& value = m_graph.getDataFromNode(index);
                 oss << "Distance to " << std::setw(width) << std::left << value << ": ";
                 oss << distance << std::endl;
 

@@ -16,7 +16,7 @@ namespace Graph_Theory_DFS
     private:
         const Graph<T>& m_graph;
         std::vector<bool> m_visited;
-        std::deque<Path> m_paths;
+        std::vector<Path> m_paths;
         Path m_components;
         size_t m_count;
 
@@ -25,8 +25,8 @@ namespace Graph_Theory_DFS
 
         void computeComponents() {
 
+            // setup 'm_visited' vector
             m_visited.resize(m_graph.countNodes());
-            std::fill(std::begin(m_visited), std::end(m_visited), false);
 
             m_components.resize(m_graph.countNodes());
             std::fill(std::begin(m_components), std::end(m_components), 0);
@@ -67,7 +67,6 @@ namespace Graph_Theory_DFS
 
             // setup 'm_visited' vector
             m_visited.resize(m_graph.countNodes());
-            std::fill(std::begin(m_visited), std::end(m_visited), false);
 
             return findPathAnyHelper(source, target, path);
         }
@@ -82,7 +81,6 @@ namespace Graph_Theory_DFS
 
             // setup 'm_visited' vector
             m_visited.resize(m_graph.countNodes());
-            std::fill(std::begin(m_visited), std::end(m_visited), false);
 
             // setup 'currentPath' vector
             Path currentPath{};
@@ -135,7 +133,8 @@ namespace Graph_Theory_DFS
 
             size_t length{ (*shortestPath).size() };
 
-            std::vector<Path> result;
+            std::vector<Path> result{};
+
             for (const auto& path : m_paths) {
 
                 if (path.size() == length) {
@@ -230,7 +229,7 @@ namespace Graph_Theory_DFS
                     if (!m_visited.at(index)) {
                         path.push_back(index);  // include current node in the path
                         findPathAllHelper(index, target, path);
-                        path.pop_back();  // remove current node from the path (backtrack)
+                        path.pop_back();        // remove current node from the path (backtrack)
                     }
                 }
 

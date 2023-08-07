@@ -99,25 +99,34 @@ namespace Graph_Theory
         }
 
         // returns true if the edge was successfully created
-        bool addEdge(const T& fromNode, const T& toNode) {
+        bool addEdge(const T& fromValue, const T& toValue) {
 
             if (m_weight == Weight::Weighted) {
                 throw std::logic_error("Graph should be unweighted!");
             }
 
-            const auto from{ findNode(fromNode) };
+            //const auto from{ findNode(fromValue) };
 
-            const auto to{ findNode(toNode) };
+            //const auto to{ findNode(toValue) };
 
-            if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
+            auto from{ findNodeEx(fromValue) };
+
+            auto to{ findNodeEx(toValue) };
+
+            //if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
+            //    return false;
+            //}
+
+            if (! from.has_value() || !to.has_value()) {
                 return false;
             }
 
-            const size_t toIndex{ getIndexFromNode(to) };
+            // const size_t toIndex{ getIndexfromValue(to) };
+            const size_t toIndex{ to.value()->getIndex() };
 
             Track<W> track{toIndex, std::nullopt};
 
-            AdjacencyTrackList<W>& fromList = from->getAdjacentTracks();
+            AdjacencyTrackList<W>& fromList = from.value()->getAdjacentTracks();
 
             auto [pos, succeeded] = fromList.insert(track);
 
@@ -127,7 +136,8 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    const size_t fromIndex{ getIndexFromNode(from) };
+                    // const size_t fromIndex{ getIndexFromNode(from) };
+                    const size_t fromIndex{ from.value()->getIndex() };
 
                     AdjacencyTrackList<W>& toList = target.getAdjacentTracks();
 
@@ -147,28 +157,37 @@ namespace Graph_Theory
         }
 
         // TODO: Klären, ob das geht: das mit std::nullopt
-        // bool addEdge(const T& fromNode, const T& toNode, const W& weight = std::nullopt) {
+        // bool addEdge(const T& fromValue, const T& toValue, const W& weight = std::nullopt) {
         // Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
 
-        bool addEdge(const T& fromNode, const T& toNode, const W& weight) {
+        bool addEdge(const T& fromValue, const T& toValue, const W& weight) {
 
             if (m_weight == Weight::Unweighted) {
                 throw std::logic_error("Graph should be weighted!");
             }
 
-            const auto from{ findNode(fromNode) };
+            //const auto from{ findNode(fromValue) };
 
-            const auto to{ findNode(toNode) };
+            //const auto to{ findNode(toValue) };
 
-            if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
+            /* const*/ auto from{findNodeEx(fromValue)};
+
+            /*const*/ auto to{ findNodeEx(toValue) };
+
+            //if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
+            //    return false;
+            //}
+
+            if (!from.has_value() || !to.has_value()) {
                 return false;
             }
 
-            const size_t toIndex{ getIndexFromNode(to) };
+            // const size_t toIndex{ getIndexfromValue(to) };
+            const size_t toIndex{ to.value()->getIndex() };
 
             Track<W> track{toIndex, weight};
 
-            AdjacencyTrackList<W>& fromList = from->getAdjacentTracks();
+            AdjacencyTrackList<W>& fromList = from.value()->getAdjacentTracks();
 
             auto [pos, succeeded] = fromList.insert(track);
 
@@ -178,7 +197,8 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    const size_t fromIndex{ getIndexFromNode(from) };
+                    // const size_t fromIndex{ getIndexFromNode(from) };
+                    const size_t fromIndex{ from.value()->getIndex() };
 
                     Track<W> track{fromIndex, weight};
 
@@ -223,18 +243,32 @@ namespace Graph_Theory
             return totalResult;
         }
 
-        AdjacencyTrackList<W>& getAdjacentTracks(const T& node_value)
+        //AdjacencyTrackList<W>& getAdjacentTracks(const T& node_value)
+        //{
+        //    static AdjacencyTrackList<W> empty {};
+
+        //    auto node{ findNode(node_value) };
+
+        //    if (node == std::end(m_nodes)) {
+
+        //        return empty;
+        //    }
+
+        //    return node->getAdjacentTracks();
+        //}
+
+        AdjacencyTrackList<W>& getAdjacentTracks(const T& value)
         {
             static AdjacencyTrackList<W> empty {};
 
-            auto node{ findNode(node_value) };
+            auto node{ findNodeEx(value) };
 
-            if (node == std::end(m_nodes)) {
+            if (!node.has_value()) {
 
                 return empty;
             }
 
-            return node->getAdjacentTracks();
+            return node.value()->getAdjacentTracks();
         }
 
         const AdjacencyTrackList<W>& getAdjacentTracks(const T& node_value) const
@@ -244,23 +278,6 @@ namespace Graph_Theory
 
 
         // Neu - for Kruskal needed
-        //std::vector<Edge<Weight>> getAllEdges() const {
-
-        //    std::vector<WeightedEdge<Weight>> edges;
-
-        //    for (size_t row = 0; const auto & vertices : m_adjacencyList) {
-        //        for (size_t column = 0; auto entry : vertices) {
-        //            if (entry.has_value()) {
-        //                edges.push_back({ row, column, entry.value() });
-        //            }
-        //            ++column;
-        //        }
-        //        ++row;
-        //    }
-        //    return edges;
-        //}
-
-
         // TO BE DONE: Das muss DRINGEND mit einem Iterator == Lazy gemacht werden !!!!
 
         std::vector<Edge<W>> getAllEdges() const {
@@ -287,51 +304,144 @@ namespace Graph_Theory
     private:
         // Helper method to return an iterator to the given node,
         // or the end iterator if the given node is not in the graph.
-        typename NodesContainerType<T, W>::iterator findNode(const T& node_value)
+        // The result is packed into a std::optional
+
+
+        // Das mit dem const und non-const muss genau anders herum sein !!!!!!!!!!!!!!!!!!!!
+        // ANDERS HERUM --   nur nicht so einfach ...................
+
+        auto findNodeEx(const T& value) -> std::optional<typename NodesContainerType<T, W>::iterator>
         {
-            return std::find_if(
+            std::optional<typename NodesContainerType<T, W>::iterator> result;
+
+            const auto position = std::find_if(
                 std::begin(m_nodes),
                 std::end(m_nodes),
-                [&node_value](const auto& node) {
-                    return node.value() == node_value;
+                [&value](const auto& node) {
+                    return node.value() == value;
                 }
             );
+
+            if (position == m_nodes.end()) {
+                result = std::nullopt;
+            }
+            else {
+                result = position;
+            }
+
+            return result;
         }
 
-        typename NodesContainerType<T, W>::const_iterator findNode(const T& node_value) const
+        const auto findNodeEx(const T& value) const
         {
-            return const_cast<Graph<T, W>*>(this)->findNode(node_value);
+            return const_cast<Graph<T, W>*>(this)->findNodeEx(value);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+        //typename NodesContainerType<T, W>::const_iterator findNode(const T& node_value) const
+        //{
+        //    return const_cast<Graph<T, W>*>(this)->findNode(node_value);
+        //}
 
         // given an iterator to a node, returns the index of that node in the nodes container
-        size_t getIndexFromNode(const typename NodesContainerType<T, W>::const_iterator& position) const noexcept
-        {
-            const GraphNode<T, W>& node = *position;
+        //size_t getIndexFromNodeEx(const GraphNode<T, W>& node) const noexcept
+        //{
+        //    const GraphNode<T, W>& node = *position;
 
-            return node.getIndex();
-        }
+        //    return node.getIndex();
+        //}
 
     public:
         size_t getIndexFromNode(const T& value) const
         {
-            const auto position{ findNode(value) };
+            const auto optionalNode{ findNodeEx(value) };
 
-            if (position == m_nodes.end()) {
+            if (!optionalNode.has_value()) {
                 throw std::invalid_argument("Node with specified value not found!");
             }
 
-            const GraphNode<T, W>& node = *position;
+            const GraphNode<T, W>& node = *optionalNode.value();
 
             return node.getIndex();
         }
 
         // brauche ich da beide Versionen
-        T getNodeData(size_t index) {
+        T& getDataFromNode(size_t index) {
             return m_nodes[index].value();
         }
 
-        const T& getNodeData(size_t index) const {
+        const T& getDataFromNode(size_t index) const {
             return m_nodes[index].value();
+        }
+
+        // Versuche das jetzt korrekt zu machen
+        // https://stackoverflow.com/questions/856542/elegant-solution-to-duplicate-const-and-non-const-getters
+        
+        //const T& getDataFromNode(size_t index) const
+        //{
+        //    return m_nodes[index].value();
+        //}
+
+        //T& getDataFromNode(size_t index)
+        //{
+        //    return const_cast<T&>(const_cast<const GraphNode<T, W>*>(this)->getDataFromNode(index));
+        //}
+
+
+        std::string toStringRaw(int width = 0) const {
+
+            std::string separator{ isDirected() ? "->" : "<=>" };
+
+            std::ostringstream oss;
+            oss << "Graph: ";
+            oss << "Nodes: " << countNodes() << ", Edges: " << countEdges();
+            oss << " // " << (isDirected() ? "Directed" : "Undirected");
+            oss << " - " << (isWeighted() ? "Weighted" : "Unweighted") << std::endl << std::endl;
+
+            for (const GraphNode<T, W>& node : m_nodes) {
+
+                size_t index = node.getIndex();
+
+                oss << "[" << std::setw(width) << std::right << index << "]";
+
+                const AdjacencyTrackList<W>& list = m_nodes[index].getAdjacentTracks();
+
+                if (list.size() != 0) {
+
+                    oss << " " << separator << " [";
+
+                    for (size_t n{}; const auto & [to, weight] : list)
+                    {
+                        oss << to;
+
+                        if (weight.has_value()) {
+                            oss << " {" << weight.value() << "}";
+                        }
+
+                        if (n != list.size() - 1) {
+                            oss << ", ";
+                        }
+
+                        ++n;
+                    }
+
+                    oss << "]";
+                }
+
+                oss << std::endl;
+            }
+
+            return oss.str();
         }
 
         std::string toString(int width = 0) const {
@@ -358,7 +468,9 @@ namespace Graph_Theory
 
                     for (size_t n{}; const auto& [to, weight] : list)
                     {
-                        const T& toValue = m_nodes[to].value();
+                        // const T& toValue = m_nodes[to].value();
+                        const T& toValue{ getDataFromNode(to) };
+
                         oss << toValue;
 
                         if (weight.has_value()) {
@@ -397,7 +509,8 @@ namespace Graph_Theory
 
                 for (size_t index{}; index != path.size(); ++index) {
 
-                    const T& value{ m_nodes[path[index]].value() };
+                    // const T& value{ m_nodes[path[index]].value() };
+                    const T& value{ getDataFromNode(index) };
 
                     oss << '[' << value << ']';
 
@@ -431,11 +544,29 @@ namespace Graph_Theory
         }
 
     private:
+        //bool addNode(const T& data) {
+
+        //    auto iter{ findNode(data) };
+
+        //    if (iter != std::end(m_nodes)) {
+        //        // value is already in the graph, return false
+        //        return false;
+        //    }
+
+        //    T copy{ data };
+        //    m_nodes.emplace_back(std::move(copy));
+
+        //    size_t size = m_nodes.size();
+        //    m_nodes[size - 1].setIndex(size - 1);
+
+        //    return true;
+        //}
+
         bool addNode(const T& data) {
 
-            auto iter{ findNode(data) };
+            auto node{ findNodeEx(data) };
 
-            if (iter != std::end(m_nodes)) {
+            if (node.has_value()) {
                 // value is already in the graph, return false
                 return false;
             }
@@ -456,3 +587,44 @@ namespace Graph_Theory
 // =====================================================================================
 // End-of-File
 // =====================================================================================
+
+    //private:
+    //    // Helper method to return an iterator to the given node,
+    //    // or the end iterator if the given node is not in the graph.
+    //    typename NodesContainerType<T, W>::iterator findNode(const T& node_value)
+    //    {
+    //        return std::find_if(
+    //            std::begin(m_nodes),
+    //            std::end(m_nodes),
+    //            [&node_value](const auto& node) {
+    //                return node.value() == node_value;
+    //            }
+    //        );
+    //    }
+
+    //    typename NodesContainerType<T, W>::const_iterator findNode(const T& node_value) const
+    //    {
+    //        return const_cast<Graph<T, W>*>(this)->findNode(node_value);
+    //    }
+
+    //    // given an iterator to a node, returns the index of that node in the nodes container
+    //    size_t getIndexFromNode(const typename NodesContainerType<T, W>::const_iterator& position) const noexcept
+    //    {
+    //        const GraphNode<T, W>& node = *position;
+
+    //        return node.getIndex();
+    //    }
+
+    //public:
+    //    size_t getIndexFromNode(const T& value) const
+    //    {
+    //        const auto position{ findNode(value) };
+
+    //        if (position == m_nodes.end()) {
+    //            throw std::invalid_argument("Node with specified value not found!");
+    //        }
+
+    //        const GraphNode<T, W>& node = *position;
+
+    //        return node.getIndex();
+    //    }

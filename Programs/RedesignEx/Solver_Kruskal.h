@@ -94,8 +94,8 @@ namespace Graph_Theory_Kruskal
 
                 W weight{ getEdgeWeight<W>(edge).value() };
 
-                const T& sourceValue{ m_graph.getNodeData(source) };
-                const T& targetValue{ m_graph.getNodeData(target) };
+                const T& sourceValue{ m_graph.getDataFromNode(source) };
+                const T& targetValue{ m_graph.getDataFromNode(target) };
 
                 std::cout
                     << sourceValue << " - "

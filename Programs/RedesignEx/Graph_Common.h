@@ -29,7 +29,7 @@ enum class Direction { Directed, Undirected };
 
 enum class Weight { Weighted, Unweighted };
 
-using NodeIndex = size_t;
+using Vertex = size_t;
 
 using EmptyType = std::nullptr_t;
 

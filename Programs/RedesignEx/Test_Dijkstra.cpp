@@ -264,11 +264,11 @@ void test_dijkstra_04()
 
 void test_dijkstra()
 {
-    //test_dijkstra_01();
-    //test_dijkstra_02();
-    //test_dijkstra_03();
+    test_dijkstra_01();
+    test_dijkstra_02();
+    test_dijkstra_03();
     test_dijkstra_03_testing_add_edges();
-    //test_dijkstra_04();
+    test_dijkstra_04();
 }
 
 // =====================================================================================

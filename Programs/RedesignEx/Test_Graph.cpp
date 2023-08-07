@@ -28,16 +28,6 @@ void test_graphs_01()
     graph.addEdge(44, 55);
 
     std::cout << graph.toString() << std::endl;
-
-    std::vector<Edge<std::nullptr_t>> edges = graph.getAllEdges();
-
-    for (const auto& [source, target, weight] : edges) {
-
-        const auto& sourceValue = graph.getNodeData(source);
-        const auto& targetValue = graph.getNodeData(target);
-
-        std::cout << sourceValue << " -> " << targetValue << std::endl;
-    }
 }
 
 void test_graphs_01_a()
@@ -93,6 +83,8 @@ void test_graphs_02_a()
     graph.addEdge(std::string {"C"}, std::string {"A"}, 50);
 
     std::cout << graph.toString() << std::endl;
+
+    std::cout << graph.toStringRaw() << std::endl;
 }
 
 // ------------------------------------------------------------------------
@@ -111,6 +103,8 @@ void test_graphs_03()
     graph.addEdge(3, 0);
 
     std::cout << graph.toString() << std::endl;
+
+    std::cout << graph.toStringRaw() << std::endl;
 }
 
 void test_graphs_03_a()
@@ -127,6 +121,8 @@ void test_graphs_03_a()
     graph.addEdge(std::string {"C"}, std::string {"A"});
 
     std::cout << graph.toString() << std::endl;
+
+    std::cout << graph.toStringRaw() << std::endl;
 }
 
 
@@ -168,6 +164,8 @@ void test_graphs_04_a()
     graph.addEdge("D", "A", 7000);
 
     std::cout << graph.toString() << std::endl;
+
+    std::cout << graph.toStringRaw() << std::endl;
 }
 
 
@@ -224,19 +222,53 @@ void test_graphs_11()
     std::cout << graph.toString() << std::endl;
 }
 
+// =======================================================================
+
+void test_graphs_20()
+{
+    // testing getAllEdges
+
+    Graph<int> graph{};
+
+    graph.addNodes({ 22, 11, 33, 44 });
+
+    graph.addEdge(11, 33);
+    graph.addEdge(22, 33);
+    graph.addEdge(22, 44);
+    graph.addEdge(22, 55);
+    graph.addEdge(33, 44);
+    graph.addEdge(44, 55);
+
+    std::cout << graph.toString() << std::endl;
+
+    std::vector<Edge<std::nullptr_t>> edges = graph.getAllEdges();
+
+    for (const auto& [source, target, weight] : edges) {
+
+        const auto& sourceValue = graph.getDataFromNode(source);
+        const auto& targetValue = graph.getDataFromNode(target);
+
+        std::cout << sourceValue << " -> " << targetValue << std::endl;
+    }
+}
+
+// =======================================================================
+
 void test_graphs()
 {
     test_graphs_01();
-    //test_graphs_01_a();
-    //test_graphs_02();
-    //test_graphs_02_a();
-    //test_graphs_03();
-    //test_graphs_03_a();
-    //test_graphs_04();
-    //test_graphs_04_a();
+    test_graphs_01_a();
+    test_graphs_02();
+     test_graphs_02_a();
+    test_graphs_03();
+     test_graphs_03_a();
+    test_graphs_04();
+    test_graphs_04_a();
 
-    //test_graphs_10();
-    //test_graphs_11();
+    test_graphs_10();
+    test_graphs_11();
+
+    test_graphs_20();
 }
 
 // =====================================================================================

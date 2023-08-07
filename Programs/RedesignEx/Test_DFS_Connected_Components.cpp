@@ -60,7 +60,7 @@ void test_dfs_connected_components_01()
 
             for (size_t last{}; size_t vertex : component) {
 
-                size_t data = graph.getNodeData(vertex);
+                size_t data = graph.getDataFromNode(vertex);
                 std::cout << "[" << data << "]";
 
                 if (last < component.size() - 1) {

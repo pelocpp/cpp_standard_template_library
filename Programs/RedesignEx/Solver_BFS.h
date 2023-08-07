@@ -25,12 +25,10 @@ namespace Graph_Theory_BFS
 
             // setup 'm_visited' vector
             m_visited.resize(m_graph.countNodes());
-            std::fill(std::begin(m_visited), std::end(m_visited), false);
             m_visited.at(start) = true;
 
             // setup 'previous' vector
             std::vector<std::optional<size_t>> previous(m_graph.countNodes());
-            std::fill(std::begin(previous), std::end(previous), std::nullopt);
 
             m_queue.push_back(start);
             while (!m_queue.empty()) {
