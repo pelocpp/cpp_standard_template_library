@@ -105,23 +105,14 @@ namespace Graph_Theory
                 throw std::logic_error("Graph should be unweighted!");
             }
 
-            //const auto from{ findNode(fromValue) };
+            const auto from{ findNodeEx(fromValue) };
 
-            //const auto to{ findNode(toValue) };
+            const auto to{ findNodeEx(toValue) };
 
-            auto from{ findNodeEx(fromValue) };
-
-            auto to{ findNodeEx(toValue) };
-
-            //if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
-            //    return false;
-            //}
-
-            if (! from.has_value() || !to.has_value()) {
+            if (!from.has_value() || !to.has_value()) {
                 return false;
             }
 
-            // const size_t toIndex{ getIndexfromValue(to) };
             const size_t toIndex{ to.value()->getIndex() };
 
             Track<W> track{toIndex, std::nullopt};
@@ -136,7 +127,6 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    // const size_t fromIndex{ getIndexFromNode(from) };
                     const size_t fromIndex{ from.value()->getIndex() };
 
                     AdjacencyTrackList<W>& toList = target.getAdjacentTracks();
@@ -166,23 +156,14 @@ namespace Graph_Theory
                 throw std::logic_error("Graph should be weighted!");
             }
 
-            //const auto from{ findNode(fromValue) };
+            const auto from{findNodeEx(fromValue)};
 
-            //const auto to{ findNode(toValue) };
-
-            /* const*/ auto from{findNodeEx(fromValue)};
-
-            /*const*/ auto to{ findNodeEx(toValue) };
-
-            //if (from == std::end(m_nodes) || to == std::end(m_nodes)) {
-            //    return false;
-            //}
+            const auto to{ findNodeEx(toValue) };
 
             if (!from.has_value() || !to.has_value()) {
                 return false;
             }
 
-            // const size_t toIndex{ getIndexfromValue(to) };
             const size_t toIndex{ to.value()->getIndex() };
 
             Track<W> track{toIndex, weight};
@@ -197,7 +178,6 @@ namespace Graph_Theory
 
                     GraphNode<T, W>& target = m_nodes[toIndex];
 
-                    // const size_t fromIndex{ getIndexFromNode(from) };
                     const size_t fromIndex{ from.value()->getIndex() };
 
                     Track<W> track{fromIndex, weight};
@@ -261,7 +241,7 @@ namespace Graph_Theory
         {
             static AdjacencyTrackList<W> empty {};
 
-            auto node{ findNodeEx(value) };
+            const auto node{ findNodeEx(value) };
 
             if (!node.has_value()) {
 
@@ -310,6 +290,8 @@ namespace Graph_Theory
         // Das mit dem const und non-const muss genau anders herum sein !!!!!!!!!!!!!!!!!!!!
         // ANDERS HERUM --   nur nicht so einfach ...................
 
+        // ORIGINAL
+
         auto findNodeEx(const T& value) -> std::optional<typename NodesContainerType<T, W>::iterator>
         {
             std::optional<typename NodesContainerType<T, W>::iterator> result;
@@ -336,6 +318,61 @@ namespace Graph_Theory
         {
             return const_cast<Graph<T, W>*>(this)->findNodeEx(value);
         }
+
+        // ------------------------------
+
+        //using ReturnType = std::optional<typename NodesContainerType<T, W>::iterator>;
+
+        //auto findNodeEx(const T& value) -> std::optional<typename NodesContainerType<T, W>::iterator>
+        //{
+        //   // using ReturnType = std::optional<typename NodesContainerType<T, W>::iterator>;
+
+        //    return const_cast<ReturnType&> (static_cast<const Graph<T, W>&>(*this).findNodeEx(value));
+        //}
+
+
+        //const auto findNodeEx(const T& value) const
+        //{
+        //    ReturnType result;
+
+        //    typename NodesContainerType<T, W>::const_iterator position;
+
+        //    position = std::find_if(
+        //        //std::begin(m_nodes),
+        //        //std::end(m_nodes),
+        //        m_nodes.begin(),
+        //        m_nodes.end(),
+        //        [&](const auto& node) {
+        //            return node.value() == value;
+        //        }
+        //    );
+
+        //    //typename NodesContainerType<T, W>::iterator position = std::find_if(
+        //    //    std::begin(m_nodes),
+        //    //    std::end(m_nodes),
+        //    //    [&value](const auto& node) {
+        //    //        return node.value() == value;
+        //    //    }
+        //    //);
+
+        //    //if (position == m_nodes.end()) {
+        //    //    result = std::nullopt;
+        //    //}
+        //    //else {
+        //    //    result = position;
+        //    //}
+
+        //    return result;
+        //}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -375,28 +412,20 @@ namespace Graph_Theory
             return node.getIndex();
         }
 
-        // brauche ich da beide Versionen
-        T& getDataFromNode(size_t index) {
-            return m_nodes[index].value();
-        }
-
-        const T& getDataFromNode(size_t index) const {
-            return m_nodes[index].value();
-        }
-
         // Versuche das jetzt korrekt zu machen
         // https://stackoverflow.com/questions/856542/elegant-solution-to-duplicate-const-and-non-const-getters
         
-        //const T& getDataFromNode(size_t index) const
-        //{
-        //    return m_nodes[index].value();
-        //}
+        // Besser: https://stackoverflow.com/questions/123758/how-do-i-remove-code-duplication-between-similar-const-and-non-const-member-func
 
-        //T& getDataFromNode(size_t index)
-        //{
-        //    return const_cast<T&>(const_cast<const GraphNode<T, W>*>(this)->getDataFromNode(index));
-        //}
+        T& getDataFromNode(size_t index)
+        {
+            return const_cast<T&>(static_cast<const Graph<T, W>&>(*this).getDataFromNode(index));
+        }
 
+        const T& getDataFromNode(size_t index) const
+        {
+            return m_nodes[index].value();
+        }
 
         std::string toStringRaw(int width = 0) const {
 

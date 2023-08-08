@@ -27,6 +27,10 @@ void test_graphs_01()
     graph.addEdge(33, 44);
     graph.addEdge(44, 55);
 
+    const auto& value = graph.getDataFromNode(0);
+
+    int& value2 = graph.getDataFromNode(0);
+
     std::cout << graph.toString() << std::endl;
 }
 
@@ -245,10 +249,10 @@ void test_graphs_20()
 
     for (const auto& [source, target, weight] : edges) {
 
-        const auto& sourceValue = graph.getDataFromNode(source);
-        const auto& targetValue = graph.getDataFromNode(target);
+        //const auto& sourceValue = graph.getDataFromNode(source);
+        //const auto& targetValue = graph.getDataFromNode(target);
 
-        std::cout << sourceValue << " -> " << targetValue << std::endl;
+        // std::cout << sourceValue << " -> " << targetValue << std::endl;
     }
 }
 

@@ -30,13 +30,13 @@ namespace Graph_Theory
     class GraphNode
     {
     private:
-        size_t m_index;
+        size_t m_index;   // Hmmm, das sollte möglicherweise OPTIONAL sein !!!!!!!!!!!!!!!!
         T m_data;
         AdjacencyTrackList<W> m_adjacentTracks;
 
     public:
         // constructing a graph_node for a given value
-        GraphNode(const T& data) : m_data{ data } { }
+        GraphNode(const T& data) : m_data{ data }, m_index{} { }
 
         GraphNode(T&& data) : m_data{ std::move(data) } { }
 
