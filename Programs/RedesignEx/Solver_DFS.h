@@ -181,7 +181,7 @@ namespace Graph_Theory_DFS
             const GraphNode<T>& sourceNode { m_graph[source] };
 
             const AdjacencyTrackList<>& neighbours {
-                m_graph.getAdjacentTracks(sourceNode.value())
+                m_graph.getAdjacentTracks(sourceNode.data())
             };
 
             for (const auto& [next, weight] : neighbours) {
@@ -220,7 +220,7 @@ namespace Graph_Theory_DFS
                 const GraphNode<T>& sourceNode{ m_graph[source] };
 
                 const AdjacencyTrackList<>& neighbours {
-                    m_graph.getAdjacentTracks(sourceNode.value())
+                    m_graph.getAdjacentTracks(sourceNode.data())
                 };
 
                 for (const auto& [index, weight] : neighbours) {

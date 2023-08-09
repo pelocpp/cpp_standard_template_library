@@ -18,7 +18,7 @@ void test_graphs_01()
 
     Graph<int> graph{};
 
-    graph.addNodes({ 22, 11, 33, 44 });
+    graph.addNodes({ 22, 11, 33, 44, 55 });
 
     graph.addEdge(11, 33);
     graph.addEdge(22, 33);
@@ -234,7 +234,7 @@ void test_graphs_20()
 
     Graph<int> graph{};
 
-    graph.addNodes({ 22, 11, 33, 44 });
+    graph.addNodes({ 22, 11, 33, 44, 55 });
 
     graph.addEdge(11, 33);
     graph.addEdge(22, 33);
@@ -246,13 +246,14 @@ void test_graphs_20()
     std::cout << graph.toString() << std::endl;
 
     std::vector<Edge<std::nullptr_t>> edges = graph.getAllEdges();
+    //  auto edges = graph.getAllEdges();
 
     for (const auto& [source, target, weight] : edges) {
 
-        //const auto& sourceValue = graph.getDataFromNode(source);
-        //const auto& targetValue = graph.getDataFromNode(target);
+        const auto& sourceValue = graph.getDataFromNode(source);
+        const auto& targetValue = graph.getDataFromNode(target);
 
-        // std::cout << sourceValue << " -> " << targetValue << std::endl;
+        std::cout << sourceValue << " -> " << targetValue << std::endl;
     }
 }
 

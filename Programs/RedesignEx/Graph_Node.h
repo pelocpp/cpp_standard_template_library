@@ -43,9 +43,9 @@ namespace Graph_Theory
         // prohibit nodes with no data value
         GraphNode() = delete;
 
-        // returns a reference to the stored value
-        T& value() noexcept { return m_data; }
-        const T& value() const noexcept { return m_data; }
+        // direct access to the underlying data
+        T& data() noexcept { return m_data; }
+        const T& data() const noexcept { return m_data; }
 
         // returns the number of nodes in the adjacency list
         size_t count() const noexcept
@@ -57,13 +57,9 @@ namespace Graph_Theory
         void setIndex(size_t index) noexcept { m_index = index; }
 
         // private:
-        // 
-        // TODO: Das sollte möglicherweise nur die const Version ausreichen
-        // 
-
-        // returns a reference to the adjacency list
         const AdjacencyTrackList<W>& getAdjacentTracks() const
         {
+            // returns a reference to the adjacency list
             return m_adjacentTracks;
         }
 
@@ -81,14 +77,12 @@ namespace Graph_Theory
         // NEU
         const Track<W>& getTrack(size_t vertex) const {
 
-            // Hmmmm, was, wenn verte nicht passt ?????????????????????????????
-
-            const auto pos = std::find_if(
+            auto pos = std::find_if(
                 m_adjacentTracks.begin(),
                 m_adjacentTracks.end(),
                 [=](const auto& track) {
-                    size_t target = track.first;   // TODO: da geht entweder structured binding oder getTarget ..
-                    return target == vertex;
+                    const auto& [index, weight] = track;
+                    return index == vertex;
                 }
             );
 
@@ -96,14 +90,12 @@ namespace Graph_Theory
         }
 
 
+        // TODO: Hmmm, diese ganzen Comparer mal aufräumen ....
         // needed for constructing stl set container with 'GraphNode' objects
-
         // TODO: Der wird nicht benötigt !!!!!!!!!!!!!
-
-        bool operator< (const GraphNode& other) {
-
-            return m_data < other.m_data;
-        }
+        //bool operator< (const GraphNode& other) 
+        //    return m_data < other.m_data;
+        //}
     };
 }
 

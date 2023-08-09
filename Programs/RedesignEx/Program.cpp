@@ -120,11 +120,11 @@ extern void test_kruskal();
 int main()
 {
     //test_graph_nodes();
-   //test_graphs();
-  //  test_dfs();
+    test_graphs();
+    //test_dfs();
     //test_dfs_connected_components();
     //test_bfs();
-   test_dijkstra();
+    test_dijkstra();
     //test_kruskal();
 
     return 1;
