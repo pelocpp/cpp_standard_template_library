@@ -5,6 +5,32 @@
 
 // =====================================================================================
 
+
+// const vs non-const
+
+// Versuche das jetzt korrekt zu machen
+// https://stackoverflow.com/questions/856542/elegant-solution-to-duplicate-const-and-non-const-getters
+
+// Besser: https://stackoverflow.com/questions/123758/how-do-i-remove-code-duplication-between-similar-const-and-non-const-member-func
+
+// Noch besser: ES.50: Don’t cast away const
+
+// https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+
+
+
+// =====================================================================================
+
+        // TODO: Klären, ob das geht: das mit std::nullopt
+        // bool addEdge(const T& fromValue, const T& toValue, const W& weight = std::nullopt) {
+        // Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
+
+// bool addEdge(const T& fromValue, const T& toValue, const W& weight);
+
+
+// =====================================================================================
+
+
 // Generell alle NAmen der kanten:  from, to   // source, Target // EINHEITLICH !!!!!!!
 
 // size_t source, size_t target
