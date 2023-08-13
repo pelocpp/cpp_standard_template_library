@@ -30,15 +30,15 @@ namespace Graph_Theory
     class GraphNode
     {
     private:
-        size_t m_index;   // Hmmm, das sollte möglicherweise OPTIONAL sein !!!!!!!!!!!!!!!!
         T m_data;
+        size_t m_index;   // Hmmm, das sollte möglicherweise OPTIONAL sein !!!!!!!!!!!!!!!!
         AdjacencyTrackList<W> m_adjacentTracks;
 
     public:
         // constructing a graph_node for a given value
         GraphNode(const T& data) : m_data{ data }, m_index{} { }
 
-        GraphNode(T&& data) : m_data{ std::move(data) } { }
+        GraphNode(T&& data) : m_data{ std::move(data) }, m_index{} { }
 
         // prohibit nodes with no data value
         GraphNode() = delete;
@@ -48,8 +48,7 @@ namespace Graph_Theory
         const T& data() const noexcept { return m_data; }
 
         // returns the number of nodes in the adjacency list
-        size_t count() const noexcept
-        {
+        size_t count() const noexcept {
             return m_adjacentTracks.size();
         }
 

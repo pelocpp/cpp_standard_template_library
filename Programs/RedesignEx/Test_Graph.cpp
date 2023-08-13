@@ -27,8 +27,7 @@ void test_graphs_01()
     graph.addEdge(33, 44);
     graph.addEdge(44, 55);
 
-    const auto& value = graph.getDataFromNode(0);
-
+    const auto& value1 = graph.getDataFromNode(0);
     int& value2 = graph.getDataFromNode(0);
 
     std::cout << graph.toString() << std::endl;
@@ -264,9 +263,9 @@ void test_graphs()
     test_graphs_01();
     test_graphs_01_a();
     test_graphs_02();
-     test_graphs_02_a();
+    test_graphs_02_a();
     test_graphs_03();
-     test_graphs_03_a();
+    test_graphs_03_a();
     test_graphs_04();
     test_graphs_04_a();
 
