@@ -41,11 +41,15 @@ namespace Graph_Theory
         Weight m_weight;
 
     public:
+        // adding STL support 
+        using value_type = T;
+        using reference = value_type&;
+        using const_reference = const value_type&;
+
         // c'tors
         Graph();
         Graph(Direction direction, Weight weight = Weight::Unweighted);
 
-    public:
         // getter / setter
         bool isDirected() const noexcept;
         bool isWeighted() const noexcept;

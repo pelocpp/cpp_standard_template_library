@@ -1,5 +1,5 @@
 // =====================================================================================
-// Graph Theory Redesign
+// Graph Theory Redesign // Test_GraphIterator.cpp
 // =====================================================================================
 
 #include "Graph.h"
@@ -41,10 +41,10 @@ void test_graphs_01_a()
 
     graph.addNodes({ "A", "B", "C", "D" });
 
-    graph.addEdge(std::string {"A"}, std::string {"B"});
-    graph.addEdge(std::string {"B"}, std::string {"C"});
-    graph.addEdge(std::string {"C"}, std::string {"C"});
-    graph.addEdge(std::string {"C"}, std::string {"A"});
+    graph.addEdge(std::string{ "A" }, std::string{ "B" });
+    graph.addEdge(std::string{ "B" }, std::string{ "C" });
+    graph.addEdge(std::string{ "C" }, std::string{ "C" });
+    graph.addEdge(std::string{ "C" }, std::string{ "A" });
 
     std::cout << graph.toString() << std::endl;
 }
@@ -66,8 +66,8 @@ void test_graphs_02()
     graph.addEdge(2, 4, 33);
     graph.addEdge(2, 3, 20);
     graph.addEdge(3, 4, 20);
-    graph.addEdge(3, 5, 2  );
-    graph.addEdge(4, 5, 1  );
+    graph.addEdge(3, 5, 2);
+    graph.addEdge(4, 5, 1);
 
     std::cout << graph.toString() << std::endl;
 }
@@ -80,10 +80,10 @@ void test_graphs_02_a()
 
     graph.addNodes({ "A", "B", "C", "D" });
 
-    graph.addEdge(std::string {"A"}, std::string {"B"}, 10);
-    graph.addEdge(std::string {"B"}, std::string {"C"}, 20);
-    graph.addEdge(std::string {"C"}, std::string {"C"}, 10);
-    graph.addEdge(std::string {"C"}, std::string {"A"}, 50);
+    graph.addEdge(std::string{ "A" }, std::string{ "B" }, 10);
+    graph.addEdge(std::string{ "B" }, std::string{ "C" }, 20);
+    graph.addEdge(std::string{ "C" }, std::string{ "C" }, 10);
+    graph.addEdge(std::string{ "C" }, std::string{ "A" }, 50);
 
     std::cout << graph.toString() << std::endl;
 
@@ -118,10 +118,10 @@ void test_graphs_03_a()
 
     graph.addNodes({ "A", "B", "C", "D" });
 
-    graph.addEdge(std::string {"A"}, std::string {"B"});
-    graph.addEdge(std::string {"B"}, std::string {"C"});
-    graph.addEdge(std::string {"C"}, std::string {"C"});
-    graph.addEdge(std::string {"C"}, std::string {"A"});
+    graph.addEdge(std::string{ "A" }, std::string{ "B" });
+    graph.addEdge(std::string{ "B" }, std::string{ "C" });
+    graph.addEdge(std::string{ "C" }, std::string{ "C" });
+    graph.addEdge(std::string{ "C" }, std::string{ "A" });
 
     std::cout << graph.toString() << std::endl;
 
@@ -180,7 +180,7 @@ void test_graphs_10()
 
     std::cout << "Directed, Unweighted" << std::endl;
 
-    Graph<int> graph  { Direction::Directed };
+    Graph<int> graph{ Direction::Directed };
 
     graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -203,10 +203,10 @@ void test_graphs_10()
 void test_graphs_11()
 {
     // Beispiel von DFS
-        
+
     std::cout << "Undirected, Unweighted" << std::endl;
 
-    Graph<int> graph { Direction::Undirected };
+    Graph<int> graph{ Direction::Undirected };
 
     graph.addNodes({ 0, 1, 2, 3, 4, 5, 6, 7 });
 
@@ -278,3 +278,4 @@ void test_graphs()
 // =====================================================================================
 // End-of-File
 // =====================================================================================
+

@@ -138,12 +138,14 @@
     <ClInclude Include="Solver_Kruskal.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Graph_ConstIterator.h" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Test_BFS.cpp" />
     <ClCompile Include="Test_DFS.cpp" />
     <ClCompile Include="Test_DFS_Connected_Components.cpp" />
     <ClCompile Include="Test_Dijkstra.cpp" />
     <ClCompile Include="Test_Graph.cpp" />
+    <ClCompile Include="Test_ConstGraphIterator.cpp" />
     <ClCompile Include="Test_GraphNode.cpp" />
     <ClCompile Include="Test_Kruskal.cpp" />
   </ItemGroup>
