@@ -24,6 +24,7 @@
 
 #include "Graph_Common.h"
 #include "Graph_Node.h"
+#include "Graph_ConstIterator.h"
 
 // =====================================================================================
 
@@ -35,6 +36,8 @@ namespace Graph_Theory
     template<typename T, typename W = EmptyType>
     class Graph
     {
+        friend class ConstGraphIterator<T, W>;
+
     private:
         NodesContainerType<T, W> m_nodes;
         Direction m_direction;
@@ -45,6 +48,12 @@ namespace Graph_Theory
         using value_type = T;
         using reference = value_type&;
         using const_reference = const value_type&;
+
+        // iterator type aliases
+
+        // TODO: Das stimmt mit const und non const noch nicht !!!!!!!!!!!!!!!!!!
+        using iterator = ConstGraphIterator<T, W>;
+        using const_iterator = ConstGraphIterator<T, W>;
 
         // c'tors
         Graph();
@@ -85,6 +94,15 @@ namespace Graph_Theory
         // TO BE DONE: Das muss DRINGEND mit einem Iterator == Lazy gemacht werden !!!!
         std::vector<Edge<W>> getAllEdges() const;
 
+        // iterator access methods
+        iterator begin();
+        iterator end();
+        //const_iterator begin() const;
+        //const_iterator end() const;
+        //const_iterator cbegin() const;
+        //const_iterator cend() const;
+
+        // output support
         std::string toString(int width = 0) const;
         std::string toStringRaw(int width = 0) const;
         std::string toString(const Path& path) const;
@@ -336,6 +354,57 @@ namespace Graph_Theory
         }
 
         return edges;
+    }
+
+    //for (int i = m_index + 1; i < m_graph->countNodes(); ++i) {
+
+    //    if (m_graph->m_nodes[m_index].m_adjacentTracks.count() != 0) {
+
+    //        m_listIterator = m_graph->m_nodes[m_index].m_adjacentTracks.begin();
+
+    //        m_index = i;
+
+    //        return; // !!!!!
+
+    //    }
+    //}
+
+
+    // Seite 758
+
+    // iterator access methods
+    template<typename T, typename W>
+    typename Graph<T, W>::iterator Graph<T, W>::begin()
+    {
+        if (count() == 0) {
+            // Special case: there are no elements, so return the end iterator.
+            return end();
+        }
+
+        // We know there is at least one element. Find the first element.
+        for (size_t i = 0; i < m_nodes.size(); ++i) {
+
+            if (m_graph->m_nodes[m_index].m_adjacentTracks.count() != 0) {
+
+                typename Graph<T, W>::iterator it = m_graph->m_nodes[m_index].m_adjacentTracks.begin();
+
+                return it;
+
+                //return hash_map_iterator<hash_map_type>(i,
+                //    std::begin(mBuckets[i]), this);
+            }
+        }
+        // Should never
+    }
+
+    template<typename T, typename W>
+    typename Graph<T, W>::iterator Graph<T, W>::end()
+    {
+        // TO BE DONE
+
+        typename Graph<T, W>::iterator it;
+
+        return it;
     }
 
     // private helper methods

@@ -8,7 +8,7 @@
 
 // =====================================================================================
 
-// Ab Seite 751 ....
+// Ab Seite 754 ....
 
 // =====================================================================================
 
@@ -53,14 +53,16 @@ namespace Graph_Theory
         using list_iterator_type = typename AdjacencyTrackList<W>::const_iterator;
 
     private:
-        size_t mBucketIndex = 0;
-        list_iterator_type m_listIterator;
+        size_t m_indexNodes = 0;
+
+        list_iterator_type m_AdjListIterator;
+
         const Graph<T, W>* m_graph = nullptr;
 
     public:
         const value_type& operator*() const
         {
-            return *m_listIterator;
+            return *m_AdjListIterator;
         }
 
         // Return type must be something to which -> can be applied.
@@ -68,7 +70,7 @@ namespace Graph_Theory
         // will apply -> again.
         const value_type* operator->() const
         {
-            return &(*m_listIterator);
+            return &(*m_AdjListIterator);
         }
 
         ConstGraphIterator<Graph<T, W>>& operator++()
@@ -109,7 +111,34 @@ namespace Graph_Theory
             // m_listIterator is an iterator into a single adjacency track list - increment it
             ++m_listIterator;
 
-            // WEITER: 754 
+            // WEITER: 754
+             
+            auto endOfAdjListIter = m_graph->m_nodes[m_index].m_adjacentTracks.end();
+
+            if (m_AdjListIterator == endOfAdjListIter) {
+
+                for (int i = m_index + 1; i < m_graph->countNodes(); ++i) {
+
+                    if (m_graph->m_nodes[m_index].m_adjacentTracks.count() != 0) {
+
+                        m_listIterator = m_graph->m_nodes[m_index].m_adjacentTracks.begin();
+
+                        m_index = i;
+
+                        return; // !!!!!
+
+                    }
+                }
+
+                // no more graph node found - return end iterator object of last adjacency list
+
+                size_t index = m_graph->countNodes() - 1;
+
+                m_listIterator = m_graph->m_nodes[index].m_adjacentTracks.end();
+
+            }
+        
+        
         }
     };
 }

@@ -70,20 +70,20 @@ auto getEdgeWeight(const Edge<Weight>& edge) {
 
 // ------------------------------------------------------------------
 
-// custom function object (functor) to compare tracks
-template <typename W>
-struct TrackComparer
-{
-    bool operator() (const Track<W>& l, const Track<W>& r) const {
-
-        const auto& [targetLeft, weightLeft] = l;
-        const auto& [targetRight, weightRight] = r;
-        return targetLeft < targetRight;
-    }
-};
-
-template<typename Weight = EmptyType>
-using AdjacencyTrackList = std::set<Track<Weight>, TrackComparer<Weight>>;
+//// custom function object (functor) to compare tracks
+//template <typename W>
+//struct TrackComparer
+//{
+//    bool operator() (const Track<W>& l, const Track<W>& r) const {
+//
+//        const auto& [targetLeft, weightLeft] = l;
+//        const auto& [targetRight, weightRight] = r;
+//        return targetLeft < targetRight;
+//    }
+//};
+//
+//template<typename Weight = EmptyType>
+//using AdjacencyTrackList = std::set<Track<Weight>, TrackComparer<Weight>>;
 
 // ------------------------------------------------------------------
 
