@@ -138,7 +138,7 @@
     <ClInclude Include="Solver_Kruskal.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graph_ConstIterator.h" />
+    <ClCompile Include="Graph_ConstGraphIterator.h" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Test_BFS.cpp" />
     <ClCompile Include="Test_DFS.cpp" />

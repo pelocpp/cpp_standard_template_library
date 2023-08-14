@@ -4,7 +4,7 @@
 
 #include "Graph.h"
 
-#include "Graph_Iterator.h"
+#include "Graph_ConstGraphIterator.h"
 
 using namespace Graph_Theory;
 

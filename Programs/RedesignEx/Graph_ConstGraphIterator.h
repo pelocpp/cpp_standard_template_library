@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "Graph_Common.h"
+#include "Graph_Node.h"
 #include "Graph.h"
 
 // =====================================================================================
@@ -38,9 +40,11 @@
 
 namespace Graph_Theory
 {
-    template<typename T, typename W = EmptyType>
+    template<typename T, typename W>
     class ConstGraphIterator
     {
+        friend class Graph<T, W>;
+
     public:
         using value_type = typename Graph<T, W>::value_type;
         using difference_type = ptrdiff_t;
@@ -90,12 +94,12 @@ namespace Graph_Theory
         // support comparisons of different types to this one
         bool operator== (const ConstGraphIterator<Graph<T, W>>& other) const
         {
-
+            return false;
         }
 
         bool operator!= (const ConstGraphIterator<Graph<T, W>>& other) const
         {
-
+            return false;
         }
 
     private:
@@ -109,21 +113,21 @@ namespace Graph_Theory
             // wenn es vom ersten zum zweiten Element geht !!!
 
             // m_listIterator is an iterator into a single adjacency track list - increment it
-            ++m_listIterator;
+            ++m_AdjListIterator;
 
             // WEITER: 754
              
-            auto endOfAdjListIter = m_graph->m_nodes[m_index].m_adjacentTracks.end();
+            auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].m_adjacentTracks.end();
 
             if (m_AdjListIterator == endOfAdjListIter) {
 
-                for (int i = m_index + 1; i < m_graph->countNodes(); ++i) {
+                for (int i = m_indexNodes + 1; i < m_graph->countNodes(); ++i) {
 
-                    if (m_graph->m_nodes[m_index].m_adjacentTracks.count() != 0) {
+                    if (m_graph->m_nodes[i].m_adjacentTracks.count() != 0) {
 
-                        m_listIterator = m_graph->m_nodes[m_index].m_adjacentTracks.begin();
+                        m_AdjListIterator = m_graph->m_nodes[i].m_adjacentTracks.begin();
 
-                        m_index = i;
+                        m_indexNodes = i;
 
                         return; // !!!!!
 
@@ -134,11 +138,9 @@ namespace Graph_Theory
 
                 size_t index = m_graph->countNodes() - 1;
 
-                m_listIterator = m_graph->m_nodes[index].m_adjacentTracks.end();
+                m_AdjListIterator = m_graph->m_nodes[index].m_adjacentTracks.end();
 
             }
-        
-        
         }
     };
 }

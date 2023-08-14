@@ -24,7 +24,7 @@
 
 #include "Graph_Common.h"
 #include "Graph_Node.h"
-#include "Graph_ConstIterator.h"
+#include "Graph_ConstGraphIterator.h"
 
 // =====================================================================================
 
@@ -32,6 +32,9 @@ namespace Graph_Theory
 {
     template<typename T, typename W>
     using NodesContainerType = std::vector<GraphNode<T, W>>;
+
+    template<typename T, typename W = EmptyType>
+    class ConstGraphIterator;
 
     template<typename T, typename W = EmptyType>
     class Graph
@@ -376,17 +379,17 @@ namespace Graph_Theory
     template<typename T, typename W>
     typename Graph<T, W>::iterator Graph<T, W>::begin()
     {
-        if (count() == 0) {
-            // Special case: there are no elements, so return the end iterator.
+        if (countNodes() == 0) {
+            // special case: there are no elements, so return the end iterator.
             return end();
         }
 
         // We know there is at least one element. Find the first element.
         for (size_t i = 0; i < m_nodes.size(); ++i) {
 
-            if (m_graph->m_nodes[m_index].m_adjacentTracks.count() != 0) {
+            if (m_nodes[i].m_adjacentTracks.count() != 0) {
 
-                typename Graph<T, W>::iterator it = m_graph->m_nodes[m_index].m_adjacentTracks.begin();
+                typename Graph<T, W>::iterator it = m_nodes[i].m_adjacentTracks.begin();
 
                 return it;
 
@@ -394,7 +397,9 @@ namespace Graph_Theory
                 //    std::begin(mBuckets[i]), this);
             }
         }
-        // Should never
+
+        // should never be reached
+        return end();
     }
 
     template<typename T, typename W>
@@ -625,6 +630,8 @@ namespace Graph_Theory
 
         return oss.str();
     }
+
+
 }
 
 // =====================================================================================
