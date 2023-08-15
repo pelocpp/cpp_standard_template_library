@@ -12,28 +12,6 @@
 
 // Ab Seite 754 ....
 
-// =====================================================================================
-
-// fuer spaeter:
-//
-//template <typename Key, typename T, typename KeyEqual, typename Hash>
-//typename hash_map<Key, T, KeyEqual, Hash>::iterator
-//hash_map<Key, T, KeyEqual, Hash>::begin()
-//{
-//    if (mSize == 0) {
-//        // Special case: there are no elements, so return the end iterator.
-//        return end();
-//    }
-//
-//    // We know there is at least one element. Find the first element.
-//    for (size_t i = 0; i < mBuckets.size(); ++i) {
-//        if (!mBuckets[i].empty()) {
-//            return hash_map_iterator<hash_map_type>(i, std::begin(mBuckets[i]), this);
-//        }
-//    }
-//    // Should never reach here, but if we do, return the end iterator.
-//    return end();
-//}
 
 // =====================================================================================
 
@@ -52,7 +30,8 @@ namespace Graph_Theory
         // using value_type = typename Graph<T, W>::value_type;
         // i) TO BE DONE: Was soll iteriert werden: Tracks oder BESSER Edges 
         // ii) TO BE DONE: Muss das mit oder ohne typename sein ?????????????
-        using value_type = typename Track<W>;
+
+        using value_type = /*typename*/ Track<W>;
         
         using difference_type = ptrdiff_t;
         using iterator_category = std::bidirectional_iterator_tag;
@@ -135,15 +114,18 @@ namespace Graph_Theory
 
             // WEITER: 754
              
-            auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].m_adjacentTracks.end();
+            // accessing private member
+            // auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].m_adjacentTracks.end();
+            auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].getAdjacentTracks().end();
+
 
             if (m_adjListIterator == endOfAdjListIter) {
 
-                for (int i = m_indexNodes + 1; i < m_graph->countNodes(); ++i) {
+                for (size_t i = m_indexNodes + 1; i < m_graph->countNodes(); ++i) {
 
-                    if (m_graph->m_nodes[i].m_adjacentTracks.count() != 0) {
+                    if (m_graph->m_nodes[i].getAdjacentTracks().size() != 0) {
 
-                        m_adjListIterator = m_graph->m_nodes[i].m_adjacentTracks.begin();
+                        m_adjListIterator = m_graph->m_nodes[i].getAdjacentTracks().begin();
 
                         m_indexNodes = i;
 
@@ -156,11 +138,12 @@ namespace Graph_Theory
 
                 size_t index = m_graph->countNodes() - 1;
 
-                m_adjListIterator = m_graph->m_nodes[index].m_adjacentTracks.end();
+                m_adjListIterator = m_graph->m_nodes[index].getAdjacentTracks().end();
 
             }
         }
     };
+
 }
 
 // =====================================================================================
