@@ -376,6 +376,12 @@ namespace Graph_Theory
     // Seite 758
 
     // iterator access methods
+    
+    // geht auch .. da wird halt das using iterator nicht verwendet ...
+    //template<typename T, typename W>
+    //ConstGraphIterator<T, W> Graph<T, W>::begin()
+
+
     template<typename T, typename W>
     typename Graph<T, W>::iterator Graph<T, W>::begin()
     {
@@ -384,17 +390,24 @@ namespace Graph_Theory
             return end();
         }
 
+        // TODO: DAS geht OHNE for Schleife:
+        // in meiner Konstruktion des Graphen gibt es keine Lücken im Array!!! 
+        // Ohhh DOCH: Knoten ohne Kanten ?!?!?!
+
         // We know there is at least one element. Find the first element.
         for (size_t i = 0; i < m_nodes.size(); ++i) {
 
-            if (m_nodes[i].m_adjacentTracks.count() != 0) {
+            // if (m_nodes[i].m_adjacentTracks.count() != 0) {
+            if (m_nodes[i].count() != 0) {
 
-                typename Graph<T, W>::iterator it = m_nodes[i].m_adjacentTracks.begin();
+                // TODO: da haben wir das const und non-const Problem ....
+                AdjacencyTrackList<W>& list = m_nodes[i].getAdjacentTracks();
 
-                return it;
+                auto first = list.begin();
 
-                //return hash_map_iterator<hash_map_type>(i,
-                //    std::begin(mBuckets[i]), this);
+                ConstGraphIterator<T,W> iter (i, first, this);
+
+                return iter;
             }
         }
 
@@ -404,6 +417,8 @@ namespace Graph_Theory
 
     template<typename T, typename W>
     typename Graph<T, W>::iterator Graph<T, W>::end()
+    //template<typename T, typename W>
+    //ConstGraphIterator<T, W> Graph<T, W>::end()
     {
         // TO BE DONE
 

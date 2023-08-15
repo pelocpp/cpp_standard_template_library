@@ -137,6 +137,7 @@
 
 extern void test_graph_nodes();
 extern void test_graphs();
+extern void test_graph_iterators();
 extern void test_dfs();
 extern void test_dfs_connected_components();
 extern void test_bfs();
@@ -146,11 +147,12 @@ extern void test_kruskal();
 int main()
 {
     //test_graph_nodes();
-    test_graphs();
+    //test_graphs();
+    test_graph_iterators();
     //test_dfs();
     //test_dfs_connected_components();
     //test_bfs();
-    test_dijkstra();
+    //test_dijkstra();
     //test_kruskal();
 
     return 1;
