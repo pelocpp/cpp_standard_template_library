@@ -2,9 +2,45 @@
 // Graph Theory Redesign
 // =====================================================================================
 
+// =====================================================================================
+
+// WEITERARBEIT:
+
+// Es werden 2 Iteratoren an der Klasse Graph benötigt:
+
+// FÜr Tracks und für Edges
+
+// Das kann man über 2 setter abfahren (so in etwa):
+
+// for ( const& auto track : my_graph.tracks() )
+
+// Ist in StackOverflow hier beschrieben:
+
+// https://blog.cppse.nl/cpp-multiple-iterators-with-traits
+
+// oder
+
+// https://stackoverflow.com/questions/25105730/range-based-for-loops-and-multiple-iterators
+
+// oder
+
+// https://stackoverflow.com/questions/25105730/range-based-for-loops-and-multiple-iterators
+
+// Frühere Suche zum Thema 2 Iteratoren:
+
+// TODO: Hier ist beschrieben, wie man in einer Klasse ZWEI ITeratoren unterbekommt:
+// https://blog.cppse.nl/cpp-multiple-iterators-with-traits
+
+// TODO:
+// Man sollte die Klassen auch mit C++ Iteratoren ausstatten
+// Dazu benötigt man das Thema "c++ implementing iterator as nested class"  ( Google Search ) !!!
+
 
 // =====================================================================================
 
+// Prim Algorithmus
+
+// =====================================================================================
 
 // const vs non-const
 
@@ -18,20 +54,17 @@
 // https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
 
 
-
 // =====================================================================================
 
-        // TODO: Klären, ob das geht: das mit std::nullopt
-        // bool addEdge(const T& fromValue, const T& toValue, const W& weight = std::nullopt) {
-        // Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
+// TODO: Klären, ob das geht: das mit std::nullopt
+// bool addEdge(const T& fromValue, const T& toValue, const W& weight = std::nullopt) {
+// Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
 
 // bool addEdge(const T& fromValue, const T& toValue, const W& weight);
 
-
 // =====================================================================================
 
-
-// Generell alle NAmen der kanten:  from, to   // source, Target // EINHEITLICH !!!!!!!
+// Generell alle Namen der kanten:  from, to   // source, Target // EINHEITLICH !!!!!!!
 
 // size_t source, size_t target
 
@@ -39,7 +72,6 @@
 
 // TODO:
 // [[ nodiscard ]]
-
 
 // Hmmm, die könnte man massenhaft einbauen .. sieht halt dann nicht mehr so gut aus ...
 
@@ -56,14 +88,18 @@
 
 // Klasse Graph mit begin und end ausstatten ===> dann kann man mit for_each iterieren ...
 
-// andere Algorithmen wie std::find_if,  std::accumulate etc. ausprobieren und anwenden ...
+// andere Algorithmen wie
+// std::find_if,
+// std::accumulate, etc.
+// std::copy_if
+// ausprobieren und anwenden ...
 
 // -----------------------------------------------------------------------
 
 
-        // TODO: Klären, ob das geht: das mit std::nullopt
-        // bool addEdge(const T& fromNode, const T& toNode, const W& weight = std::nullopt) {
-        // Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
+// TODO: Klären, ob das geht: das mit std::nullopt
+// bool addEdge(const T& fromNode, const T& toNode, const W& weight = std::nullopt) {
+// Dann ist das nur noch eine Methode !!!!!!!!!!!!!!!!!!!!
 
 
 // -----------------------------------------------------------------------
@@ -88,17 +124,13 @@
 // 
 
 // =====================================================================================
+// =====================================================================================
 
 // von der anderen Datei ....
 
 // TODO: final, override ... Vor allem final einsetzen, wenn man eine Methode nicht mehr überschreiben sollte
 
-// TODO: Hier ist beschrieben, wie man in einer Klasse ZWEI ITeratoren unterbekommt:
-// https://blog.cppse.nl/cpp-multiple-iterators-with-traits
-
-// TODO:
-// Man sollte die Klassen auch mit C++ Iteratoren ausstatten
-// Dazu benötigt man das Thema "c++ implementing iterator as nested class"  ( Google Search ) !!!
+// =====================================================================================
 
 // // TODO:
 // ACHTUNG: Habe jetzt überall size_t verwendet - da geht aber -1 nicht !!!!!!!!!!!!!!!!!!!!
@@ -106,25 +138,27 @@
 // TODO:
 // Es sind derzeit keinerlei Fehlerberprüfungen drin: doppelte Kanten ... wieso wird da eigenlich nicht mehr eine std::set verwendet ????
 
+
+// =====================================================================================
+
 // TWO PHASE LOOKUP !!!!
 // https://www.modernescpp.com/index.php/surprise-included-inheritance-and-member-functions-of-class-templates
 // HIER GEHT ES UM DAS using inmitten des Quellcode !!!!
 
-// TODO: 
-//// Die beiden Methoden 
-//virtual void setNodeDescription(size_t index, const NodeDescription& description) = 0;
-//virtual void setNodeDescriptions(const std::initializer_list<NodeDescription> list) = 0;
-// sind derzeit doppelt implementiert ... das sollte man doch vermeiden
-// 
+
+// =====================================================================================
 
 // TODO:
 // oss << "[" << std::setw(12) << std::left << description << "] ";
 // Hier könnte man die maximale Feldbreite tatsächlich berechnen -- sieht dann doch besser aus ....
 // ODer gleich mit std::format von C++ 20 arbeiten !!!!
 
+// =====================================================================================
+
 // TODO:
 // Viele Methoden können mit const qualifiziert werden
 
+// =====================================================================================
 
 // TODO:
 // Iteratoren für die "benachbarten" Konten schreiben !!!

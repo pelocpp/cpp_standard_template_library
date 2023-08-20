@@ -10,8 +10,7 @@
 
 // =====================================================================================
 
-// Ab Seite 754 ....
-
+// Ab Seite 754 .... Marc Gregoire ...
 
 // =====================================================================================
 
@@ -118,7 +117,6 @@ namespace Graph_Theory
             // auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].m_adjacentTracks.end();
             auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].getAdjacentTracks().end();
 
-
             if (m_adjListIterator == endOfAdjListIter) {
 
                 for (size_t i = m_indexNodes + 1; i < m_graph->countNodes(); ++i) {
@@ -139,7 +137,6 @@ namespace Graph_Theory
                 size_t index = m_graph->countNodes() - 1;
 
                 m_adjListIterator = m_graph->m_nodes[index].getAdjacentTracks().end();
-
             }
         }
     };
