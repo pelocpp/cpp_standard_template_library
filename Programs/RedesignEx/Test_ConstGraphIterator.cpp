@@ -74,13 +74,47 @@ void test_graphs_iterators_03()
     auto& elem2 = *iter;
 }
 
+void test_graphs_iterators_04()
+{
+    // b) Directed, Weighted
+
+    Graph<std::string, size_t> graph{ Direction::Directed, Weight::Weighted };
+
+    graph.addNodes({ "A", "B", "C", "D" });
+
+    graph.addEdge(std::string{ "A" }, std::string{ "B" }, 10);
+    graph.addEdge(std::string{ "B" }, std::string{ "C" }, 20);
+    graph.addEdge(std::string{ "C" }, std::string{ "C" }, 10);
+    graph.addEdge(std::string{ "C" }, std::string{ "A" }, 50);
+
+    //std::cout << graph.toString() << std::endl;
+
+    //std::cout << graph.toStringRaw() << std::endl;
+
+    for (const auto& x : graph) {
+
+        auto target = getTrackTarget(x);
+
+        std::cout << "Target: " << target   << std::endl;
+
+        //template<typename Weight>
+        //auto getTrackWeight(const Track<Weight>&edge) {
+        //    return std::get<1>(edge);
+        //}
+
+
+
+    }
+}
+
 // =======================================================================
 
 void test_graph_iterators()
 {
     //test_graphs_iterators_01();
     //test_graphs_iterators_02();
-    test_graphs_iterators_03();
+    //test_graphs_iterators_03();
+    test_graphs_iterators_04();
 }
 
 // =====================================================================================

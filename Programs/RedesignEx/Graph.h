@@ -421,10 +421,20 @@ namespace Graph_Theory
     //ConstGraphIterator<T, W> Graph<T, W>::end()
     {
         // TO BE DONE
+        // das kracht alles, wenn der Graph leer ist -- also  countNodes() == 0 zurückliefert ....
 
-        typename Graph<T, W>::iterator it;
+        size_t count = countNodes();
 
-        return it;
+        AdjacencyTrackList<W>& list = m_nodes[count - 1].getAdjacentTracks();
+
+        auto end = list.end();
+
+       //  typename Graph<T, W>::iterator it;
+
+        // Hmmm, das mit dem nullptr -- wie geht das bei Gregoire
+        ConstGraphIterator<T, W> iter(0, end, nullptr);
+    
+        return iter;
     }
 
     // private helper methods
