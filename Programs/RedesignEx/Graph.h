@@ -377,13 +377,14 @@ namespace Graph_Theory
 
     // iterator access methods
     
-    // geht auch .. da wird halt das using iterator nicht verwendet ...
-    //template<typename T, typename W>
-    //ConstGraphIterator<T, W> Graph<T, W>::begin()
+
 
 
     template<typename T, typename W>
     typename Graph<T, W>::iterator Graph<T, W>::begin()
+    // sollte auch gehen .. da wird halt das using iterator nicht verwendet ...
+    //template<typename T, typename W>
+    //ConstGraphIterator<T, W> Graph<T, W>::begin()
     {
         if (countNodes() == 0) {
             // special case: there are no elements, so return the end iterator.
@@ -403,7 +404,8 @@ namespace Graph_Theory
                 // TODO: da haben wir das const und non-const Problem ....
                 AdjacencyTrackList<W>& list = m_nodes[i].getAdjacentTracks();
 
-                auto first = list.begin();
+                // auto first = list.begin();
+                typename AdjacencyTrackList<W>::iterator first = list.begin();
 
                 ConstGraphIterator<T,W> iter (i, first, this);
 
@@ -417,6 +419,7 @@ namespace Graph_Theory
 
     template<typename T, typename W>
     typename Graph<T, W>::iterator Graph<T, W>::end()
+    // sollte auch gehen 
     //template<typename T, typename W>
     //ConstGraphIterator<T, W> Graph<T, W>::end()
     {
@@ -427,12 +430,12 @@ namespace Graph_Theory
 
         AdjacencyTrackList<W>& list = m_nodes[count - 1].getAdjacentTracks();
 
-        auto end = list.end();
-
-       //  typename Graph<T, W>::iterator it;
+        //  auto end = list.end();
+        // using list_iterator_type = typename AdjacencyTrackList<W>::iterator;
+        typename AdjacencyTrackList<W>::iterator end = list.end();
 
         // Hmmm, das mit dem nullptr -- wie geht das bei Gregoire
-        ConstGraphIterator<T, W> iter(0, end, nullptr);
+        ConstGraphIterator<T, W> iter(0, end, this);
     
         return iter;
     }
