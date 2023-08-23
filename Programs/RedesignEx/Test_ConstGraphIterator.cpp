@@ -93,17 +93,14 @@ void test_graphs_iterators_04()
 
     for (const auto& x : graph) {
 
+        //T& getDataFromNode(size_t index);
+        //const T& getDataFromNode(size_t index) const;
+
         auto target = getTrackTarget(x);
+        const std::string data = graph.getDataFromNode(target);
+        auto weight = getTrackWeight(x);
 
-        std::cout << "Target: " << target   << std::endl;
-
-        //template<typename Weight>
-        //auto getTrackWeight(const Track<Weight>&edge) {
-        //    return std::get<1>(edge);
-        //}
-
-
-
+        std::cout << "Target: " << target << " [" << data << "] - Weight: "  << weight.value() << std::endl;
     }
 }
 

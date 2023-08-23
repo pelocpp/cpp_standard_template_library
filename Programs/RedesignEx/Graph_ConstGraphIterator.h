@@ -88,15 +88,31 @@ namespace Graph_Theory
 
         // The following are ok as member functions because we don't
         // support comparisons of different types to this one
+        //bool operator== (const ConstGraphIterator<T, W>& other) const
+        //{
+        //    if (m_indexNodes != other.m_indexNodes) {
+        //        return false;
+        //    }
+        //    else if (m_adjListIterator != other.m_adjListIterator) {
+        //        return false;
+        //    }
+        //    else if (m_graph != other.m_graph) {
+        //        return false;
+        //    }
+        //    else {
+        //        return true;
+        //    }
+        //}
+
         bool operator== (const ConstGraphIterator<T, W>& other) const
         {
-            if (m_indexNodes != other.m_indexNodes) {
+            if (m_graph != other.m_graph) {
+                return false;
+            }
+            else if (m_indexNodes != other.m_indexNodes) {
                 return false;
             }
             else if (m_adjListIterator != other.m_adjListIterator) {
-                return false;
-            }
-            else if (m_graph != other.m_graph) {
                 return false;
             }
             else {

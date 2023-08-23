@@ -435,7 +435,7 @@ namespace Graph_Theory
         typename AdjacencyTrackList<W>::iterator end = list.end();
 
         // Hmmm, das mit dem nullptr -- wie geht das bei Gregoire
-        ConstGraphIterator<T, W> iter(0, end, this);
+        ConstGraphIterator<T, W> iter(count - 1, end, this);
     
         return iter;
     }
