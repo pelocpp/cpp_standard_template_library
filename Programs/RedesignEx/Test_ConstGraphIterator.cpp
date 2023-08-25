@@ -87,7 +87,7 @@ void test_graphs_iterators_04()
     graph.addEdge(std::string{ "C" }, std::string{ "C" }, 10);
     graph.addEdge(std::string{ "C" }, std::string{ "A" }, 50);
 
-    //std::cout << graph.toString() << std::endl;
+    std::cout << graph.toString() << std::endl;
 
     //std::cout << graph.toStringRaw() << std::endl;
 

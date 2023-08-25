@@ -148,14 +148,13 @@ namespace Graph_Theory
 
                 for (size_t i = m_indexNodes + 1; i < m_graph->countNodes(); ++i) {
 
+                    m_indexNodes = i;
+
                     if (m_graph->m_nodes[i].getAdjacentTracks().size() != 0) {
 
                         m_adjListIterator = m_graph->m_nodes[i].getAdjacentTracks().begin();
 
-                        m_indexNodes = i;
-
                         return; // !!!!!
-
                     }
                 }
 
