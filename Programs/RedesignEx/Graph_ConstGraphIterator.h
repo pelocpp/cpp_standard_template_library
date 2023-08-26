@@ -26,12 +26,10 @@ namespace Graph_Theory
         friend class Graph<T, W>;
 
     public:
-        // using value_type = typename Graph<T, W>::value_type;
         // i) TO BE DONE: Was soll iteriert werden: Tracks oder BESSER Edges 
         // ii) TO BE DONE: Muss das mit oder ohne typename sein ?????????????
 
-        using value_type = /*typename*/ Track<W>;
-        
+        using value_type = Track<W>;
         using difference_type = ptrdiff_t;
         using iterator_category = std::bidirectional_iterator_tag;
         using pointer = value_type*;
@@ -81,28 +79,10 @@ namespace Graph_Theory
 
         ConstGraphIterator<T, W> operator++(int)
         {
-            auto oldIt = *this;   // TODO:  auch mal ohne auto ....
+            ConstGraphIterator<T, W> copy = *this;
             increment();
-            return oldIt;
+            return copy;
         }
-
-        // The following are ok as member functions because we don't
-        // support comparisons of different types to this one
-        //bool operator== (const ConstGraphIterator<T, W>& other) const
-        //{
-        //    if (m_indexNodes != other.m_indexNodes) {
-        //        return false;
-        //    }
-        //    else if (m_adjListIterator != other.m_adjListIterator) {
-        //        return false;
-        //    }
-        //    else if (m_graph != other.m_graph) {
-        //        return false;
-        //    }
-        //    else {
-        //        return true;
-        //    }
-        //}
 
         bool operator== (const ConstGraphIterator<T, W>& other) const
         {
@@ -140,28 +120,26 @@ namespace Graph_Theory
 
             // WEITER: 754
              
-            // accessing private member
-            // auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].m_adjacentTracks.end();
+            // take either next iterator object in the current list
+            // or skip to the next adjacency list
             auto endOfAdjListIter = m_graph->m_nodes[m_indexNodes].getAdjacentTracks().end();
 
             if (m_adjListIterator == endOfAdjListIter) {
 
                 for (size_t i = m_indexNodes + 1; i < m_graph->countNodes(); ++i) {
 
+                    // store index of current adjacency list
                     m_indexNodes = i;
 
                     if (m_graph->m_nodes[i].getAdjacentTracks().size() != 0) {
 
                         m_adjListIterator = m_graph->m_nodes[i].getAdjacentTracks().begin();
-
-                        return; // !!!!!
+                        return;
                     }
                 }
 
                 // no more graph node found - return end iterator object of last adjacency list
-
                 size_t index = m_graph->countNodes() - 1;
-
                 m_adjListIterator = m_graph->m_nodes[index].getAdjacentTracks().end();
             }
         }

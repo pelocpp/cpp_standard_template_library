@@ -359,27 +359,10 @@ namespace Graph_Theory
         return edges;
     }
 
-    //for (int i = m_index + 1; i < m_graph->countNodes(); ++i) {
-
-    //    if (m_graph->m_nodes[m_index].m_adjacentTracks.count() != 0) {
-
-    //        m_listIterator = m_graph->m_nodes[m_index].m_adjacentTracks.begin();
-
-    //        m_index = i;
-
-    //        return; // !!!!!
-
-    //    }
-    //}
-
-
     // Seite 758
 
     // iterator access methods
     
-
-
-
     template<typename T, typename W>
     typename Graph<T, W>::iterator Graph<T, W>::begin()
     // sollte auch gehen .. da wird halt das using iterator nicht verwendet ...
@@ -423,21 +406,29 @@ namespace Graph_Theory
     //template<typename T, typename W>
     //ConstGraphIterator<T, W> Graph<T, W>::end()
     {
-        // TO BE DONE
-        // das kracht alles, wenn der Graph leer ist -- also  countNodes() == 0 zurückliefert ....
-
         size_t count = countNodes();
 
-        AdjacencyTrackList<W>& list = m_nodes[count - 1].getAdjacentTracks();
+        // rare situation: no nodes and no edges
+        if (count == 0) {
 
-        //  auto end = list.end();
-        // using list_iterator_type = typename AdjacencyTrackList<W>::iterator;
-        typename AdjacencyTrackList<W>::iterator end = list.end();
+            static AdjacencyTrackList<W> empty;
 
-        // Hmmm, das mit dem nullptr -- wie geht das bei Gregoire
-        ConstGraphIterator<T, W> iter(count - 1, end, this);
-    
-        return iter;
+            typename AdjacencyTrackList<W>::iterator end = empty.end();
+
+            ConstGraphIterator<T, W> iter{ 0 , end, this };
+
+            return iter;
+        }
+        else {
+
+            AdjacencyTrackList<W>& list = m_nodes[count - 1].getAdjacentTracks();
+
+            typename AdjacencyTrackList<W>::iterator end = list.end();
+
+            ConstGraphIterator<T, W> iter{ count - 1, end, this };
+
+            return iter;
+        }
     }
 
     // private helper methods

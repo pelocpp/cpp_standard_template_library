@@ -4,6 +4,15 @@
 
 // TEST
 
+
+// =====================================================================================
+
+// FRAGE:
+
+// Der Iterator von Marc Gregoire kann nicht funktionieren:
+
+// Es werden Iteratoren (map / set) von verschiedenen Containern verglichen
+
 // =====================================================================================
 
 // WEITERARBEIT:
