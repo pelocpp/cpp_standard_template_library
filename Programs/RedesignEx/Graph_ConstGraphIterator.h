@@ -31,7 +31,7 @@ namespace Graph_Theory
 
         using value_type = Track<W>;
         using difference_type = ptrdiff_t;
-        using iterator_category = std::bidirectional_iterator_tag;
+        using iterator_category = std::forward_iterator_tag;
         using pointer = value_type*;
         using reference = value_type&;
         // using list_iterator_type = typename HashMap::ListType::const_iterator;
